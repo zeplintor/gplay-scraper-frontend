@@ -576,10 +576,10 @@
         </header>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('single')">🔍 Analyse Simple</button>
-            <button class="tab-btn" onclick="switchTab('bulk')">📊 Analyse Groupée</button>
-            <button class="tab-btn" onclick="switchTab('compare')">⚖️ Comparaison</button>
-            <button class="tab-btn" onclick="switchTab('settings')">⚙️ Paramètres</button>
+            <button class="tab-btn active" data-tab="single">🔍 Analyse Simple</button>
+            <button class="tab-btn" data-tab="bulk">📊 Analyse Groupée</button>
+            <button class="tab-btn" data-tab="compare">⚖️ Comparaison</button>
+            <button class="tab-btn" data-tab="settings">⚙️ Paramètres</button>
         </div>
 
         <div id="single-tab" class="tab-content active">
@@ -690,7 +690,7 @@
                 <div class="input-group">
                     <input id="compareApp1" placeholder="App 1 (ex: com.whatsapp)" />
                     <input id="compareApp2" placeholder="App 2 (ex: org.telegram.messenger)" />
-                    <button onclick="compareApps()">⚖️ Comparer</button>
+                    <button onclick="compareAppsFunc()">⚖️ Comparer</button>
                 </div>
             </div>
             <div id="compareResults"></div>
@@ -712,7 +712,7 @@
                             placeholder="XXXX-XXXX-XXXX-XXXX"
                             style="width: 400px;"
                         />
-                        <button onclick="activateLicense()">✓ Activer</button>
+                        <button onclick="activateLicenseFunc()">✓ Activer</button>
                     </div>
                 </div>
 
@@ -724,8 +724,8 @@
                         Le cache permet d'accélérer les recherches répétées.
                     </p>
                     <div style="display: flex; gap: 10px;">
-                        <button onclick="clearCache()" class="btn-danger">🗑️ Vider le cache</button>
-                        <button onclick="showCacheStats()">📊 Voir les statistiques</button>
+                        <button onclick="clearCacheFunc()" class="btn-danger">🗑️ Vider le cache</button>
+                        <button onclick="showCacheStatsFunc()">📊 Voir les statistiques</button>
                     </div>
                 </div>
 
