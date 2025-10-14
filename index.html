@@ -576,12 +576,16 @@
                 const response = await fetch(`${API_URL}/api/search/${appId}`);
                 const result = await response.json();
 
+                console.log('Réponse complète:', result);
+
                 if (!response.ok || !result.success) {
                     throw new Error(result.error || 'Erreur lors de la recherche');
                 }
 
+                // Les données sont dans result.data
                 displayResult(result.data);
             } catch (error) {
+                console.error('Erreur:', error);
                 showError(error.message);
             } finally {
                 document.getElementById('loading').style.display = 'none';
@@ -590,15 +594,32 @@
         }
 
         function displayResult(data) {
+            // Debug : afficher toutes les données dans la console
+            console.log('Données reçues :', data);
+            
             document.getElementById('appIcon').src = data.icon || '';
             document.getElementById('appTitle').textContent = data.title || 'N/A';
             document.getElementById('appDeveloper').textContent = data.developer || 'N/A';
             document.getElementById('appGenre').textContent = data.genre || 'N/A';
-            document.getElementById('appScore').textContent = data.score ? data.score.toFixed(1) + ' ⭐' : 'N/A';
-            document.getElementById('appRatings').textContent = data.ratings ? formatNumber(data.ratings) : 'N/A';
-            document.getElementById('appInstalls').textContent = data.installs || 'N/A';
-            document.getElementById('appPrice').textContent = data.free ? 'Gratuit' : `$${data.price}`;
-            document.getElementById('appSummary').textContent = data.summary || 'Aucun résumé disponible';
+            
+            // Score avec vérification
+            const score = data.score || data.rating || data.scoreText;
+            document.getElementById('appScore').textContent = score ? (typeof score === 'number' ? score.toFixed(1) : score) + ' ⭐' : 'N/A';
+            
+            // Ratings
+            const ratings = data.ratings || data.reviews || data.ratingsCount;
+            document.getElementById('appRatings').textContent = ratings ? formatNumber(ratings) : 'N/A';
+            
+            // Installs
+            const installs = data.installs || data.minInstalls || data.installsText;
+            document.getElementById('appInstalls').textContent = installs ? (typeof installs === 'number' ? formatNumber(installs) : installs) : 'N/A';
+            
+            // Prix
+            const isFree = data.free !== undefined ? data.free : (data.price === 0 || data.price === '0');
+            document.getElementById('appPrice').textContent = isFree ? 'Gratuit' : `${data.price || 'N/A'}`;
+            
+            // Summary
+            document.getElementById('appSummary').textContent = data.summary || data.description || 'Aucun résumé disponible';
             
             document.getElementById('result').style.display = 'block';
             
