@@ -282,7 +282,15 @@
         }
 
         .result {
-            display: none;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+        
+        .result.hidden {
+            display: none !important;
         }
 
         .result-card {
@@ -453,7 +461,7 @@
 
         <div class="error" id="error"></div>
 
-        <div class="result" id="result">
+        <div class="result hidden" id="result">
             <div class="result-card">
                 <div class="app-header">
                     <img id="appIcon" class="app-icon" src="" alt="App Icon">
@@ -567,7 +575,7 @@
                 return;
             }
 
-            document.getElementById('result').style.display = 'none';
+            document.getElementById('result').classList.add('hidden');
             document.getElementById('error').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
             document.getElementById('searchBtn').disabled = true;
