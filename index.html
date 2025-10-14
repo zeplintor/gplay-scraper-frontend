@@ -701,25 +701,31 @@
             const histogram = data.histogram || [0,0,0,0,0];
             const maxValue = Math.max(...histogram);
             
+            // Calculer les valeurs avant de créer le HTML
+            const realInstallsValue = formatNumber(data.realInstalls || 0);
+            const dailyInstallsValue = formatNumber(data.dailyInstalls || 0);
+            const monthlyInstallsValue = formatNumber(data.monthlyInstalls || 0);
+            const reviewsValue = formatNumber(data.reviews || 0);
+            
             const html = `
                 <div class="premium-section">
                     <h4>📊 Statistiques Détaillées</h4>
                     <div class="info-grid">
                         <div class="info-item">
                             <div class="info-label">Installations réelles</div>
-                            <div class="info-value">${formatNumber(data.realInstalls || 0)}</div>
+                            <div class="info-value">${realInstallsValue}</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Installs quotidiennes</div>
-                            <div class="info-value">${formatNumber(data.dailyInstalls || 0)}/jour</div>
+                            <div class="info-value">${dailyInstallsValue}/jour</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Installs mensuelles</div>
-                            <div class="info-value">${formatNumber(data.monthlyInstalls || 0)}/mois</div>
+                            <div class="info-value">${monthlyInstallsValue}/mois</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Nombre de reviews</div>
-                            <div class="info-value">${formatNumber(data.reviews || 0)}</div>
+                            <div class="info-value">${reviewsValue}</div>
                         </div>
                     </div>
                 </div>
@@ -728,12 +734,15 @@
                     <h4>⭐ Distribution des Notes</h4>
                     <div class="chart-container">
                         <div class="bar-chart">
-                            ${histogram.map((count, index) => `
-                                <div class="bar" style="height: ${(count/maxValue)*100}%">
-                                    <div class="bar-value">${formatNumber(count)}</div>
+                            ${histogram.map((count, index) => {
+                                const height = maxValue > 0 ? (count/maxValue)*100 : 0;
+                                const countFormatted = formatNumber(count);
+                                return `
+                                <div class="bar" style="height: ${height}%">
+                                    <div class="bar-value">${countFormatted}</div>
                                     <div class="bar-label">${index + 1}★</div>
-                                </div>
-                            `).join('')}
+                                </div>`;
+                            }).join('')}
                         </div>
                     </div>
                 </div>
