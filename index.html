@@ -1,181 +1,91 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlayStore Analytics Pro</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
-    <script src="https://gumroad.com/js/gumroad.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
-            line-height: 1.6;
+            padding: 20px;
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
 
         header {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
             text-align: center;
             margin-bottom: 30px;
-            padding: 40px;
-            background: white;
-            border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
 
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
 
-        .subtitle {
-            color: #666;
-            font-size: 1.2rem;
-        }
-
-        .license-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            margin-top: 15px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-        }
-
-        .license-input-group {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .license-input-group input {
-            padding: 12px 20px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            width: 300px;
-        }
-
-        .license-input-group button {
-            padding: 12px 30px;
-            background: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .license-input-group button:hover {
-            background: #45a049;
-        }
-
         .tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 30px;
             background: white;
             padding: 10px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 18px;
+            padding: 15px;
             background: transparent;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 1.05rem;
+            font-size: 16px;
             font-weight: 600;
             transition: all 0.3s;
-            color: #666;
-        }
-
-        .tab-btn:hover {
-            background: #f0f0f0;
         }
 
         .tab-btn.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
-        .tab-content {
-            display: none;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .search-box {
+        .box {
             background: white;
-            padding: 35px;
+            padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
             margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
         input, textarea {
-            flex: 1;
-            padding: 16px;
+            width: 100%;
+            padding: 15px;
             font-size: 16px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
-            outline: none;
+            margin-bottom: 15px;
             font-family: inherit;
-            transition: all 0.3s;
         }
 
-        textarea {
-            min-height: 180px;
-            resize: vertical;
-            font-family: 'Courier New', monospace;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
+        textarea { min-height: 150px; font-family: monospace; }
 
         button {
-            padding: 16px 35px;
+            padding: 15px 30px;
             font-size: 16px;
             font-weight: bold;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -184,97 +94,90 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
+            margin-right: 10px;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        button:hover { transform: translateY(-2px); }
+        button:disabled { background: #ccc; }
+
+        .btn-success { background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); }
+        .btn-danger { background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%); }
+        .btn-warning { background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); }
+
+        .result {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
         }
 
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-        }
-
-        .btn-success:hover {
-            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-        }
-
-        .examples {
+        .app-header {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
-        .example-btn {
-            padding: 10px 18px;
-            font-size: 14px;
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
             background: #f8f9fa;
-            color: #333;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
         }
 
-        .example-btn:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-            transform: translateY(-2px);
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
         }
 
         .loading {
-            display: none;
             text-align: center;
-            padding: 50px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 40px;
         }
 
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #667eea;
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .progress-container {
-            margin-top: 25px;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .progress-bar {
             width: 100%;
-            height: 35px;
+            height: 30px;
             background: #f0f0f0;
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
-            position: relative;
+            margin: 20px 0;
         }
 
         .progress-fill {
@@ -287,567 +190,398 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 14px;
-        }
-
-        .bulk-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .bulk-controls button {
-            flex: 1;
-        }
-
-        .result {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .app-header {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 3px solid #f0f0f0;
-        }
-
-        .app-icon {
-            width: 120px;
-            height: 120px;
-            border-radius: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .app-info h2 {
-            font-size: 2.2rem;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .app-developer {
-            color: #666;
-            font-size: 1.15rem;
-            margin-bottom: 12px;
-        }
-
-        .app-genre {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 35px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .stat-value {
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .premium-cta {
-            text-align: center;
-            padding: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            margin: 40px 0;
-            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
-        }
-
-        .premium-cta h3 {
-            color: white;
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-
-        .premium-cta p {
-            color: rgba(255,255,255,0.95);
-            font-size: 1.15rem;
-            margin-bottom: 30px;
-        }
-
-        .btn-premium {
-            background: white;
-            color: #667eea;
-            padding: 18px 45px;
-            font-size: 1.15rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin: 0 10px;
-        }
-
-        .btn-premium:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(255,255,255,0.3);
-        }
-
-        .bulk-results {
-            margin-top: 30px;
         }
 
         .bulk-item {
             background: white;
-            padding: 25px;
-            margin-bottom: 18px;
-            border-radius: 12px;
-            border-left: 5px solid #667eea;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-
-        .bulk-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        }
-
-        .bulk-item.error {
-            border-left-color: #f44336;
-            background: #ffebee;
-        }
-
-        .bulk-item h4 {
-            margin-bottom: 12px;
-            color: #333;
-            font-size: 1.2rem;
-        }
-
-        .bulk-stats {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .bulk-stat {
-            background: #f8f9fa;
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-        }
-
-        .bulk-stat strong {
-            color: #667eea;
-            font-weight: 700;
-        }
-
-        .comparison-chart {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin: 30px 0;
-        }
-
-        .comparison-chart h3 {
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 1.5rem;
-        }
-
-        .cache-info {
-            background: #e3f2fd;
-            border: 2px solid #2196f3;
-            padding: 15px 20px;
+            padding: 20px;
+            margin-bottom: 15px;
             border-radius: 10px;
-            margin: 20px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .cache-info span {
-            color: #1976d2;
-            font-weight: 600;
-        }
-
-        .cache-info button {
-            padding: 8px 20px;
-            font-size: 14px;
-            background: #2196f3;
-        }
-
-        @media (max-width: 768px) {
-            .input-group, .bulk-controls {
-                flex-direction: column;
-            }
-
-            .app-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .tabs {
-                flex-direction: column;
-            }
-
-            .btn-premium {
-                display: block;
-                margin: 10px 0;
-            }
-
-            .license-input-group {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .license-input-group input {
-                width: 100%;
-            }
+            border-left: 4px solid #667eea;
         }
 
         .toast {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 20px;
+            right: 20px;
             background: #333;
             color: white;
-            padding: 18px 25px;
+            padding: 15px 25px;
             border-radius: 10px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
             z-index: 10000;
-            animation: slideIn 0.3s;
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(400px); }
-            to { transform: translateX(0); }
-        }
-
-        .toast.success {
-            background: #4caf50;
-        }
-
-        .toast.error {
-            background: #f44336;
-        }
+        .toast.success { background: #4caf50; }
+        .toast.error { background: #f44336; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🔍 PlayStore Analytics Pro</h1>
-            <p class="subtitle">Plateforme d'analyse complète pour applications Android</p>
+            <p>Analyse complète d'applications Android</p>
             <div id="licenseStatus"></div>
         </header>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="single">🔍 Analyse Simple</button>
-            <button class="tab-btn" data-tab="bulk">📊 Analyse Groupée</button>
-            <button class="tab-btn" data-tab="compare">⚖️ Comparaison</button>
-            <button class="tab-btn" data-tab="settings">⚙️ Paramètres</button>
+            <button class="tab-btn active" id="tab1">🔍 Simple</button>
+            <button class="tab-btn" id="tab2">📊 Bulk</button>
+            <button class="tab-btn" id="tab3">⚖️ Comparer</button>
+            <button class="tab-btn" id="tab4">⚙️ Licence</button>
         </div>
 
-        <div id="single-tab" class="tab-content active">
-            <div class="search-box">
-                <div class="input-group">
-                    <input 
-                        type="text" 
-                        id="appIdInput" 
-                        placeholder="ID de l'app (ex: com.whatsapp)"
-                        value="com.whatsapp"
-                    />
-                    <button id="searchBtn">🔍 Analyser</button>
-                </div>
-                <div class="examples" id="exampleApps"></div>
+        <!-- TAB 1: SIMPLE -->
+        <div id="content1" class="tab-content active">
+            <div class="box">
+                <input type="text" id="appId" placeholder="ID app (ex: com.roblox.client)" value="com.roblox.client">
+                <button id="searchBtn">🔍 Analyser</button>
             </div>
-
-            <div class="loading" id="loading">
+            <div id="loading1" class="loading" style="display:none;">
                 <div class="spinner"></div>
-                <p>Analyse en cours...</p>
+                <p>Chargement...</p>
             </div>
-
-            <div class="result" id="result" style="display: none;">
-                <div class="app-header">
-                    <img id="appIcon" class="app-icon" src="" alt="App Icon">
-                    <div class="app-info">
-                        <h2 id="appTitle">-</h2>
-                        <p class="app-developer" id="appDeveloper">-</p>
-                        <span class="app-genre" id="appGenre">-</span>
-                    </div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-label">Note</div>
-                        <div class="stat-value" id="appScore">-</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Avis</div>
-                        <div class="stat-value" id="appRatings">-</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Installations</div>
-                        <div class="stat-value" id="appInstalls">-</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Prix</div>
-                        <div class="stat-value" id="appPrice">-</div>
-                    </div>
-                </div>
-
-                <div class="premium-cta">
-                    <h3>💎 Débloquez toutes les fonctionnalités</h3>
-                    <p>50+ métriques • Historique • Export PDF • Comparaison • Alertes</p>
-                    <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank">
-                        <button class="btn-premium btn-success">
-                            💳 Acheter la Licence - 9.99€
-                        </button>
-                    </a>
-                </div>
-            </div>
+            <div id="result1"></div>
         </div>
 
-        <div id="bulk-tab" class="tab-content">
-            <div class="search-box">
-                <h3 style="margin-bottom: 20px; color: #667eea;">📊 Analyse Groupée (Bulk)</h3>
-                <p style="margin-bottom: 15px; color: #666;">
-                    Entrez plusieurs IDs d'applications (un par ligne) :
-                </p>
-                <textarea 
-                    id="bulkInput" 
-                    placeholder="com.whatsapp&#10;com.instagram.android&#10;com.spotify.music&#10;org.telegram.messenger&#10;com.snapchat.android"
-                ></textarea>
-                <div class="bulk-controls">
-                    <button id="bulkAnalyzeBtn">🚀 Analyser</button>
-                    <button id="bulkPauseBtn" class="btn-warning" style="display:none;">⏸️ Pause</button>
-                    <button id="bulkResumeBtn" class="btn-success" style="display:none;">▶️ Reprendre</button>
-                    <button id="bulkExportBtn" class="btn-success" disabled>📥 Export CSV</button>
-                    <button id="bulkClearBtn" class="btn-danger">🗑️ Effacer</button>
-                </div>
-            </div>
-
-            <div id="cacheInfo" class="cache-info" style="display:none;">
-                <span id="cacheText">📦 0 résultats en cache</span>
-                <button onclick="clearCache()">Vider le cache</button>
-            </div>
-
-            <div class="loading" id="bulkLoading" style="display: none;">
-                <div class="spinner"></div>
-                <p id="bulkLoadingText">Préparation...</p>
-                <div class="progress-container">
+        <!-- TAB 2: BULK -->
+        <div id="content2" class="tab-content">
+            <div class="box">
+                <h3>📊 Analyse Groupée</h3>
+                <textarea id="bulkInput" placeholder="com.roblox.client&#10;com.whatsapp&#10;com.instagram.android"></textarea>
+                <button id="bulkBtn">🚀 Analyser</button>
+                <button id="pauseBtn" class="btn-warning" style="display:none;">⏸️ Pause</button>
+                <button id="resumeBtn" class="btn-success" style="display:none;">▶️ Reprendre</button>
+                <button id="exportBtn" class="btn-success" disabled>📥 CSV</button>
+                <button id="clearBtn" class="btn-danger">🗑️ Effacer</button>
+                <div id="progress" style="display:none;">
                     <div class="progress-bar">
-                        <div class="progress-fill" id="bulkProgress">0%</div>
+                        <div class="progress-fill" id="progressBar">0%</div>
                     </div>
                 </div>
             </div>
-
-            <div class="bulk-results" id="bulkResults" style="display: none;"></div>
-
-            <div class="comparison-chart" id="bulkChart" style="display: none;">
-                <h3>📊 Comparaison Visuelle</h3>
-                <canvas id="comparisonCanvas"></canvas>
+            <div id="bulkResults"></div>
+            <div id="chartBox" class="box" style="display:none;">
+                <h3>📊 Graphique</h3>
+                <canvas id="chart"></canvas>
             </div>
         </div>
 
-        <div id="compare-tab" class="tab-content">
-            <div class="search-box">
-                <h3 style="margin-bottom: 20px; color: #667eea;">⚖️ Comparaison Directe</h3>
-                <div class="input-group">
-                    <input id="compareApp1" placeholder="App 1 (ex: com.whatsapp)" />
-                    <input id="compareApp2" placeholder="App 2 (ex: org.telegram.messenger)" />
-                    <button onclick="compareAppsFunc()">⚖️ Comparer</button>
-                </div>
+        <!-- TAB 3: COMPARE -->
+        <div id="content3" class="tab-content">
+            <div class="box">
+                <h3>⚖️ Comparer 2 Apps</h3>
+                <input id="app1" placeholder="App 1 (ex: com.whatsapp)">
+                <input id="app2" placeholder="App 2 (ex: org.telegram.messenger)">
+                <button id="compareBtn">⚖️ Comparer</button>
             </div>
-            <div id="compareResults"></div>
+            <div id="compareResult"></div>
         </div>
 
-        <div id="settings-tab" class="tab-content">
-            <div class="search-box">
-                <h3 style="margin-bottom: 20px; color: #667eea;">⚙️ Paramètres & Licence</h3>
-                
-                <div style="margin-bottom: 30px;">
-                    <h4 style="margin-bottom: 15px;">🔑 Activer votre licence</h4>
-                    <p style="color: #666; margin-bottom: 15px;">
-                        Entrez votre clé de licence achetée sur Gumroad :
-                    </p>
-                    <div class="license-input-group">
-                        <input 
-                            type="text" 
-                            id="licenseKeyInput" 
-                            placeholder="XXXX-XXXX-XXXX-XXXX"
-                            style="width: 400px;"
-                        />
-                        <button onclick="activateLicenseFunc()">✓ Activer</button>
-                    </div>
-                </div>
-
-                <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
-
-                <div style="margin-bottom: 30px;">
-                    <h4 style="margin-bottom: 15px;">💾 Gestion du Cache</h4>
-                    <p style="color: #666; margin-bottom: 15px;">
-                        Le cache permet d'accélérer les recherches répétées.
-                    </p>
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="clearCacheFunc()" class="btn-danger">🗑️ Vider le cache</button>
-                        <button onclick="showCacheStatsFunc()">📊 Voir les statistiques</button>
-                    </div>
-                </div>
-
-                <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
-
-                <div>
-                    <h4 style="margin-bottom: 15px;">📧 Support</h4>
-                    <p style="color: #666;">
-                        Besoin d'aide ? Contactez-nous à <strong>support@votre-site.com</strong>
-                    </p>
-                </div>
+        <!-- TAB 4: LICENSE -->
+        <div id="content4" class="tab-content">
+            <div class="box">
+                <h3>🔑 Activer Licence</h3>
+                <p>Entrez votre clé Gumroad :</p>
+                <input id="licenseKey" placeholder="PREMIUM-2025">
+                <button id="activateBtn">✓ Activer</button>
+                <br><br>
+                <p><strong>Clés de test :</strong> PREMIUM-2025, TEST-LICENSE</p>
+                <br>
+                <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank">
+                    <button class="btn-success">💳 Acheter Licence - 9.99€</button>
+                </a>
+                <hr style="margin:30px 0">
+                <h3>💾 Cache</h3>
+                <p id="cacheInfo">Cache vide</p>
+                <button id="clearCacheBtn" class="btn-danger">🗑️ Vider Cache</button>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://gplay-scraper-backend.onrender.com';
-        let currentAppData = null;
+        const API = 'https://gplay-scraper-backend.onrender.com';
         let bulkData = [];
         let bulkPaused = false;
         let bulkIndex = 0;
-        let hasLicense = false;
-        let comparisonChart = null;
+        let chart = null;
 
-        const popularApps = [
-            { id: 'com.whatsapp', name: '💬 WhatsApp' },
-            { id: 'com.instagram.android', name: '📸 Instagram' },
-            { id: 'com.zhiliaoapp.musically', name: '🎵 TikTok' },
-            { id: 'org.telegram.messenger', name: '✈️ Telegram' },
-            { id: 'com.snapchat.android', name: '👻 Snapchat' },
-            { id: 'com.spotify.music', name: '🎧 Spotify' }
-        ];
+        // TABS
+        document.getElementById('tab1').onclick = () => showTab(1);
+        document.getElementById('tab2').onclick = () => showTab(2);
+        document.getElementById('tab3').onclick = () => showTab(3);
+        document.getElementById('tab4').onclick = () => showTab(4);
 
-        // Initialisation
-        window.onload = function() {
-            checkLicense();
-            loadCachedData();
-            updateCacheInfo();
-            
-            const exampleAppsContainer = document.getElementById('exampleApps');
-            popularApps.forEach(app => {
-                const btn = document.createElement('button');
-                btn.className = 'example-btn';
-                btn.textContent = app.name;
-                btn.onclick = () => setAppId(app.id);
-                exampleAppsContainer.appendChild(btn);
-            });
+        function showTab(n) {
+            for(let i=1; i<=4; i++) {
+                document.getElementById('content'+i).classList.remove('active');
+                document.getElementById('tab'+i).classList.remove('active');
+            }
+            document.getElementById('content'+n).classList.add('active');
+            document.getElementById('tab'+n).classList.add('active');
+        }
 
-            // Event Listeners
-            document.getElementById('searchBtn').addEventListener('click', searchApp);
-            document.getElementById('bulkAnalyzeBtn').addEventListener('click', bulkAnalyze);
-            document.getElementById('bulkPauseBtn').addEventListener('click', pauseBulk);
-            document.getElementById('bulkResumeBtn').addEventListener('click', resumeBulk);
-            document.getElementById('bulkExportBtn').addEventListener('click', exportToCSV);
-            document.getElementById('bulkClearBtn').addEventListener('click', clearBulkInput);
-            
-            document.getElementById('appIdInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') searchApp();
-            });
+        // UTILS
+        function fmt(n) {
+            if(!n) return '0';
+            if(n >= 1e9) return (n/1e9).toFixed(1)+'B';
+            if(n >= 1e6) return (n/1e6).toFixed(1)+'M';
+            if(n >= 1e3) return (n/1e3).toFixed(1)+'K';
+            return n.toString();
+        }
+
+        function toast(msg, type) {
+            const t = document.createElement('div');
+            t.className = 'toast ' + type;
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+
+        function cache(key, val) {
+            if(val) {
+                const c = JSON.parse(localStorage.getItem('cache') || '{}');
+                c[key] = {data: val, time: Date.now()};
+                localStorage.setItem('cache', JSON.stringify(c));
+                updateCache();
+            } else {
+                const c = JSON.parse(localStorage.getItem('cache') || '{}');
+                if(c[key] && (Date.now() - c[key].time) < 86400000) return c[key].data;
+                return null;
+            }
+        }
+
+        function updateCache() {
+            const c = JSON.parse(localStorage.getItem('cache') || '{}');
+            document.getElementById('cacheInfo').textContent = Object.keys(c).length + ' apps en cache';
+        }
+
+        // LICENSE
+        function checkLicense() {
+            const key = localStorage.getItem('license');
+            if(key && (key === 'PREMIUM-2025' || key === 'TEST-LICENSE' || key.startsWith('GR-'))) {
+                document.getElementById('licenseStatus').innerHTML = 
+                    '<span style="background:#4caf50;color:white;padding:8px 20px;border-radius:20px;display:inline-block;margin-top:15px;">✓ Premium</span>';
+            }
+        }
+
+        document.getElementById('activateBtn').onclick = function() {
+            const key = document.getElementById('licenseKey').value.trim();
+            if(!key) return toast('Entrez une clé', 'error');
+            if(key === 'PREMIUM-2025' || key === 'TEST-LICENSE' || key.startsWith('GR-')) {
+                localStorage.setItem('license', key);
+                toast('Licence activée !', 'success');
+                checkLicense();
+            } else {
+                toast('Clé invalide', 'error');
+            }
         };
 
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            const tabs = ['single', 'bulk', 'compare', 'settings'];
-            const index = tabs.indexOf(tab);
-            document.querySelectorAll('.tab-btn')[index].classList.add('active');
-            document.getElementById(tab + '-tab').classList.add('active');
-        }
+        document.getElementById('clearCacheBtn').onclick = function() {
+            localStorage.removeItem('cache');
+            updateCache();
+            toast('Cache vidé', 'success');
+        };
 
-        function setAppId(appId) {
-            document.getElementById('appIdInput').value = appId;
-        }
+        // SIMPLE SEARCH
+        document.getElementById('searchBtn').onclick = async function() {
+            const id = document.getElementById('appId').value.trim();
+            if(!id) return toast('Entrez un ID', 'error');
 
-        function formatNumber(num) {
-            if (!num) return '0';
-            if (num >= 1000000000) return (num / 1000000000).toFixed(1) + 'B';
-            else if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-            else if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return num.toString();
-        }
+            const cached = cache(id);
+            if(cached) {
+                displayResult(cached);
+                return toast('Chargé du cache', 'success');
+            }
 
-        // CACHE SYSTEM
-        function saveToCache(appId, data) {
-            const cache = JSON.parse(localStorage.getItem('appCache') || '{}');
-            cache[appId] = {
-                data: data,
-                timestamp: Date.now()
-            };
-            localStorage.setItem('appCache', JSON.stringify(cache));
-            updateCacheInfo();
-        }
+            document.getElementById('loading1').style.display = 'block';
+            document.getElementById('result1').innerHTML = '';
 
-        function getFromCache(appId) {
-            const cache = JSON.parse(localStorage.getItem('appCache') || '{}');
-            if (cache[appId]) {
-                const ageHours = (Date.now() - cache[appId].timestamp) / (1000 * 60 * 60);
-                if (ageHours < 24) {
-                    return cache[appId].data;
+            try {
+                const res = await fetch(API + '/api/search/' + id);
+                const data = await res.json();
+                if(data.success) {
+                    cache(id, data.data);
+                    displayResult(data.data);
+                } else {
+                    toast('App non trouvée', 'error');
                 }
+            } catch(e) {
+                toast('Erreur: ' + e.message, 'error');
             }
-            return null;
+            document.getElementById('loading1').style.display = 'none';
+        };
+
+        function displayResult(d) {
+            document.getElementById('result1').innerHTML = 
+                '<div class="result">' +
+                '<div class="app-header">' +
+                '<img class="app-icon" src="'+d.icon+'">' +
+                '<div><h2>'+d.title+'</h2><p>'+d.developer+'</p><span style="background:#667eea;color:white;padding:5px 15px;border-radius:20px;">'+d.genre+'</span></div>' +
+                '</div>' +
+                '<div class="stats-grid">' +
+                '<div class="stat-card"><div class="stat-label">Note</div><div class="stat-value">'+(d.score?d.score.toFixed(1):'N/A')+' ⭐</div></div>' +
+                '<div class="stat-card"><div class="stat-label">Avis</div><div class="stat-value">'+fmt(d.ratings)+'</div></div>' +
+                '<div class="stat-card"><div class="stat-label">Installs</div><div class="stat-value">'+d.installs+'</div></div>' +
+                '<div class="stat-card"><div class="stat-label">Prix</div><div class="stat-value">'+(d.free?'Gratuit':'$'+d.price)+'</div></div>' +
+                '</div>' +
+                '<p style="background:#f8f9fa;padding:20px;border-radius:10px;"><strong>Description:</strong><br>'+d.summary+'</p>' +
+                '</div>';
         }
 
-        function clearCache() {
-            localStorage.removeItem('appCache');
-            updateCacheInfo();
-            showToast('Cache vidé avec succès', 'success');
-        }
+        // BULK
+        document.getElementById('bulkBtn').onclick = async function() {
+            const ids = document.getElementById('bulkInput').value.split('\n').map(x=>x.trim()).filter(x=>x);
+            if(ids.length === 0) return toast('Entrez des IDs', 'error');
 
-        function updateCacheInfo() {
-            const cache = JSON.parse(localStorage.getItem('appCache') || '{}');
-            const count = Object.keys(cache).length;
-            if (count > 0) {
-                document.getElementById('cacheInfo').style.display = 'flex';
-                document.getElementById('cacheText').textContent = '📦 ' + count + ' app(s) en cache';
-            } else {
-                document.getElementById('cacheInfo').style.display = 'none';
+            bulkData = [];
+            bulkPaused = false;
+            bulkIndex = 0;
+            document.getElementById('bulkResults').innerHTML = '';
+            document.getElementById('chartBox').style.display = 'none';
+            document.getElementById('progress').style.display = 'block';
+            document.getElementById('bulkBtn').style.display = 'none';
+            document.getElementById('pauseBtn').style.display = 'inline-block';
+            document.getElementById('exportBtn').disabled = true;
+
+            await processBulk(ids);
+        };
+
+        async function processBulk(ids) {
+            for(; bulkIndex < ids.length; bulkIndex++) {
+                if(bulkPaused) return;
+
+                const id = ids[bulkIndex];
+                const pct = Math.round(((bulkIndex+1)/ids.length)*100);
+                document.getElementById('progressBar').style.width = pct+'%';
+                document.getElementById('progressBar').textContent = pct+'%';
+
+                const cached = cache(id);
+                if(cached) {
+                    bulkData.push(cached);
+                    showBulkItem(cached);
+                    continue;
+                }
+
+                try {
+                    const res = await fetch(API + '/api/search/' + id);
+                    const data = await res.json();
+                    if(data.success) {
+                        cache(id, data.data);
+                        bulkData.push(data.data);
+                        showBulkItem(data.data);
+                    }
+                } catch(e) {}
+
+                await new Promise(r => setTimeout(r, 500));
+            }
+
+            document.getElementById('bulkBtn').style.display = 'inline-block';
+            document.getElementById('pauseBtn').style.display = 'none';
+            document.getElementById('exportBtn').disabled = false;
+            if(bulkData.length > 0) {
+                showChart();
+                toast('Terminé: '+bulkData.length+' apps', 'success');
             }
         }
 
-        function loadCachedData() {
-            const cache = JSON.parse(localStorage.getItem('appCache') || '{}');
-            return Object.keys(cache).length;
+        document.getElementById('pauseBtn').onclick = function() {
+            bulkPaused = true;
+            document.getElementById('pauseBtn').style.display = 'none';
+            document.getElementById('resumeBtn').style.display = 'inline-block';
+            toast('Pause', 'success');
+        };
+
+        document.getElementById('resumeBtn').onclick = function() {
+            bulkPaused = false;
+            document.getElementById('resumeBtn').style.display = 'none';
+            document.getElementById('pauseBtn').style.display = 'inline-block';
+            const ids = document.getElementById('bulkInput').value.split('\n').map(x=>x.trim()).filter(x=>x);
+            processBulk(ids);
+        };
+
+        document.getElementById('clearBtn').onclick = function() {
+            document.getElementById('bulkInput').value = '';
+            document.getElementById('bulkResults').innerHTML = '';
+            document.getElementById('chartBox').style.display = 'none';
+            bulkData = [];
+            toast('Effacé', 'success');
+        };
+
+        function showBulkItem(d) {
+            const div = document.createElement('div');
+            div.className = 'bulk-item';
+            div.innerHTML = '<h4>✅ '+d.title+'</h4><p>Note: '+(d.score?d.score.toFixed(1):'N/A')+' ⭐ | Avis: '+fmt(d.ratings)+' | Dev: '+d.developer+'</p>';
+            document.getElementById('bulkResults').appendChild(div);
+        }
+
+        function showChart() {
+            document.getElementById('chartBox').style.display = 'block';
+            const ctx = document.getElementById('chart');
+            if(chart) chart.destroy();
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: bulkData.map(d => d.title.substring(0,15)),
+                    datasets: [{
+                        label: 'Note',
+                        data: bulkData.map(d => d.score || 0),
+                        backgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    scales: { y: { max: 5 } }
+                }
+            });
+        }
+
+        document.getElementById('exportBtn').onclick = function() {
+            let csv = 'Titre,Note,Avis,Installs,Dev\n';
+            bulkData.forEach(d => {
+                csv += '"'+d.title+'",'+d.score+','+d.ratings+',"'+d.installs+'","'+d.developer+'"\n';
+            });
+            const blob = new Blob([csv], {type:'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'export-'+Date.now()+'.csv';
+            a.click();
+            toast('CSV exporté', 'success');
+        };
+
+        // COMPARE
+        document.getElementById('compareBtn').onclick = async function() {
+            const id1 = document.getElementById('app1').value.trim();
+            const id2 = document.getElementById('app2').value.trim();
+            if(!id1 || !id2) return toast('Entrez 2 IDs', 'error');
+
+            try {
+                const [r1, r2] = await Promise.all([
+                    fetch(API+'/api/search/'+id1),
+                    fetch(API+'/api/search/'+id2)
+                ]);
+                const [d1, d2] = await Promise.all([r1.json(), r2.json()]);
+                if(d1.success && d2.success) {
+                    document.getElementById('compareResult').innerHTML = 
+                        '<div class="result">' +
+                        '<h3 style="text-align:center;margin-bottom:20px;">⚖️ Comparaison</h3>' +
+                        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">' +
+                        '<div style="text-align:center;"><img src="'+d1.data.icon+'" style="width:80px;height:80px;border-radius:20px;"><h4>'+d1.data.title+'</h4><p>Note: '+d1.data.score.toFixed(1)+'⭐</p><p>Avis: '+fmt(d1.data.ratings)+'</p></div>' +
+                        '<div style="text-align:center;"><img src="'+d2.data.icon+'" style="width:80px;height:80px;border-radius:20px;"><h4>'+d2.data.title+'</h4><p>Note: '+d2.data.score.toFixed(1)+'⭐</p><p>Avis: '+fmt(d2.data.ratings)+'</p></div>' +
+                        '</div>' +
+                        '<div style="margin-top:20px;padding:20px;background:#f8f9fa;border-radius:10px;">' +
+                        '<p><strong>Meilleure note:</strong> '+(d1.data.score>d2.data.score?d1.data.title:d2.data.title)+'</p>' +
+                        '<p><strong>Plus d\'avis:</strong> '+(d1.data.ratings>d2.data.ratings?d1.data.title:d2.data.title)+'</p>' +
+                        '</div></div>';
+                }
+            } catch(e) {
+                toast('Erreur: '+e.message, 'error');
+            }
+        };
+
+        // INIT
+        checkLicense();
+        updateCache();
+    </script>
+</body>
+</html>
