@@ -247,7 +247,6 @@
             margin-bottom: 10px;
         }
 
-        /* Bouton Premium */
         .premium-cta {
             text-align: center;
             padding: 40px;
@@ -278,16 +277,12 @@
             border-radius: 8px;
             cursor: pointer;
             transition: transform 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .btn-premium:hover {
             transform: scale(1.05);
         }
 
-        /* Modal Premium */
         .modal {
             display: none;
             position: fixed;
@@ -432,9 +427,6 @@
             height: 100%;
             backdrop-filter: blur(8px);
             background: rgba(255,255,255,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .unlock-badge {
@@ -583,7 +575,6 @@
         </div>
     </div>
 
-    <!-- Modal Premium -->
     <div class="modal" id="premiumModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -617,23 +608,19 @@
         });
 
         function setAppId(appId) {
-            document.getElementById('searchBtn').addEventListener('click', searchApp);
-        
-        document.getElementById('appIdInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchApp();
-            }
-        });
+            document.getElementById('appIdInput').value = appId;
+        }
 
-        // Fermer modal en cliquant en dehors
-        document.getElementById('premiumModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closePremiumModal();
+        function formatNumber(num) {
+            if (!num) return '0';
+            if (num >= 1000000000) {
+                return (num / 1000000000).toFixed(1) + 'B';
+            } else if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
             }
-        });
-    </script>
-</body>
-</html>getElementById('appIdInput').value = appId;
+            return num.toString();
         }
 
         async function searchApp() {
@@ -650,7 +637,7 @@
             document.getElementById('searchBtn').disabled = true;
 
             try {
-                const response = await fetch(`${API_URL}/api/analyze/${appId}`);
+                const response = await fetch(API_URL + '/api/analyze/' + appId);
                 const result = await response.json();
 
                 if (!response.ok || !result.success) {
@@ -701,159 +688,90 @@
             const histogram = data.histogram || [0,0,0,0,0];
             const maxValue = Math.max(...histogram);
             
-            // Calculer les valeurs avant de créer le HTML
-            const realInstallsValue = formatNumber(data.realInstalls || 0);
-            const dailyInstallsValue = formatNumber(data.dailyInstalls || 0);
-            const monthlyInstallsValue = formatNumber(data.monthlyInstalls || 0);
-            const reviewsValue = formatNumber(data.reviews || 0);
+            let barsHTML = '';
+            for (let i = 0; i < histogram.length; i++) {
+                const count = histogram[i];
+                const height = maxValue > 0 ? (count / maxValue) * 100 : 0;
+                const countFormatted = formatNumber(count);
+                barsHTML += '<div class="bar" style="height: ' + height + '%">';
+                barsHTML += '<div class="bar-value">' + countFormatted + '</div>';
+                barsHTML += '<div class="bar-label">' + (i + 1) + '★</div>';
+                barsHTML += '</div>';
+            }
             
-            const html = `
-                <div class="premium-section">
-                    <h4>📊 Statistiques Détaillées</h4>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">Installations réelles</div>
-                            <div class="info-value">${realInstallsValue}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Installs quotidiennes</div>
-                            <div class="info-value">${dailyInstallsValue}/jour</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Installs mensuelles</div>
-                            <div class="info-value">${monthlyInstallsValue}/mois</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Nombre de reviews</div>
-                            <div class="info-value">${reviewsValue}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="premium-section">
-                    <h4>⭐ Distribution des Notes</h4>
-                    <div class="chart-container">
-                        <div class="bar-chart">
-                            ${histogram.map((count, index) => {
-                                const height = maxValue > 0 ? (count/maxValue)*100 : 0;
-                                const countFormatted = formatNumber(count);
-                                return `
-                                <div class="bar" style="height: ${height}%">
-                                    <div class="bar-value">${countFormatted}</div>
-                                    <div class="bar-label">${index + 1}★</div>
-                                </div>`;
-                            }).join('')}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="premium-section">
-                    <h4>📅 Informations Temporelles</h4>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">Date de sortie</div>
-                            <div class="info-value">${data.released || 'N/A'}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Dernière mise à jour</div>
-                            <div class="info-value">${data.lastUpdated || 'N/A'}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Âge de l'app</div>
-                            <div class="info-value">${data.appAgeDays || 0} jours</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Version actuelle</div>
-                            <div class="info-value">${data.version || 'N/A'}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="premium-section blur-overlay">
-                    <div class="unlock-badge">🔒 Contenu Premium - 9.99€</div>
-                    <h4>🔧 Informations Techniques</h4>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">Android requis</div>
-                            <div class="info-value">Android ${data.androidVersion || 'N/A'}+</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Classification</div>
-                            <div class="info-value">${data.contentRating || 'N/A'}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Publicités</div>
-                            <div class="info-value">${data.adSupported ? 'Oui' : 'Non'}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Achats intégrés</div>
-                            <div class="info-value">${data.offersIAP ? 'Oui' : 'Non'}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="premium-section blur-overlay">
-                    <h4>👨‍💻 Informations Développeur</h4>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">Email</div>
-                            <div class="info-value">${data.developerEmail || 'N/A'}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Site web</div>
-                            <div class="info-value">${data.developerWebsite ? 'Disponible' : 'N/A'}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Adresse</div>
-                            <div class="info-value">${data.developerAddress ? 'Disponible' : 'N/A'}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Politique de confidentialité</div>
-                            <div class="info-value">${data.privacyPolicy ? 'Disponible' : 'N/A'}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="premium-section blur-overlay">
-                    <h4>🔍 Analyse SEO/ASO</h4>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">Mots-clés uniques</div>
-                            <div class="info-value">${data.uniqueKeywords || 0}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Nombre total de mots</div>
-                            <div class="info-value">${data.totalWords || 0}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Score de lisibilité</div>
-                            <div class="info-value">${data.readability?.flesch_score?.toFixed(1) || 'N/A'}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Niveau de lecture</div>
-                            <div class="info-value">${data.readability?.flesch_level || 'N/A'}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="premium-section" style="text-align: center; padding: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white;">
-                    <h3 style="margin-bottom: 20px;">🎁 Débloquez le Rapport Complet</h3>
-                    <div class="price-tag">9,99€</div>
-                    <ul class="feature-list" style="text-align: left; max-width: 500px; margin: 30px auto; color: white;">
-                        <li>Accès à toutes les métriques avancées</li>
-                        <li>Historique des statistiques (30 jours)</li>
-                        <li>Comparaison avec concurrents</li>
-                        <li>Export PDF du rapport complet</li>
-                        <li>Alertes sur les changements importants</li>
-                        <li>Analyse des captures d'écran</li>
-                        <li>Recommandations ASO personnalisées</li>
-                    </ul>
-                    <button class="btn-premium" style="background: white; color: #667eea;">
-                        💳 Acheter maintenant
-                    </button>
-                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">Paiement sécurisé - Accès instantané</p>
-                </div>
-            `;
+            const html = '<div class="premium-section">' +
+                '<h4>📊 Statistiques Détaillées</h4>' +
+                '<div class="info-grid">' +
+                    '<div class="info-item">' +
+                        '<div class="info-label">Installations réelles</div>' +
+                        '<div class="info-value">' + formatNumber(data.realInstalls || 0) + '</div>' +
+                    '</div>' +
+                    '<div class="info-item">' +
+                        '<div class="info-label">Installs quotidiennes</div>' +
+                        '<div class="info-value">' + formatNumber(data.dailyInstalls || 0) + '/jour</div>' +
+                    '</div>' +
+                    '<div class="info-item">' +
+                        '<div class="info-label">Installs mensuelles</div>' +
+                        '<div class="info-value">' + formatNumber(data.monthlyInstalls || 0) + '/mois</div>' +
+                    '</div>' +
+                    '<div class="info-item">' +
+                        '<div class="info-label">Nombre de reviews</div>' +
+                        '<div class="info-value">' + formatNumber(data.reviews || 0) + '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="premium-section">' +
+                '<h4>⭐ Distribution des Notes</h4>' +
+                '<div class="chart-container">' +
+                    '<div class="bar-chart">' + barsHTML + '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="premium-section">' +
+                '<h4>📅 Informations Temporelles</h4>' +
+                '<div class="info-grid">' +
+                    '<div class="info-item">' +
+                        '<div class="info-label">Date de sortie</div>' +
+                        '<div class="info-value">' + (data.released || 'N/A') + '</div>' +
+                    '</div>' +
+                    '<div class="info-item">' +
+                        '<div class="info-label">Dernière mise à jour</div>' +
+                        '<div class="info-value">' + (data.lastUpdated || 'N/A') + '</div>' +
+                    '</div>' +
+                    '<div class="info-item">' +
+                        '<div class="info-label">Âge de l\'app</div>' +
+                        '<div class="info-value">' + (data.appAgeDays || 0) + ' jours</div>' +
+                    '</div>' +
+                    '<div class="info-item">' +
+                        '<div class="info-label">Version actuelle</div>' +
+                        '<div class="info-value">' + (data.version || 'N/A') + '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="premium-section blur-overlay">' +
+                '<div class="unlock-badge">🔒 Contenu Premium - 9.99€</div>' +
+                '<h4>🔧 Informations Techniques</h4>' +
+                '<div class="info-grid">' +
+                    '<div class="info-item"><div class="info-label">Android requis</div><div class="info-value">Android ' + (data.androidVersion || 'N/A') + '+</div></div>' +
+                    '<div class="info-item"><div class="info-label">Classification</div><div class="info-value">' + (data.contentRating || 'N/A') + '</div></div>' +
+                    '<div class="info-item"><div class="info-label">Publicités</div><div class="info-value">' + (data.adSupported ? 'Oui' : 'Non') + '</div></div>' +
+                    '<div class="info-item"><div class="info-label">Achats intégrés</div><div class="info-value">' + (data.offersIAP ? 'Oui' : 'Non') + '</div></div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="premium-section" style="text-align: center; padding: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white;">' +
+                '<h3 style="margin-bottom: 20px;">🎁 Débloquez le Rapport Complet</h3>' +
+                '<div class="price-tag">9,99€</div>' +
+                '<ul class="feature-list" style="text-align: left; max-width: 500px; margin: 30px auto; color: white;">' +
+                    '<li>Accès à toutes les métriques avancées</li>' +
+                    '<li>Historique des statistiques (30 jours)</li>' +
+                    '<li>Comparaison avec concurrents</li>' +
+                    '<li>Export PDF du rapport complet</li>' +
+                    '<li>Alertes sur les changements importants</li>' +
+                    '<li>Analyse des captures d\'écran</li>' +
+                    '<li>Recommandations ASO personnalisées</li>' +
+                '</ul>' +
+                '<button class="btn-premium" style="background: white; color: #667eea;">💳 Acheter maintenant</button>' +
+                '<p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">Paiement sécurisé - Accès instantané</p>' +
+            '</div>';
             
             document.getElementById('modalBody').innerHTML = html;
         }
@@ -862,20 +780,24 @@
             const errorDiv = document.getElementById('error');
             errorDiv.textContent = '❌ ' + message;
             errorDiv.style.display = 'block';
-            setTimeout(() => {
+            setTimeout(function() {
                 errorDiv.style.display = 'none';
             }, 5000);
         }
 
-        function formatNumber(num) {
-            if (num >= 1000000000) {
-                return (num / 1000000000).toFixed(1) + 'B';
-            } else if (num >= 1000000) {
-                return (num / 1000000).toFixed(1) + 'M';
-            } else if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'K';
+        document.getElementById('searchBtn').addEventListener('click', searchApp);
+        
+        document.getElementById('appIdInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchApp();
             }
-            return num.toString();
-        }
+        });
 
-        document.
+        document.getElementById('premiumModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePremiumModal();
+            }
+        });
+    </script>
+</body>
+</html>
