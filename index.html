@@ -45,7 +45,6 @@
             font-size: 1.1rem;
         }
 
-        /* Espace pub */
         .ad-space {
             background: #e8f4f8;
             border: 2px dashed #1a73e8;
@@ -57,7 +56,6 @@
             font-weight: bold;
         }
 
-        /* Search Box */
         .search-box {
             background: white;
             padding: 30px;
@@ -126,7 +124,6 @@
             background: #e0e0e0;
         }
 
-        /* Loading */
         .loading {
             display: none;
             text-align: center;
@@ -150,7 +147,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Error */
         .error {
             display: none;
             background: #ffebee;
@@ -161,7 +157,6 @@
             margin-bottom: 20px;
         }
 
-        /* Result */
         .result {
             background: white;
             padding: 40px;
@@ -207,7 +202,6 @@
             font-size: 0.9rem;
         }
 
-        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -243,6 +237,7 @@
             border-radius: 10px;
             line-height: 1.8;
             color: #555;
+            margin-bottom: 30px;
         }
 
         .summary strong {
@@ -250,6 +245,242 @@
             color: #1a73e8;
             font-size: 1.1rem;
             margin-bottom: 10px;
+        }
+
+        /* Bouton Premium */
+        .premium-cta {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            margin: 40px 0;
+        }
+
+        .premium-cta h3 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .premium-cta p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        .btn-premium {
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-premium:hover {
+            transform: scale(1.05);
+        }
+
+        /* Modal Premium */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 900px;
+            margin: 50px auto;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            color: white;
+            font-size: 2rem;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 40px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .premium-section {
+            margin-bottom: 40px;
+        }
+
+        .premium-section h4 {
+            color: #1a73e8;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #1a73e8;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .chart-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, #1a73e8, #667eea);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .bar:hover {
+            transform: translateY(-5px);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .blur-overlay {
+            position: relative;
+        }
+
+        .blur-overlay::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(8px);
+            background: rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .unlock-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ff9800;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .price-tag {
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 1.3rem;
         }
 
         @media (max-width: 768px) {
@@ -264,6 +495,10 @@
 
             .stats-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .modal-body {
+                padding: 20px;
             }
         }
     </style>
@@ -333,6 +568,14 @@
                 <strong>📝 Description</strong>
                 <p id="appSummary">-</p>
             </div>
+
+            <div class="premium-cta">
+                <h3>💎 Rapport Complet Premium</h3>
+                <p>Débloquez l'analyse complète avec 50+ métriques avancées</p>
+                <button class="btn-premium" onclick="openPremiumModal()">
+                    🔓 Voir le rapport complet
+                </button>
+            </div>
         </div>
 
         <div class="ad-space">
@@ -340,8 +583,20 @@
         </div>
     </div>
 
+    <!-- Modal Premium -->
+    <div class="modal" id="premiumModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💎 Rapport Premium - <span id="modalAppTitle"></span></h2>
+                <button class="modal-close" onclick="closePremiumModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
     <script>
         const API_URL = 'https://gplay-scraper-backend.onrender.com';
+        let currentAppData = null;
 
         const popularApps = [
             { id: 'com.whatsapp', name: '💬 WhatsApp' },
@@ -362,7 +617,23 @@
         });
 
         function setAppId(appId) {
-            document.getElementById('appIdInput').value = appId;
+            document.getElementById('searchBtn').addEventListener('click', searchApp);
+        
+        document.getElementById('appIdInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchApp();
+            }
+        });
+
+        // Fermer modal en cliquant en dehors
+        document.getElementById('premiumModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePremiumModal();
+            }
+        });
+    </script>
+</body>
+</html>getElementById('appIdInput').value = appId;
         }
 
         async function searchApp() {
@@ -379,16 +650,14 @@
             document.getElementById('searchBtn').disabled = true;
 
             try {
-                console.log('Fetching:', `${API_URL}/api/search/${appId}`);
-                const response = await fetch(`${API_URL}/api/search/${appId}`);
+                const response = await fetch(`${API_URL}/api/analyze/${appId}`);
                 const result = await response.json();
-
-                console.log('Result:', result);
 
                 if (!response.ok || !result.success) {
                     throw new Error(result.error || 'Erreur lors de la recherche');
                 }
 
+                currentAppData = result.data;
                 displayResult(result.data);
             } catch (error) {
                 console.error('Error:', error);
@@ -400,8 +669,6 @@
         }
 
         function displayResult(data) {
-            console.log('Display result:', data);
-            
             document.getElementById('appIcon').src = data.icon || '';
             document.getElementById('appTitle').textContent = data.title || 'N/A';
             document.getElementById('appDeveloper').textContent = data.developer || 'N/A';
@@ -414,6 +681,172 @@
             
             document.getElementById('result').style.display = 'block';
             document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openPremiumModal() {
+            if (!currentAppData) return;
+            
+            document.getElementById('modalAppTitle').textContent = currentAppData.title;
+            generatePremiumReport(currentAppData);
+            document.getElementById('premiumModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePremiumModal() {
+            document.getElementById('premiumModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function generatePremiumReport(data) {
+            const histogram = data.histogram || [0,0,0,0,0];
+            const maxValue = Math.max(...histogram);
+            
+            const html = `
+                <div class="premium-section">
+                    <h4>📊 Statistiques Détaillées</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Installations réelles</div>
+                            <div class="info-value">${formatNumber(data.realInstalls || 0)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Installs quotidiennes</div>
+                            <div class="info-value">${formatNumber(data.dailyInstalls || 0)}/jour</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Installs mensuelles</div>
+                            <div class="info-value">${formatNumber(data.monthlyInstalls || 0)}/mois</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Nombre de reviews</div>
+                            <div class="info-value">${formatNumber(data.reviews || 0)}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-section">
+                    <h4>⭐ Distribution des Notes</h4>
+                    <div class="chart-container">
+                        <div class="bar-chart">
+                            ${histogram.map((count, index) => `
+                                <div class="bar" style="height: ${(count/maxValue)*100}%">
+                                    <div class="bar-value">${formatNumber(count)}</div>
+                                    <div class="bar-label">${index + 1}★</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-section">
+                    <h4>📅 Informations Temporelles</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Date de sortie</div>
+                            <div class="info-value">${data.released || 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Dernière mise à jour</div>
+                            <div class="info-value">${data.lastUpdated || 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Âge de l'app</div>
+                            <div class="info-value">${data.appAgeDays || 0} jours</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Version actuelle</div>
+                            <div class="info-value">${data.version || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-section blur-overlay">
+                    <div class="unlock-badge">🔒 Contenu Premium - 9.99€</div>
+                    <h4>🔧 Informations Techniques</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Android requis</div>
+                            <div class="info-value">Android ${data.androidVersion || 'N/A'}+</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Classification</div>
+                            <div class="info-value">${data.contentRating || 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Publicités</div>
+                            <div class="info-value">${data.adSupported ? 'Oui' : 'Non'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Achats intégrés</div>
+                            <div class="info-value">${data.offersIAP ? 'Oui' : 'Non'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-section blur-overlay">
+                    <h4>👨‍💻 Informations Développeur</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">${data.developerEmail || 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Site web</div>
+                            <div class="info-value">${data.developerWebsite ? 'Disponible' : 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Adresse</div>
+                            <div class="info-value">${data.developerAddress ? 'Disponible' : 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Politique de confidentialité</div>
+                            <div class="info-value">${data.privacyPolicy ? 'Disponible' : 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-section blur-overlay">
+                    <h4>🔍 Analyse SEO/ASO</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Mots-clés uniques</div>
+                            <div class="info-value">${data.uniqueKeywords || 0}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Nombre total de mots</div>
+                            <div class="info-value">${data.totalWords || 0}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Score de lisibilité</div>
+                            <div class="info-value">${data.readability?.flesch_score?.toFixed(1) || 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Niveau de lecture</div>
+                            <div class="info-value">${data.readability?.flesch_level || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-section" style="text-align: center; padding: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white;">
+                    <h3 style="margin-bottom: 20px;">🎁 Débloquez le Rapport Complet</h3>
+                    <div class="price-tag">9,99€</div>
+                    <ul class="feature-list" style="text-align: left; max-width: 500px; margin: 30px auto; color: white;">
+                        <li>Accès à toutes les métriques avancées</li>
+                        <li>Historique des statistiques (30 jours)</li>
+                        <li>Comparaison avec concurrents</li>
+                        <li>Export PDF du rapport complet</li>
+                        <li>Alertes sur les changements importants</li>
+                        <li>Analyse des captures d'écran</li>
+                        <li>Recommandations ASO personnalisées</li>
+                    </ul>
+                    <button class="btn-premium" style="background: white; color: #667eea;">
+                        💳 Acheter maintenant
+                    </button>
+                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">Paiement sécurisé - Accès instantané</p>
+                </div>
+            `;
+            
+            document.getElementById('modalBody').innerHTML = html;
         }
 
         function showError(message) {
@@ -436,13 +869,4 @@
             return num.toString();
         }
 
-        document.getElementById('searchBtn').addEventListener('click', searchApp);
-        
-        document.getElementById('appIdInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchApp();
-            }
-        });
-    </script>
-</body>
-</html>
+        document.
