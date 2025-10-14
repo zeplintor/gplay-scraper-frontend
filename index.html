@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlayStore Analytics - Analyse d'Apps Android</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
@@ -22,7 +23,6 @@
             overflow-x: hidden;
         }
 
-        /* Fond animé avec gradients */
         .bg-animated {
             position: fixed;
             top: 0;
@@ -47,7 +47,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             top: -200px;
             left: -200px;
-            animation-delay: 0s;
         }
 
         .orb-2 {
@@ -74,7 +73,6 @@
             66% { transform: translate(-50px, 50px) scale(0.9); }
         }
 
-        /* Navbar */
         nav {
             position: fixed;
             top: 0;
@@ -95,7 +93,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .nav-links {
@@ -109,36 +106,18 @@
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
         }
 
         .nav-links a:hover {
             color: #fff;
         }
 
-        /* Container principal */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 120px 20px 50px;
         }
 
-        /* Hero Section */
         .hero {
             text-align: center;
             padding: 60px 20px;
@@ -152,7 +131,6 @@
             background: linear-gradient(135deg, #fff 0%, #667eea 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             line-height: 1.2;
         }
 
@@ -160,13 +138,9 @@
             font-size: clamp(1rem, 2vw, 1.5rem);
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 40px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        /* Espace publicitaire top */
-        .ad-space-top {
+        .ad-space {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
             border: 2px dashed rgba(102, 126, 234, 0.3);
             border-radius: 20px;
@@ -176,18 +150,10 @@
             transition: all 0.3s;
         }
 
-        .ad-space-top:hover {
+        .ad-space:hover {
             border-color: rgba(102, 126, 234, 0.6);
-            transform: scale(1.02);
         }
 
-        .ad-placeholder {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 600;
-        }
-
-        /* Search Box */
         .search-box {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
@@ -202,7 +168,6 @@
             display: flex;
             gap: 15px;
             margin-bottom: 30px;
-            position: relative;
         }
 
         input {
@@ -220,7 +185,6 @@
         input:focus {
             outline: none;
             border-color: #667eea;
-            background: rgba(255, 255, 255, 0.08);
             box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
@@ -238,23 +202,6 @@
             border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
         }
 
         .btn-primary:hover {
@@ -262,17 +209,11 @@
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
         .btn-primary:disabled {
             background: rgba(255, 255, 255, 0.1);
             cursor: not-allowed;
-            transform: none;
         }
 
-        /* Example Apps */
         .examples-section {
             margin-top: 40px;
         }
@@ -311,7 +252,6 @@
             transform: translateY(-2px);
         }
 
-        /* Loading Animation */
         .loading {
             text-align: center;
             padding: 80px 20px;
@@ -322,55 +262,25 @@
             width: 80px;
             height: 80px;
             margin: 0 auto 30px;
-            position: relative;
-        }
-
-        .loading-spinner::before,
-        .loading-spinner::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            border: 4px solid transparent;
+            border: 4px solid rgba(102, 126, 234, 0.2);
             border-top-color: #667eea;
-        }
-
-        .loading-spinner::before {
-            width: 80px;
-            height: 80px;
+            border-radius: 50%;
             animation: spin 1s linear infinite;
-        }
-
-        .loading-spinner::after {
-            width: 60px;
-            height: 60px;
-            top: 10px;
-            left: 10px;
-            border-top-color: #764ba2;
-            animation: spin 0.7s linear infinite reverse;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .loading-text {
-            font-size: 20px;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 600;
-        }
-
-        /* Error Message */
         .error {
-            background: linear-gradient(135deg, rgba(245, 87, 108, 0.2) 0%, rgba(240, 147, 251, 0.2) 100%);
+            background: rgba(245, 87, 108, 0.2);
             border: 2px solid rgba(245, 87, 108, 0.5);
             padding: 25px;
             border-radius: 20px;
             margin-bottom: 30px;
             display: none;
-            font-weight: 600;
         }
 
-        /* Result Section */
         .result {
             display: none;
         }
@@ -392,20 +302,11 @@
             align-items: flex-start;
         }
 
-        .app-icon-wrapper {
-            position: relative;
-        }
-
         .app-icon {
             width: 120px;
             height: 120px;
             border-radius: 28px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s;
-        }
-
-        .app-icon:hover {
-            transform: scale(1.05) rotate(2deg);
         }
 
         .app-info h2 {
@@ -418,7 +319,6 @@
             font-size: 1.2rem;
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 15px;
-            font-weight: 500;
         }
 
         .app-genre {
@@ -430,7 +330,6 @@
             font-weight: 600;
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -445,29 +344,11 @@
             border-radius: 20px;
             text-align: center;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            opacity: 0;
-            transition: opacity 0.3s;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
             border-color: rgba(102, 126, 234, 0.5);
-        }
-
-        .stat-card:hover::before {
-            opacity: 1;
         }
 
         .stat-label {
@@ -477,8 +358,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
-            position: relative;
-            z-index: 1;
         }
 
         .stat-value {
@@ -487,12 +366,8 @@
             background: linear-gradient(135deg, #fff 0%, #667eea 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            z-index: 1;
         }
 
-        /* Summary Section */
         .summary {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -502,187 +377,54 @@
             line-height: 1.8;
         }
 
-        .summary strong {
-            display: block;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #667eea;
-        }
-
-        /* Espace publicitaire sidebar */
-        .layout-with-ads {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 40px;
-            margin-top: 60px;
-        }
-
-        .ad-sidebar {
-            position: sticky;
-            top: 120px;
-            height: fit-content;
-        }
-
-        .ad-space-side {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border: 2px dashed rgba(102, 126, 234, 0.3);
-            border-radius: 20px;
-            padding: 40px 20px;
-            text-align: center;
-            margin-bottom: 30px;
-            min-height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .ad-space-side:hover {
-            border-color: rgba(102, 126, 234, 0.6);
-        }
-
-        /* Espace publicitaire bottom */
-        .ad-space-bottom {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border: 2px dashed rgba(102, 126, 234, 0.3);
-            border-radius: 20px;
-            padding: 60px 20px;
-            text-align: center;
-            margin-top: 60px;
-            transition: all 0.3s;
-        }
-
-        .ad-space-bottom:hover {
-            border-color: rgba(102, 126, 234, 0.6);
-            transform: scale(1.01);
-        }
-
-        /* API URL Section */
-        .api-url-section {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 20px;
-            margin-top: 40px;
-        }
-
-        .api-url-section h3 {
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-            color: #667eea;
-        }
-
-        .api-url-section input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 60px 20px;
-            margin-top: 100px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .layout-with-ads {
-                grid-template-columns: 1fr;
-            }
-
-            .ad-sidebar {
-                position: relative;
-                top: 0;
-            }
-
-            .ad-space-side {
-                min-height: 250px;
-            }
-        }
-
         @media (max-width: 768px) {
-            nav {
-                padding: 15px 5%;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .container {
-                padding-top: 100px;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .search-box {
-                padding: 30px 20px;
-            }
-
             .input-group {
                 flex-direction: column;
             }
 
             .app-header {
                 flex-direction: column;
-                text-align: center;
                 align-items: center;
+                text-align: center;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            .result-card {
-                padding: 30px 20px;
+            .nav-links {
+                display: none;
             }
-        }
-
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
         }
     </style>
 </head>
 <body>
-    <!-- Fond animé -->
     <div class="bg-animated">
         <div class="gradient-orb orb-1"></div>
         <div class="gradient-orb orb-2"></div>
         <div class="gradient-orb orb-3"></div>
     </div>
 
-    <!-- Navbar -->
-    <nav id="navbar">
+    <nav>
         <div class="logo">PlayStore Analytics</div>
         <ul class="nav-links">
             <li><a href="#home">Accueil</a></li>
             <li><a href="#search">Rechercher</a></li>
-            <li><a href="#about">À propos</a></li>
         </ul>
     </nav>
 
     <div class="container">
-        <!-- Hero Section -->
         <section class="hero" id="home">
             <h1>Analysez les Apps Android</h1>
-            <p>Découvrez les statistiques complètes de n'importe quelle application sur le Google Play Store en temps réel</p>
+            <p>Découvrez les statistiques complètes de n'importe quelle application sur le Google Play Store</p>
         </section>
 
-        <!-- Espace publicitaire TOP -->
-        <div class="ad-space-top">
-            <div class="ad-placeholder">📢 Espace Publicitaire Premium (728x90)</div>
+        <div class="ad-space">
+            <div style="color: rgba(255,255,255,0.5); font-size: 18px; font-weight: 600;">
+                📢 Espace Publicitaire Premium (728x90)
+            </div>
         </div>
 
-        <!-- Search Box -->
         <div class="search-box" id="search">
             <div class="input-group">
                 <input 
@@ -691,98 +433,71 @@
                     placeholder="Entrez l'ID de l'app (ex: com.whatsapp)"
                     value="com.whatsapp"
                 />
-                <button class="btn-primary" id="searchBtn" onclick="searchApp()">
+                <button class="btn-primary" id="searchBtn">
                     🔍 Analyser
                 </button>
             </div>
             
             <div class="examples-section">
                 <div class="examples-label">Applications populaires</div>
-                <div class="example-apps">
-                    <button class="example-btn" onclick="setAppId('com.whatsapp')">💬 WhatsApp</button>
-                    <button class="example-btn" onclick="setAppId('com.instagram.android')">📸 Instagram</button>
-                    <button class="example-btn" onclick="setAppId('com.zhiliaoapp.musically')">🎵 TikTok</button>
-                    <button class="example-btn" onclick="setAppId('org.telegram.messenger')">✈️ Telegram</button>
-                    <button class="example-btn" onclick="setAppId('com.snapchat.android')">👻 Snapchat</button>
-                    <button class="example-btn" onclick="setAppId('com.spotify.music')">🎧 Spotify</button>
-                </div>
+                <div class="example-apps" id="exampleApps"></div>
             </div>
         </div>
 
-        <!-- Loading -->
         <div class="loading" id="loading">
             <div class="loading-spinner"></div>
-            <div class="loading-text">Analyse en cours...</div>
+            <div style="font-size: 20px; color: rgba(255,255,255,0.8); font-weight: 600;">
+                Analyse en cours...
+            </div>
         </div>
 
-        <!-- Error -->
         <div class="error" id="error"></div>
 
-        <!-- Layout avec sidebar publicité -->
-        <div class="layout-with-ads">
-            <!-- Résultats -->
-            <div class="result" id="result">
-                <div class="result-card">
-                    <div class="app-header">
-                        <div class="app-icon-wrapper">
-                            <img id="appIcon" class="app-icon" src="" alt="App Icon">
-                        </div>
-                        <div class="app-info">
-                            <h2 id="appTitle"></h2>
-                            <p class="app-developer" id="appDeveloper"></p>
-                            <span class="app-genre" id="appGenre"></span>
-                        </div>
-                    </div>
-
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-label">Note moyenne</div>
-                            <div class="stat-value" id="appScore">-</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Nombre d'avis</div>
-                            <div class="stat-value" id="appRatings">-</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Installations</div>
-                            <div class="stat-value" id="appInstalls">-</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Prix</div>
-                            <div class="stat-value" id="appPrice">-</div>
-                        </div>
-                    </div>
-
-                    <div class="summary">
-                        <strong>📝 Description</strong>
-                        <p id="appSummary"></p>
-                    </div>
-
-                    <div class="api-url-section">
-                        <h3>🔗 URL de l'API utilisée</h3>
-                        <input type="text" id="apiUrlUsed" readonly onclick="this.select()">
+        <div class="result" id="result">
+            <div class="result-card">
+                <div class="app-header">
+                    <img id="appIcon" class="app-icon" src="" alt="App Icon">
+                    <div class="app-info">
+                        <h2 id="appTitle"></h2>
+                        <p class="app-developer" id="appDeveloper"></p>
+                        <span class="app-genre" id="appGenre"></span>
                     </div>
                 </div>
 
-                <!-- Espace publicitaire BOTTOM -->
-                <div class="ad-space-bottom">
-                    <div class="ad-placeholder">📢 Espace Publicitaire Large (970x250)</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Note moyenne</div>
+                        <div class="stat-value" id="appScore">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Nombre d'avis</div>
+                        <div class="stat-value" id="appRatings">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Installations</div>
+                        <div class="stat-value" id="appInstalls">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Prix</div>
+                        <div class="stat-value" id="appPrice">-</div>
+                    </div>
+                </div>
+
+                <div class="summary">
+                    <strong style="display: block; font-size: 1.2rem; margin-bottom: 15px; color: #667eea;">
+                        📝 Description
+                    </strong>
+                    <p id="appSummary"></p>
                 </div>
             </div>
 
-            <!-- Sidebar publicité -->
-            <aside class="ad-sidebar">
-                <div class="ad-space-side">
-                    <div class="ad-placeholder">📢 Publicité<br>Sidebar<br>(300x600)</div>
+            <div class="ad-space">
+                <div style="color: rgba(255,255,255,0.5); font-size: 18px; font-weight: 600;">
+                    📢 Espace Publicitaire Large (970x250)
                 </div>
-            </aside>
+            </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer id="about">
-        <p>© 2025 PlayStore Analytics - Propulsé par Google Play Scraper API</p>
-    </footer>
 
     <script>
         // ⚠️ REMPLACE CETTE URL PAR TON URL RENDER !
@@ -791,21 +506,6 @@
         // GSAP Animations
         gsap.registerPlugin(ScrollTrigger);
 
-        // Animation de la navbar au scroll
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            const navbar = document.getElementById('navbar');
-            
-            if (currentScroll > lastScroll && currentScroll > 100) {
-                gsap.to(navbar, { y: -100, duration: 0.3 });
-            } else {
-                gsap.to(navbar, { y: 0, duration: 0.3 });
-            }
-            lastScroll = currentScroll;
-        });
-
-        // Animation au chargement de la page
         gsap.from('.hero h1', {
             duration: 1,
             y: 50,
@@ -829,39 +529,26 @@
             ease: 'power3.out'
         });
 
-        // Animation des cartes de stats
-        function animateStats() {
-            const statCards = document.querySelectorAll('.stat-card');
-            gsap.from(statCards, {
-                duration: 0.6,
-                y: 30,
-                opacity: 0,
-                stagger: 0.1,
-                ease: 'power2.out'
-            });
-        }
+        // Apps populaires
+        const popularApps = [
+            { id: 'com.whatsapp', name: '💬 WhatsApp' },
+            { id: 'com.instagram.android', name: '📸 Instagram' },
+            { id: 'com.zhiliaoapp.musically', name: '🎵 TikTok' },
+            { id: 'org.telegram.messenger', name: '✈️ Telegram' },
+            { id: 'com.snapchat.android', name: '👻 Snapchat' },
+            { id: 'com.spotify.music', name: '🎧 Spotify' }
+        ];
 
-        // Animation du résultat
-        function animateResult() {
-            gsap.from('.result-card', {
-                duration: 0.8,
-                y: 50,
-                opacity: 0,
-                ease: 'power3.out'
-            });
+        // Créer les boutons d'exemples
+        const exampleAppsContainer = document.getElementById('exampleApps');
+        popularApps.forEach(app => {
+            const btn = document.createElement('button');
+            btn.className = 'example-btn';
+            btn.textContent = app.name;
+            btn.onclick = () => setAppId(app.id);
+            exampleAppsContainer.appendChild(btn);
+        });
 
-            gsap.from('.app-icon', {
-                duration: 1,
-                scale: 0,
-                rotation: 360,
-                ease: 'back.out(1.7)',
-                delay: 0.2
-            });
-
-            animateStats();
-        }
-
-        // Fonctions principales
         function setAppId(appId) {
             document.getElementById('appIdInput').value = appId;
             gsap.to('#appIdInput', {
@@ -880,17 +567,10 @@
                 return;
             }
 
-            // Reset
             document.getElementById('result').style.display = 'none';
             document.getElementById('error').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
             document.getElementById('searchBtn').disabled = true;
-
-            // Animation du bouton
-            gsap.to('#searchBtn', {
-                duration: 0.3,
-                scale: 0.95
-            });
 
             try {
                 const response = await fetch(`${API_URL}/api/search/${appId}`);
@@ -900,12 +580,92 @@
                     throw new Error(result.error || 'Erreur lors de la recherche');
                 }
 
-                displayResult(result.data, appId);
+                displayResult(result.data);
             } catch (error) {
                 showError(error.message);
             } finally {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('searchBtn').disabled = false;
-                gsap.to('#searchBtn', {
-                    duration: 0.3,
-                    scale:
+            }
+        }
+
+        function displayResult(data) {
+            document.getElementById('appIcon').src = data.icon || '';
+            document.getElementById('appTitle').textContent = data.title || 'N/A';
+            document.getElementById('appDeveloper').textContent = data.developer || 'N/A';
+            document.getElementById('appGenre').textContent = data.genre || 'N/A';
+            document.getElementById('appScore').textContent = data.score ? data.score.toFixed(1) + ' ⭐' : 'N/A';
+            document.getElementById('appRatings').textContent = data.ratings ? formatNumber(data.ratings) : 'N/A';
+            document.getElementById('appInstalls').textContent = data.installs || 'N/A';
+            document.getElementById('appPrice').textContent = data.free ? 'Gratuit' : `$${data.price}`;
+            document.getElementById('appSummary').textContent = data.summary || 'Aucun résumé disponible';
+            
+            document.getElementById('result').style.display = 'block';
+            
+            gsap.from('.result-card', {
+                duration: 0.8,
+                y: 50,
+                opacity: 0,
+                ease: 'power3.out'
+            });
+
+            gsap.from('.app-icon', {
+                duration: 1,
+                scale: 0,
+                rotation: 360,
+                ease: 'back.out(1.7)',
+                delay: 0.2
+            });
+
+            gsap.from('.stat-card', {
+                duration: 0.6,
+                y: 30,
+                opacity: 0,
+                stagger: 0.1,
+                ease: 'power2.out',
+                delay: 0.3
+            });
+
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = '❌ ' + message;
+            errorDiv.style.display = 'block';
+            
+            gsap.from(errorDiv, {
+                duration: 0.5,
+                y: -20,
+                opacity: 0
+            });
+
+            setTimeout(() => {
+                gsap.to(errorDiv, {
+                    duration: 0.5,
+                    opacity: 0,
+                    onComplete: () => errorDiv.style.display = 'none'
+                });
+            }, 5000);
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Event listeners
+        document.getElementById('searchBtn').addEventListener('click', searchApp);
+        
+        document.getElementById('appIdInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchApp();
+            }
+        });
+    </script>
+</body>
+</html>
