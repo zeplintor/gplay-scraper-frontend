@@ -2130,10 +2130,10 @@ function downloadFile(blob, filename) {
 
 // ============ APP NAME SEARCH FUNCTIONALITY ============
 
-const SERPAPI_KEY = 'bbfe6148f9e6efe12cb7d3451240a3e1d3ab52c4d4e8838e25d6af043f21d6c7';
 let searchTimeout = null;
 const appNameInput = document.getElementById('appNameSearch');
 const suggestionsDiv = document.getElementById('searchSuggestions');
+const SERPAPI_FUNCTION = '/.netlify/functions/serp-search';
 
 // Close suggestions when clicking outside
 document.addEventListener('click', function(e) {
@@ -2160,16 +2160,16 @@ appNameInput.addEventListener('input', function() {
 
     // Debounce search
     searchTimeout = setTimeout(async () => {
-        // Try SerpApi live results first
+        // Try SerpApi live results via proxy first
         try {
-            const serpApps = await searchSerpApi(query);
+            const serpApps = await searchSerpProxy(query);
 
             if (serpApps.length > 0) {
                 displaySuggestions(serpApps);
                 return;
             }
         } catch (error) {
-            console.error('Erreur SerpApi', error);
+            console.error('Erreur proxy SerpApi', error);
         }
 
         // Fallback to backend search if available
@@ -2190,62 +2190,19 @@ appNameInput.addEventListener('input', function() {
     }, 300);
 });
 
-async function searchSerpApi(query) {
-    const params = new URLSearchParams({
-        engine: 'google_play',
-        store: 'apps',
-        num: '8',
-        gl: 'fr',
-        hl: 'fr',
-        q: query,
-        api_key: SERPAPI_KEY
-    });
-
-    const response = await fetch(`https://serpapi.com/search.json?${params.toString()}`);
+async function searchSerpProxy(query) {
+    const response = await fetch(`${SERPAPI_FUNCTION}?q=${encodeURIComponent(query)}`);
 
     if (!response.ok) {
-        throw new Error(`SerpApi HTTP ${response.status}`);
+        throw new Error(`Proxy SerpApi HTTP ${response.status}`);
     }
 
     const data = await response.json();
-    const results = Array.isArray(data.organic_results) ? data.organic_results : [];
+    if (data.success && Array.isArray(data.apps)) {
+        return data.apps;
+    }
 
-    return results
-        .map(result => {
-            let appId = '';
-
-            if (result.app_id) {
-                appId = result.app_id;
-            } else if (result.link) {
-                try {
-                    const url = new URL(result.link);
-                    appId = url.searchParams.get('id') || '';
-                } catch (err) {
-                    appId = '';
-                }
-            }
-
-            const ratingRaw = result.rating;
-            let score = null;
-
-            if (typeof ratingRaw === 'number') {
-                score = ratingRaw;
-            } else if (typeof ratingRaw === 'string') {
-                const parsed = parseFloat(ratingRaw.replace(',', '.'));
-                if (!Number.isNaN(parsed)) {
-                    score = parsed;
-                }
-            }
-
-            return {
-                appId,
-                title: result.title || result.app_id || '',
-                developer: result.developer || result.author || result.offered_by || '',
-                score,
-                icon: result.thumbnail || result.favicon || ''
-            };
-        })
-        .filter(app => app.appId && app.title);
+    return [];
 }
 
 // Fallback: Search in popular apps list
