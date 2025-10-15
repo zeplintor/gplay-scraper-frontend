@@ -1,6 +1,18 @@
 const API = 'https://gplay-scraper-backend.onrender.com';
 let fullData = null;
 let hasLicense = false;
+const loadingEl = document.getElementById('loading');
+const reportContainer = document.getElementById('reportContainer');
+const exportMenu = document.getElementById('exportMenu');
+const exportContainer = document.querySelector('.export-container');
+const shareBtn = document.getElementById('shareBtn');
+const shareMenu = document.getElementById('shareMenu');
+const shareContainer = document.querySelector('.actions-dropdown');
+const csvInput = document.getElementById('csvInput');
+const startBatchBtn = document.getElementById('startBatchBtn');
+const batchProgress = document.getElementById('batchProgress');
+let batchQueue = [];
+let batchRunning = false;
 
 function fmt(n) {
     if (!n) return '0';
@@ -25,6 +37,122 @@ function checkLicense() {
         document.getElementById('licenseStatus').innerHTML =
             '<span class="license-status">✓ Premium Actif</span>';
     }
+    updateStatusBanner();
+}
+
+// ============================================
+// FREEMIUM SYSTEM: Daily Analysis Limit
+// ============================================
+
+function getDailyAnalysisCount() {
+    const today = new Date().toDateString();
+    const data = JSON.parse(localStorage.getItem('dailyAnalyses') || '{}');
+
+    if (data.date !== today) {
+        // New day, reset counter
+        return { date: today, count: 0 };
+    }
+
+    return data;
+}
+
+function incrementAnalysisCount() {
+    const data = getDailyAnalysisCount();
+    data.count++;
+    localStorage.setItem('dailyAnalyses', JSON.stringify(data));
+    updateStatusBanner();
+    return data.count;
+}
+
+function canAnalyze() {
+    if (hasLicense) return true;
+
+    const data = getDailyAnalysisCount();
+    return data.count < 3;
+}
+
+function getRemainingAnalyses() {
+    if (hasLicense) return Infinity;
+
+    const data = getDailyAnalysisCount();
+    return Math.max(0, 3 - data.count);
+}
+
+function updateStatusBanner() {
+    const banner = document.getElementById('statusBanner');
+    if (!banner) return;
+
+    if (hasLicense) {
+        banner.className = 'status-banner premium';
+        banner.innerHTML = `
+            <div class="status-banner-left">
+                <span class="status-icon">💎</span>
+                <div class="status-text">
+                    <h3>Premium Actif</h3>
+                    <p>Analyses illimitées • Toutes les fonctionnalités débloquées</p>
+                </div>
+            </div>
+        `;
+    } else {
+        const remaining = getRemainingAnalyses();
+        banner.className = 'status-banner free';
+        banner.innerHTML = `
+            <div class="status-banner-left">
+                <span class="status-icon">🆓</span>
+                <div class="status-text">
+                    <h3>Mode Gratuit</h3>
+                    <p>Analyses gratuites aujourd'hui</p>
+                </div>
+                <span class="status-counter">${remaining}/3 restantes</span>
+            </div>
+            <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" class="status-upgrade-btn">
+                💎 Passer Premium
+            </a>
+        `;
+    }
+}
+
+function showPaywall() {
+    const modal = document.getElementById('paywallModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function hidePaywall() {
+    const modal = document.getElementById('paywallModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Paywall event listeners
+document.getElementById('closePaywall')?.addEventListener('click', hidePaywall);
+document.getElementById('paywallWaitTomorrow')?.addEventListener('click', hidePaywall);
+
+// Close paywall when clicking outside
+document.getElementById('paywallModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        hidePaywall();
+    }
+});
+
+async function fetchAppData(appId) {
+    const encodedId = encodeURIComponent(appId);
+    const response = await fetch(`${API}/api/analyze/${encodedId}`);
+
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    if (!payload.success || !payload.data) {
+        throw new Error(payload.message || 'Analyse impossible pour cette application');
+    }
+
+    return payload.data;
 }
 
 document.getElementById('licenseBtn').onclick = function() {
@@ -44,27 +172,38 @@ document.getElementById('licenseBtn').onclick = function() {
 
 document.getElementById('searchBtn').onclick = async function() {
     const id = document.getElementById('appId').value.trim();
-    if (!id) return toast('Veuillez entrer un ID d\'application', 'error');
-
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('reportContainer').innerHTML = '';
-
-    try {
-        const res = await fetch(`${API}/api/analyze/${id}`);
-        const data = await res.json();
-
-        if (data.success) {
-            fullData = data.data;
-            generateReport(data.data);
-            toast('Analyse terminée', 'success');
-        } else {
-            toast('Application non trouvée', 'error');
-        }
-    } catch (e) {
-        toast('Erreur: ' + e.message, 'error');
+    if (!id) {
+        toast('Veuillez entrer un ID d\'application', 'error');
+        return;
     }
 
-    document.getElementById('loading').style.display = 'none';
+    // ✅ Check freemium limit BEFORE analyzing
+    if (!canAnalyze()) {
+        showPaywall();
+        toast('Limite gratuite atteinte (3/jour)', 'error');
+        return;
+    }
+
+    if (loadingEl) loadingEl.style.display = 'block';
+    if (reportContainer) reportContainer.innerHTML = '';
+
+    try {
+        const data = await fetchAppData(id);
+        fullData = data;
+
+        // ✅ Increment counter AFTER successful analysis
+        if (!hasLicense) {
+            incrementAnalysisCount();
+        }
+
+        generateReport(data);
+        toast('Analyse terminée', 'success');
+    } catch (e) {
+        console.error('Analyse error:', e);
+        toast('Erreur: ' + e.message, 'error');
+    } finally {
+        if (loadingEl) loadingEl.style.display = 'none';
+    }
 };
 
 function generateReport(data) {
@@ -435,27 +574,37 @@ function generateReport(data) {
     container.innerHTML = html;
 }
 
-// ============ EXPORT FUNCTIONS ============
+// ============ EXPORT & SHARE FUNCTIONS ============
 
-// Toggle Export Menu
-document.getElementById('exportBtn').onclick = function(e) {
-    e.stopPropagation();
-    const menu = document.getElementById('exportMenu');
-    menu.classList.toggle('active');
-};
+const exportBtn = document.getElementById('exportBtn');
+if (exportBtn && exportMenu) {
+    exportBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        exportMenu.classList.toggle('active');
+    });
+}
+
+if (shareBtn && shareMenu) {
+    shareBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        shareMenu.classList.toggle('active');
+    });
+}
 
 document.addEventListener('click', function(e) {
-    const menu = document.getElementById('exportMenu');
-    const exportContainer = document.querySelector('.export-container');
-    if (!exportContainer.contains(e.target)) {
-        menu.classList.remove('active');
+    if (exportMenu && exportContainer && !exportContainer.contains(e.target)) {
+        exportMenu.classList.remove('active');
+    }
+
+    if (shareMenu && shareContainer && !shareContainer.contains(e.target)) {
+        shareMenu.classList.remove('active');
     }
 });
 
 document.querySelectorAll('.export-menu-item').forEach(item => {
     item.addEventListener('click', function() {
         const format = this.dataset.format;
-        document.getElementById('exportMenu').classList.remove('active');
+        if (exportMenu) exportMenu.classList.remove('active');
 
         if (!fullData) {
             toast('Veuillez d\'abord analyser une application', 'error');
@@ -463,6 +612,14 @@ document.querySelectorAll('.export-menu-item').forEach(item => {
         }
 
         handleExport(format);
+    });
+});
+
+document.querySelectorAll('.share-menu-item').forEach(item => {
+    item.addEventListener('click', function() {
+        const action = this.dataset.share;
+        if (shareMenu) shareMenu.classList.remove('active');
+        handleShare(action);
     });
 });
 
@@ -491,6 +648,65 @@ async function handleExport(format) {
     } catch(e) {
         toast('Erreur lors de l\'export: ' + e.message, 'error');
         console.error('Export error:', e);
+    }
+}
+
+function handleShare(action) {
+    if (!fullData) {
+        toast('Analysez une application avant de partager', 'error');
+        return;
+    }
+
+    if (action === 'email') {
+        const subject = encodeURIComponent(`Rapport PlayStore – ${fullData.title || fullData.appId || 'Application'}`);
+        const summary = buildReportSummary();
+        const body = encodeURIComponent(summary + '\n\nGénéré avec PlayStore Analytics Pro.');
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        return;
+    }
+
+    if (action === 'clipboard') {
+        const summary = buildReportSummary();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(summary)
+                .then(() => toast('Résumé copié dans le presse-papiers', 'success'))
+                .catch(() => fallbackCopy(summary));
+        } else {
+            fallbackCopy(summary);
+        }
+    }
+}
+
+function buildReportSummary() {
+    const appIdInput = document.getElementById('appId');
+    const appId = fullData.appId || (appIdInput ? appIdInput.value : '');
+    const lines = [
+        `Rapport PlayStore – ${fullData.title || appId || 'Application'}`,
+        `ID : ${appId || 'N/A'}`,
+        `Note moyenne : ${fullData.score ? fullData.score.toFixed(1) : 'N/A'}`,
+        `Avis : ${fmt(fullData.ratings || 0)}`,
+        `Installations : ${fullData.installs || 'N/A'}`,
+        fullData.genre ? `Catégorie : ${fullData.genre}` : null,
+        appId ? `Lien : https://play.google.com/store/apps/details?id=${appId}` : null
+    ].filter(Boolean);
+    return lines.join('\n');
+}
+
+function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-1000px';
+    textarea.style.top = '-1000px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand('copy');
+        toast('Résumé copié dans le presse-papiers', 'success');
+    } catch (err) {
+        toast('Impossible de copier automatiquement', 'error');
+    } finally {
+        document.body.removeChild(textarea);
     }
 }
 
@@ -1297,6 +1513,232 @@ appNameInput.addEventListener('input', function() {
         searchLocalApps(query);
     }, 300);
 });
+
+if (csvInput) {
+    csvInput.addEventListener('change', handleCSVImport);
+}
+
+if (startBatchBtn) {
+    startBatchBtn.addEventListener('click', () => {
+        if (!batchQueue.length || batchRunning) {
+            if (!batchQueue.length) {
+                toast('Importez un fichier CSV avant de lancer l\'analyse en série', 'error');
+            } else if (batchRunning) {
+                toast('Une analyse est déjà en cours', 'error');
+            }
+            return;
+        }
+        runBatchQueue();
+    });
+}
+
+function handleCSVImport(event) {
+    if (batchRunning) {
+        toast('Une analyse est déjà en cours. Patientez avant de réimporter un CSV.', 'error');
+        event.target.value = '';
+        return;
+    }
+
+    const file = event.target.files ? event.target.files[0] : null;
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = ({ target }) => {
+        try {
+            const content = target?.result || '';
+            const ids = parseCsvContent(String(content));
+
+            if (!ids.length) {
+                toast('CSV vide ou colonne appId introuvable', 'error');
+                resetBatchUI();
+                return;
+            }
+
+            renderBatchList(ids);
+            toast(`${ids.length} application${ids.length > 1 ? 's' : ''} détectée${ids.length > 1 ? 's' : ''}`, 'success');
+        } catch (err) {
+            console.error('CSV parse error:', err);
+            toast('Impossible de lire ce fichier CSV', 'error');
+            resetBatchUI();
+        }
+    };
+    reader.onerror = () => {
+        toast('Erreur lors de la lecture du fichier CSV', 'error');
+        resetBatchUI();
+    };
+    reader.readAsText(file);
+}
+
+function parseCsvContent(text) {
+    const lines = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+    if (!lines.length) return [];
+
+    let startIndex = 0;
+    let targetIndex = 0;
+    const firstParts = splitCsvLine(lines[0]);
+    if (firstParts.length > 1 || /[a-zA-Z]/.test(firstParts[0])) {
+        const headers = firstParts.map(part => part.toLowerCase());
+        const possible = ['appid', 'app_id', 'id'];
+        targetIndex = headers.findIndex((header) => possible.includes(header));
+        if (targetIndex === -1) targetIndex = 0;
+        startIndex = 1;
+    }
+
+    const ids = [];
+    for (let i = startIndex; i < lines.length; i++) {
+        const parts = splitCsvLine(lines[i]);
+        const candidate = (parts[targetIndex] || '').trim();
+        if (candidate) ids.push(candidate);
+    }
+
+    return Array.from(new Set(ids));
+}
+
+function splitCsvLine(line) {
+    const segments = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+
+        if (char === '"') {
+            if (line[i + 1] === '"') {
+                current += '"';
+                i++;
+            } else {
+                inQuotes = !inQuotes;
+            }
+        } else if (char === ',' && !inQuotes) {
+            segments.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    segments.push(current.trim());
+
+    return segments;
+}
+
+function renderBatchList(appIds) {
+    if (!batchProgress) return;
+
+    batchProgress.innerHTML = '';
+    batchQueue = appIds.map((appId) => {
+        const item = document.createElement('div');
+        item.className = 'batch-item';
+        item.innerHTML = `
+            <div class="batch-info">
+                <span class="batch-title">${appId}</span>
+                <span class="batch-status">En attente</span>
+            </div>
+            <div class="batch-bar">
+                <div class="batch-bar-fill"></div>
+            </div>
+        `;
+
+        batchProgress.appendChild(item);
+
+        return {
+            appId,
+            element: item,
+            statusEl: item.querySelector('.batch-status'),
+            barEl: item.querySelector('.batch-bar-fill'),
+            data: null
+        };
+    });
+
+    if (startBatchBtn) {
+        startBatchBtn.disabled = batchQueue.length === 0;
+        startBatchBtn.textContent = batchQueue.length
+            ? `Démarrer l'analyse (${batchQueue.length})`
+            : `Démarrer l'analyse`;
+    }
+}
+
+function resetBatchUI() {
+    batchQueue = [];
+    if (batchProgress) batchProgress.innerHTML = '';
+    if (startBatchBtn) {
+        startBatchBtn.disabled = true;
+        startBatchBtn.textContent = `Démarrer l'analyse`;
+    }
+    if (csvInput) {
+        csvInput.value = '';
+    }
+}
+
+async function runBatchQueue() {
+    if (!batchQueue.length) return;
+
+    batchRunning = true;
+    if (startBatchBtn) {
+        startBatchBtn.disabled = true;
+        startBatchBtn.textContent = 'Analyse en cours...';
+    }
+
+    for (const item of batchQueue) {
+        await processBatchItem(item);
+    }
+
+    batchRunning = false;
+    if (startBatchBtn) {
+        startBatchBtn.disabled = false;
+        startBatchBtn.textContent = 'Relancer l\'analyse';
+    }
+
+    toast('Analyse en série terminée', 'success');
+}
+
+async function processBatchItem(item) {
+    updateBatchStatus(item, 'Analyse en cours...', null);
+    updateBatchProgress(item, 20);
+
+    try {
+        const data = await fetchAppData(item.appId);
+        item.data = data;
+        updateBatchProgress(item, 100);
+        updateBatchStatus(item, 'Succès', 'success');
+        item.barEl?.classList.remove('error');
+
+        if (!item.element.dataset.bound) {
+            item.element.dataset.bound = '1';
+            item.element.classList.add('clickable');
+            item.element.addEventListener('click', () => {
+                if (item.data) {
+                    fullData = item.data;
+                    generateReport(item.data);
+                    toast(`Rapport chargé : ${item.data.title || item.appId}`, 'success');
+                }
+            });
+        }
+
+        fullData = data;
+        generateReport(data);
+    } catch (error) {
+        console.error(`Erreur analyse batch (${item.appId})`, error);
+        updateBatchProgress(item, 100);
+        updateBatchStatus(item, 'Échec', 'error');
+        item.barEl?.classList.add('error');
+        toast(`Échec pour ${item.appId}`, 'error');
+    }
+}
+
+function updateBatchProgress(item, value) {
+    if (item?.barEl) {
+        item.barEl.style.width = `${Math.min(Math.max(value, 0), 100)}%`;
+    }
+}
+
+function updateBatchStatus(item, text, statusClass) {
+    if (!item?.statusEl) return;
+    item.statusEl.textContent = text;
+    item.statusEl.classList.remove('success', 'error');
+    if (statusClass) {
+        item.statusEl.classList.add(statusClass);
+    }
+}
 
 async function searchSerpProxy(query) {
     const response = await fetch(`${SERPAPI_FUNCTION}?q=${encodeURIComponent(query)}`);

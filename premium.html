@@ -17,11 +17,26 @@
                 <span class="header-icon">💎</span>
                 <div class="header-text">
                     <h1>PlayStore Analytics Pro</h1>
-                    <p class="subtitle">Rapport Premium Ultra-Détaillé</p>
+                    <p class="subtitle">Rapport Premium ultra détaillé</p>
                 </div>
             </div>
-            <div id="licenseStatus"></div>
+            <div class="header-right">
+                <div class="header-badge">Dashboard Premium</div>
+                <div class="header-meta">
+                    <span class="header-meta-label">Statut licence</span>
+                    <span id="licenseStatus" class="header-license-placeholder">En attente</span>
+                </div>
+                <div class="header-links">
+                    <a href="index.html" class="link-pill">Landing</a>
+                    <a href="mailto:hello@playstore-analytics.pro" class="link-pill">Support</a>
+                </div>
+            </div>
         </header>
+
+        <!-- Status Badge: Free vs Premium -->
+        <div id="statusBanner" class="status-banner">
+            <!-- Will be populated by JavaScript -->
+        </div>
 
         <div class="search-box">
             <div class="search-header">
@@ -31,6 +46,19 @@
                 </div>
                 <div class="search-actions">
                     <button id="licenseBtn" class="license-btn">Gérer la licence</button>
+                    <div class="actions-dropdown">
+                        <button id="shareBtn" class="secondary-btn">Partager</button>
+                        <div class="share-menu" id="shareMenu">
+                            <div class="share-menu-item" data-share="email">
+                                <span class="icon">✉️</span>
+                                <span class="label">Envoyer par email</span>
+                            </div>
+                            <div class="share-menu-item" data-share="clipboard">
+                                <span class="icon">📋</span>
+                                <span class="label">Copier un résumé</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="export-container">
                         <button id="exportBtn" class="export-btn">Exporter</button>
                         <div id="exportMenu" class="export-menu">
@@ -81,6 +109,23 @@
             </div>
         </div>
 
+        <div class="card batch-card">
+            <div class="batch-header">
+                <div>
+                    <h2>Analyse en série (CSV)</h2>
+                    <p>Importez un fichier contenant une colonne <code>appId</code> pour lancer des analyses successives.</p>
+                </div>
+                <div class="batch-controls">
+                    <label class="upload-label">
+                        <input type="file" id="csvInput" accept=".csv">
+                        <span>Importer un CSV</span>
+                    </label>
+                    <button id="startBatchBtn" class="secondary-btn" disabled>Démarrer l'analyse</button>
+                </div>
+            </div>
+            <div id="batchProgress" class="batch-progress"></div>
+        </div>
+
         <div id="loading" class="loading" style="display:none;">
             <div class="spinner"></div>
             <p style="font-size:0.9375rem; font-weight:600; color:#6366f1; margin-top:12px;">Analyse en cours...</p>
@@ -89,6 +134,58 @@
         <div id="reportContainer"></div>
     </div>
 
+    <!-- Paywall Modal -->
+    <div id="paywallModal" class="paywall-modal" style="display: none;">
+        <div class="paywall-overlay"></div>
+        <div class="paywall-content">
+            <button class="paywall-close" id="closePaywall">×</button>
+            <div class="paywall-icon">🚀</div>
+            <h2>Limite gratuite atteinte !</h2>
+            <p class="paywall-subtitle">Vous avez utilisé vos <strong>3 analyses gratuites</strong> aujourd'hui.</p>
+
+            <div class="paywall-comparison">
+                <div class="paywall-col free-col">
+                    <div class="paywall-col-header">
+                        <h3>Gratuit</h3>
+                        <div class="paywall-price">0€</div>
+                    </div>
+                    <ul class="paywall-features">
+                        <li class="limited">3 analyses par jour</li>
+                        <li class="limited">Données de base uniquement</li>
+                        <li class="limited">Export avec watermark</li>
+                        <li class="limited">Sections premium floutées</li>
+                    </ul>
+                </div>
+
+                <div class="paywall-col premium-col">
+                    <div class="paywall-badge">RECOMMANDÉ</div>
+                    <div class="paywall-col-header">
+                        <h3>Premium</h3>
+                        <div class="paywall-price">9,99€</div>
+                    </div>
+                    <ul class="paywall-features">
+                        <li class="included">✓ Analyses illimitées</li>
+                        <li class="included">✓ 65+ métriques complètes</li>
+                        <li class="included">✓ Export PDF professionnel</li>
+                        <li class="included">✓ Analyse CSV en batch</li>
+                        <li class="included">✓ Toutes sections débloquées</li>
+                        <li class="included">✓ Support prioritaire</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="paywall-actions">
+                <a href="https://votresite.gumroad.com/l/playstore-pro" class="paywall-btn-primary" target="_blank">
+                    💎 Débloquer Premium - 9,99€
+                </a>
+                <button class="paywall-btn-secondary" id="paywallWaitTomorrow">
+                    Revenir demain (3 nouvelles analyses)
+                </button>
+            </div>
+
+            <p class="paywall-footer">💳 Paiement sécurisé • Accès instantané • Garantie 30 jours</p>
+        </div>
+    </div>
 
 <script src="assets/scripts/dashboard.js"></script>
 </body>
