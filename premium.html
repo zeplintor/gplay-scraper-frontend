@@ -740,6 +740,80 @@
             white-space: nowrap;
             user-select: none;
         }
+
+        /* Search Suggestions Styles */
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background: #f9fafb;
+        }
+
+        .suggestion-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        .suggestion-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .suggestion-title {
+            font-weight: 600;
+            color: #111827;
+            font-size: 14px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .suggestion-developer {
+            font-size: 12px;
+            color: #6b7280;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .suggestion-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .search-loading {
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .search-empty {
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -756,8 +830,22 @@
         </header>
 
         <div class="search-box">
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px;">
+                    🔍 Rechercher une application par nom
+                </label>
+                <div style="position: relative;">
+                    <input type="text" id="appNameSearch" placeholder="Ex: Roblox, Instagram, TikTok..." style="width: 100%;">
+                    <div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1.5px solid #d1d5db; border-radius: 8px; margin-top: 4px; max-height: 400px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 1000;"></div>
+                </div>
+            </div>
+            <div style="margin-bottom: 8px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px;">
+                    📱 ID de l'application
+                </label>
+            </div>
             <div class="search-container">
-                <input type="text" id="appId" placeholder="Entrez l'ID de l'application (ex: com.roblox.client)" value="com.roblox.client">
+                <input type="text" id="appId" placeholder="Ex: com.roblox.client" value="">
                 <button id="searchBtn">Analyser</button>
                 <button id="licenseBtn" class="license-btn">Licence</button>
                 <div class="export-container">
@@ -2038,6 +2126,128 @@ function downloadFile(blob, filename) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+}
+
+// ============ APP NAME SEARCH FUNCTIONALITY ============
+
+let searchTimeout = null;
+const appNameInput = document.getElementById('appNameSearch');
+const suggestionsDiv = document.getElementById('searchSuggestions');
+
+// Close suggestions when clicking outside
+document.addEventListener('click', function(e) {
+    if (!suggestionsDiv.contains(e.target) && e.target !== appNameInput) {
+        suggestionsDiv.style.display = 'none';
+    }
+});
+
+// Search apps by name
+appNameInput.addEventListener('input', function() {
+    const query = this.value.trim();
+
+    // Clear previous timeout
+    if (searchTimeout) clearTimeout(searchTimeout);
+
+    if (query.length < 2) {
+        suggestionsDiv.style.display = 'none';
+        return;
+    }
+
+    // Show loading
+    suggestionsDiv.style.display = 'block';
+    suggestionsDiv.innerHTML = '<div class="search-loading">🔍 Recherche en cours...</div>';
+
+    // Debounce search
+    searchTimeout = setTimeout(async () => {
+        try {
+            // Try backend first
+            const res = await fetch(`${API}/api/search-by-name?q=${encodeURIComponent(query)}`);
+            const data = await res.json();
+
+            if (data.success && data.apps && data.apps.length > 0) {
+                displaySuggestions(data.apps);
+            } else {
+                // Fallback to local popular apps search
+                searchLocalApps(query);
+            }
+        } catch (e) {
+            // Fallback to local popular apps search
+            searchLocalApps(query);
+        }
+    }, 300);
+});
+
+// Fallback: Search in popular apps list
+function searchLocalApps(query) {
+    const popularApps = [
+        { appId: 'com.roblox.client', title: 'Roblox', developer: 'Roblox Corporation', score: 4.5, icon: 'https://play-lh.googleusercontent.com/WNWZaxi9RdJKe2GQM3vqXIAkk69mnIl4Cc8EyZcir2SKlVOxeUv9tZGfNTmNaLC717Ht=s48' },
+        { appId: 'com.instagram.android', title: 'Instagram', developer: 'Instagram', score: 4.4, icon: 'https://play-lh.googleusercontent.com/VRMWkE5p3CkWhJs6nv-9ZsLAs1QOg5ob1_3qg-rckwYW7yp1fMrYZqnEFpk0IoVP4LM=s48' },
+        { appId: 'com.zhiliaoapp.musically', title: 'TikTok', developer: 'TikTok Pte. Ltd.', score: 4.5, icon: 'https://play-lh.googleusercontent.com/z5nin6HN5R1K4UvDZSbZXsVxXvwP-sZLGXBfAzgCTyhFbk2jc9FKCFJ9Ky9K3jbjEcw=s48' },
+        { appId: 'com.whatsapp', title: 'WhatsApp', developer: 'WhatsApp LLC', score: 4.2, icon: 'https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN=s48' },
+        { appId: 'com.facebook.katana', title: 'Facebook', developer: 'Meta Platforms, Inc.', score: 3.6, icon: 'https://play-lh.googleusercontent.com/ccWDU4A7fX1R24v-vvT480ySh26AYp97g1VrIB_FIdjRcuQB2JP2WdY7h_wVVAeSpg=s48' },
+        { appId: 'com.snapchat.android', title: 'Snapchat', developer: 'Snap Inc', score: 4.1, icon: 'https://play-lh.googleusercontent.com/KxeSAjPTKliCErbivNiXrd6cTwfbqUJcbSRPe_IBVK_YmwckfMRS1VIHz-5cgT09yMo=s48' },
+        { appId: 'com.twitter.android', title: 'X (Twitter)', developer: 'X Corp.', score: 3.8, icon: 'https://play-lh.googleusercontent.com/7Ak4Ye7wNUtheIvSKnVgGL_OIZWjGPZNV6TP_3XLxHC-sDHLSE45aDg41dFNmL5COA=s48' },
+        { appId: 'com.spotify.music', title: 'Spotify', developer: 'Spotify AB', score: 4.4, icon: 'https://play-lh.googleusercontent.com/eN0IexSzxpUDMfFtm-OyM-nNs44Y74Q3k51bxAMhTFYgNbPfp4R8R2D7T3CEr6tN4wso=s48' },
+        { appId: 'com.netflix.mediaclient', title: 'Netflix', developer: 'Netflix, Inc.', score: 4.3, icon: 'https://play-lh.googleusercontent.com/384jyLRgWNxRsLq_SwH7Ay4ULxg-kMoL7LGBwxmGCYm3HQc_qZzjAZqQP3XYqN-8y5w=s48' },
+        { appId: 'com.disney.disneyplus', title: 'Disney+', developer: 'Disney', score: 4.3, icon: 'https://play-lh.googleusercontent.com/xoGGYH2LgLibLDBoxMg-ZE16b-RNfITw_OgXBWRAPin2FZY7FVPx-AAJBlRPRzeVI6s=s48' },
+        { appId: 'com.google.android.youtube', title: 'YouTube', developer: 'Google LLC', score: 4.1, icon: 'https://play-lh.googleusercontent.com/lMoItBgdPPVDJsNOVtP26EKHePkwBg-PkuY9NOrc-fumRtTFP4XhpUNk_22syN4Datc=s48' },
+        { appId: 'com.google.android.apps.maps', title: 'Google Maps', developer: 'Google LLC', score: 4.2, icon: 'https://play-lh.googleusercontent.com/Kf8WTct65hFJxBUDm5E-EpYsiDoLQiGGbnuyP6HBNax43YShXti9THPon1YKB6zPYpA=s48' },
+        { appId: 'com.amazon.mShop.android.shopping', title: 'Amazon Shopping', developer: 'Amazon Mobile LLC', score: 4.5, icon: 'https://play-lh.googleusercontent.com/3C-hB-KWoyWzZjUnRsXUPu-bqB3HUHARMLjUe9OmPoHa6dQdtJNW30VrvwQ1m7Pln3A=s48' },
+        { appId: 'com.duolingo', title: 'Duolingo', developer: 'Duolingo', score: 4.6, icon: 'https://play-lh.googleusercontent.com/BMRP3ZhVb5P1P6YFfXT7NBVWHI8PrR7hhLvYp7vLoBz5w0WlnDxLq_PFfzLPl0r2bpQ=s48' },
+        { appId: 'com.supercell.clashofclans', title: 'Clash of Clans', developer: 'Supercell', score: 4.6, icon: 'https://play-lh.googleusercontent.com/LByrur1lKw3gnTSI4yPw3eeHN0L8YsCdzHiGOWmSAZe1BbP7UHaOLzSL6hj5Lej2tyM=s48' },
+        { appId: 'com.mojang.minecraftpe', title: 'Minecraft', developer: 'Mojang', score: 4.5, icon: 'https://play-lh.googleusercontent.com/VSwHQjcAttxsLE47RuS4PqpC4LT7lCoSjE7Hx5AW_yCxtDvcnsHHvm5CTuL5BPN-uRTP=s48' },
+        { appId: 'com.android.chrome', title: 'Chrome', developer: 'Google LLC', score: 4.2, icon: 'https://play-lh.googleusercontent.com/KwUBNPbMTk9jDXYS2AeX3illtVRTkrKVh5xR1Mg4WHd0CG2tV4mrh1z3kXi5z_warlk=s48' },
+        { appId: 'com.ubercab', title: 'Uber', developer: 'Uber Technologies, Inc.', score: 4.2, icon: 'https://play-lh.googleusercontent.com/Qfa-s0-ZaFdM02Pje7fh5IYCmGQdXvbG7ZDVj0qcz7n2_5A_kDq6g5Qc8-8Qh8-8Q=s48' },
+        { appId: 'com.canva.editor', title: 'Canva', developer: 'Canva', score: 4.7, icon: 'https://play-lh.googleusercontent.com/zHFv5xC75XIqbADq1Q_4OAkpUY4xk5lPU8Pz1z_p1z_p1z_p1z_p1z_p1z_p1z_p1z=s48' },
+        { appId: 'com.pinterest', title: 'Pinterest', developer: 'Pinterest', score: 4.5, icon: 'https://play-lh.googleusercontent.com/d_0Hi7dwp8DYDUz8oU4G8Rn1xDc4WS9UcfbPd_8w8w8w8w8w8w8w8w8w8w8w8w8w8w=s48' }
+    ];
+
+    const filtered = popularApps.filter(app =>
+        app.title.toLowerCase().includes(query.toLowerCase()) ||
+        app.developer.toLowerCase().includes(query.toLowerCase()) ||
+        app.appId.toLowerCase().includes(query.toLowerCase())
+    );
+
+    if (filtered.length > 0) {
+        displaySuggestions(filtered);
+    } else {
+        suggestionsDiv.innerHTML = '<div class="search-empty">💡 Aucune correspondance trouvée.<br>Essayez : Roblox, Instagram, TikTok, WhatsApp...</div>';
+    }
+}
+
+function displaySuggestions(apps) {
+    let html = '';
+
+    apps.slice(0, 8).forEach(app => {
+        html += `
+            <div class="suggestion-item" data-appid="${app.appId || ''}">
+                <img src="${app.icon || ''}" class="suggestion-icon" alt="${app.title || ''}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22%3E%3Crect fill=%22%23e5e7eb%22 width=%2248%22 height=%2248%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2224%22%3E📱%3C/text%3E%3C/svg%3E'">
+                <div class="suggestion-details">
+                    <div class="suggestion-title">${app.title || 'N/A'}</div>
+                    <div class="suggestion-developer">${app.developer || 'N/A'}</div>
+                </div>
+                <div class="suggestion-rating">
+                    ⭐ ${app.score ? app.score.toFixed(1) : 'N/A'}
+                </div>
+            </div>
+        `;
+    });
+
+    suggestionsDiv.innerHTML = html;
+
+    // Add click handlers
+    document.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const appId = this.dataset.appid;
+            const appTitle = this.querySelector('.suggestion-title').textContent;
+
+            document.getElementById('appId').value = appId;
+            document.getElementById('appNameSearch').value = appTitle;
+            suggestionsDiv.style.display = 'none';
+
+            toast(`✓ ${appTitle} sélectionné`, 'success');
+        });
+    });
 }
 
 checkLicense();
