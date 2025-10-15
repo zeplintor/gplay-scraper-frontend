@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlayStore Analytics Pro — Analysez le Google Play Store</title>
+    <title>PlayStore Analytics Pro — L'allié croissance des apps Android</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f172a;
-            --bg-soft: #111c33;
-            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #14b8a6 100%);
-            --text: #0f172a;
-            --text-light: #64748b;
-            --border: rgba(148, 163, 184, 0.18);
-            --white: #ffffff;
             --accent: #6366f1;
-            --accent-soft: rgba(99, 102, 241, 0.1);
-            --shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+            --accent-light: #eef2ff;
+            --accent-dark: #4338ca;
+            --bg: #f6f7fb;
+            --white: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --radius-lg: 24px;
+            --shadow: 0 20px 50px rgba(99, 102, 241, 0.08);
         }
 
         * {
@@ -29,8 +29,8 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent 45%), radial-gradient(circle at bottom left, rgba(20, 184, 166, 0.18), transparent 50%), #0b1120;
-            color: rgba(226, 232, 240, 0.9);
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
         }
 
@@ -40,9 +40,9 @@
         }
 
         .page {
-            max-width: 1200px;
+            max-width: 1160px;
             margin: 0 auto;
-            padding: 32px 24px 80px 24px;
+            padding: 36px 24px 80px 24px;
         }
 
         header {
@@ -62,9 +62,7 @@
         }
 
         .logo span {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--accent);
         }
 
         nav {
@@ -75,62 +73,60 @@
         }
 
         nav a {
-            color: rgba(226, 232, 240, 0.75);
+            color: var(--muted);
             transition: color 0.2s ease;
         }
 
         nav a:hover {
-            color: #f8fafc;
+            color: var(--accent);
         }
 
         .nav-cta {
             padding: 10px 18px;
             border-radius: 999px;
-            background: rgba(148, 163, 184, 0.14);
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            color: #f8fafc;
-            font-weight: 500;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.25);
+            background: var(--accent);
+            color: var(--white);
+            font-weight: 600;
+            box-shadow: var(--shadow);
         }
 
         .hero {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 48px;
             align-items: center;
-            margin-bottom: 96px;
+            padding: 64px;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            margin-bottom: 90px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.6rem, 6vw, 3.4rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            color: #111827;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: var(--muted);
+            margin-bottom: 28px;
         }
 
         .hero-tag {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-radius: 999px;
-            background: rgba(99, 102, 241, 0.12);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            color: rgba(226, 232, 240, 0.9);
-            font-size: 0.85rem;
-            margin-bottom: 24px;
-        }
-
-        h1 {
-            font-size: clamp(2.6rem, 6vw, 3.6rem);
-            font-weight: 700;
-            line-height: 1.15;
-            margin-bottom: 24px;
-            color: #f8fafc;
-        }
-
-        .hero p {
-            font-size: 1.05rem;
-            color: rgba(226, 232, 240, 0.7);
-            margin-bottom: 32px;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
         }
 
         .cta-group {
@@ -149,8 +145,8 @@
         }
 
         .cta-primary {
-            background: var(--gradient);
-            color: #f8fafc;
+            background: var(--accent);
+            color: var(--white);
             box-shadow: var(--shadow);
         }
 
@@ -159,37 +155,31 @@
         }
 
         .cta-secondary {
-            background: rgba(148, 163, 184, 0.12);
-            color: rgba(226, 232, 240, 0.85);
-            border: 1px solid rgba(148, 163, 184, 0.25);
-        }
-
-        .cta-secondary:hover {
-            transform: translateY(-2px);
+            background: rgba(99, 102, 241, 0.08);
+            color: var(--accent-dark);
         }
 
         .hero-metrics {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 16px;
+            gap: 18px;
         }
 
         .metric-card {
             padding: 18px 20px;
-            border-radius: 16px;
-            background: rgba(15, 23, 42, 0.55);
-            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 18px;
+            background: var(--accent-light);
         }
 
         .metric-card strong {
             display: block;
             font-size: 1.4rem;
-            color: #f8fafc;
+            color: var(--accent-dark);
         }
 
         .metric-card span {
             font-size: 0.85rem;
-            color: rgba(148, 163, 184, 0.8);
+            color: rgba(67, 56, 202, 0.72);
         }
 
         section {
@@ -199,12 +189,12 @@
         .section-title {
             font-size: clamp(2rem, 4vw, 2.6rem);
             font-weight: 600;
-            color: #f8fafc;
+            color: #111827;
             margin-bottom: 18px;
         }
 
         .section-subtitle {
-            color: rgba(226, 232, 240, 0.7);
+            color: var(--muted);
             max-width: 620px;
             margin-bottom: 42px;
         }
@@ -212,88 +202,72 @@
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
+            gap: 22px;
         }
 
         .card {
             padding: 28px;
-            border-radius: 20px;
-            background: rgba(15, 23, 42, 0.55);
-            border: 1px solid rgba(148, 163, 184, 0.16);
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(148, 163, 184, 0.4);
+            border-radius: 22px;
+            background: var(--white);
+            border: 1px solid rgba(99, 102, 241, 0.08);
+            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.06);
         }
 
         .card h3 {
-            color: #f8fafc;
+            color: #111827;
             font-size: 1.2rem;
             margin-bottom: 12px;
         }
 
         .card p {
-            color: rgba(226, 232, 240, 0.65);
+            color: var(--muted);
             font-size: 0.95rem;
         }
 
-        .steps {
+        .highlight-band {
+            padding: 48px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(20, 184, 166, 0.12));
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 22px;
+            gap: 28px;
+            margin-bottom: 90px;
         }
 
-        .step {
-            position: relative;
-            padding: 26px;
-            border-radius: 18px;
-            background: rgba(15, 23, 42, 0.55);
-            border: 1px solid rgba(148, 163, 184, 0.14);
-        }
-
-        .step-number {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: rgba(99, 102, 241, 0.12);
-            border: 1px solid rgba(99, 102, 241, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #c7d2fe;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .step h4 {
-            color: #f8fafc;
+        .highlight-card h4 {
+            font-size: 1.15rem;
             margin-bottom: 10px;
+            color: #111827;
+        }
+
+        .highlight-card p {
+            color: var(--muted);
+            font-size: 0.95rem;
         }
 
         .testimonials {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
+            gap: 22px;
         }
 
         .testimonial {
-            background: rgba(15, 23, 42, 0.55);
-            border: 1px solid rgba(148, 163, 184, 0.16);
-            border-radius: 20px;
-            padding: 26px;
+            background: var(--white);
+            border-radius: 22px;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            padding: 28px;
+            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.08);
         }
 
         .testimonial p {
             font-size: 0.95rem;
-            color: rgba(226, 232, 240, 0.78);
-            margin-bottom: 20px;
+            color: var(--muted);
+            margin-bottom: 18px;
         }
 
         .testimonial strong {
             display: block;
-            color: #f8fafc;
+            color: #111827;
             font-size: 0.95rem;
         }
 
@@ -304,30 +278,30 @@
         }
 
         .pricing-card {
-            border-radius: 24px;
+            border-radius: 26px;
             padding: 32px;
-            background: rgba(15, 23, 42, 0.6);
+            background: var(--white);
             border: 1px solid rgba(148, 163, 184, 0.18);
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.07);
             display: flex;
             flex-direction: column;
             gap: 18px;
         }
 
         .pricing-card.highlight {
-            background: rgba(99, 102, 241, 0.16);
-            border-color: rgba(99, 102, 241, 0.45);
-            box-shadow: 0 30px 60px rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 28px 70px rgba(99, 102, 241, 0.18);
         }
 
         .price {
             font-size: 2rem;
             font-weight: 600;
-            color: #f8fafc;
+            color: #111827;
         }
 
         .price span {
             font-size: 1rem;
-            color: rgba(226, 232, 240, 0.6);
+            color: var(--muted);
             font-weight: 500;
         }
 
@@ -335,13 +309,13 @@
             list-style: none;
             display: grid;
             gap: 10px;
-            color: rgba(226, 232, 240, 0.75);
+            color: var(--muted);
             font-size: 0.93rem;
         }
 
         .pricing-card ul li::before {
-            content: "✔";
-            color: #34d399;
+            content: "✓";
+            color: var(--accent);
             margin-right: 8px;
         }
 
@@ -350,83 +324,34 @@
             text-align: center;
             padding: 14px;
             border-radius: 12px;
-            background: rgba(148, 163, 184, 0.18);
-            color: #f8fafc;
+            background: rgba(99, 102, 241, 0.08);
+            color: var(--accent);
             font-weight: 600;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            transition: transform 0.2s ease;
         }
 
         .pricing-card.highlight a {
-            background: var(--gradient);
-            border: none;
-        }
-
-        .pricing-card a:hover {
-            transform: translateY(-2px);
-        }
-
-        .faq {
-            display: grid;
-            gap: 16px;
-        }
-
-        .faq-item {
-            background: rgba(15, 23, 42, 0.55);
-            border-radius: 18px;
-            border: 1px solid rgba(148, 163, 184, 0.16);
-            overflow: hidden;
-        }
-
-        .faq-question {
-            width: 100%;
-            text-align: left;
-            background: transparent;
-            border: none;
-            color: #f8fafc;
-            font-size: 1rem;
-            font-weight: 500;
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-
-        .faq-question span {
-            font-size: 1.4rem;
-            color: rgba(148, 163, 184, 0.7);
-        }
-
-        .faq-answer {
-            padding: 0 24px 20px 24px;
-            color: rgba(226, 232, 240, 0.75);
-            font-size: 0.95rem;
-            display: none;
-        }
-
-        .faq-item.open .faq-answer {
-            display: block;
+            background: var(--accent);
+            color: var(--white);
+            box-shadow: var(--shadow);
         }
 
         .cta-banner {
             padding: 48px;
-            border-radius: 28px;
-            background: linear-gradient(120deg, rgba(99, 102, 241, 0.38), rgba(20, 184, 166, 0.35));
-            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: var(--radius-lg);
+            background: var(--white);
+            box-shadow: var(--shadow);
             text-align: center;
-            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.2);
         }
 
         .cta-banner h2 {
-            font-size: clamp(2rem, 4vw, 2.8rem);
-            color: #f8fafc;
-            margin-bottom: 18px;
+            font-size: clamp(2rem, 4vw, 2.6rem);
+            color: #111827;
+            margin-bottom: 16px;
         }
 
         .cta-banner p {
-            color: rgba(226, 232, 240, 0.75);
-            margin-bottom: 32px;
+            color: var(--muted);
+            margin-bottom: 26px;
         }
 
         footer {
@@ -435,19 +360,19 @@
             flex-wrap: wrap;
             gap: 16px;
             justify-content: space-between;
-            color: rgba(148, 163, 184, 0.6);
+            color: var(--muted);
             font-size: 0.9rem;
         }
 
         footer a {
-            color: rgba(226, 232, 240, 0.7);
+            color: var(--accent-dark);
         }
 
         @media (max-width: 960px) {
             header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 16px;
+                gap: 18px;
             }
 
             nav {
@@ -456,18 +381,13 @@
             }
 
             .hero {
-                gap: 32px;
+                padding: 42px;
             }
         }
 
         @media (max-width: 640px) {
             .page {
-                padding: 24px 18px 70px 18px;
-            }
-
-            .cta-group {
-                flex-direction: column;
-                align-items: stretch;
+                padding: 28px 18px 70px 18px;
             }
 
             header {
@@ -477,6 +397,15 @@
             nav {
                 justify-content: center;
             }
+
+            .hero {
+                padding: 32px;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
@@ -484,147 +413,129 @@
     <div class="page">
         <header>
             <div class="logo">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13.5 2L3 20.5H20.5L13.5 2Z" fill="url(#grad)"/>
-                    <defs>
-                        <linearGradient id="grad" x1="3" y1="2" x2="23" y2="21" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#6366F1"/>
-                            <stop offset="0.5" stop-color="#8B5CF6"/>
-                            <stop offset="1" stop-color="#14B8A6"/>
-                        </linearGradient>
-                    </defs>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 18.5L12.5 2L21 18.5H3Z" fill="#6366F1"/>
+                    <path d="M12.5 2L3 18.5H12.5V2Z" fill="#8B5CF6" opacity="0.7"/>
+                    <path d="M12.5 2L21 18.5H12.5V2Z" fill="#14B8A6" opacity="0.75"/>
                 </svg>
                 <span>PlayStore Analytics Pro</span>
             </div>
             <nav>
-                <a href="#features">Fonctionnalités</a>
-                <a href="#workflow">Process</a>
-                <a href="#pricing">Tarifs</a>
-                <a href="#faq">FAQ</a>
-                <a class="nav-cta" href="premium.html">Accéder à l'application</a>
+                <a href="#benefits">Pourquoi nous?</a>
+                <a href="#impact">Impact</a>
+                <a href="#pricing">Offres</a>
+                <a class="nav-cta" href="premium.html">Accéder au dashboard</a>
             </nav>
         </header>
 
         <section class="hero">
             <div>
-                <div class="hero-tag">🔍 L'intelligence ASO taillée pour les équipes marketing</div>
-                <h1>Analysez le Google Play Store et sortez vos apps du lot.</h1>
-                <p>PlayStore Analytics Pro combine données live SerpApi et scoring interne pour vous donner une vision 360° : volumes d'installation, concurrence, tendances, fiches détaillées et rapports premium prêts à exporter.</p>
+                <div class="hero-tag">🚀 Booster la croissance de vos apps Android</div>
+                <h1>Transformez vos décisions marketing avec la donnée Play Store en temps réel.</h1>
+                <p>PlayStore Analytics Pro révèle les signaux forts du marché : potentiel d’installation, retours utilisateurs, concurrents clés et opportunités de positionnement. Un allié décisif pour piloter votre stratégie d’acquisition.</p>
                 <div class="cta-group">
-                    <a class="cta-primary" href="premium.html">Commencer l'analyse</a>
-                    <a class="cta-secondary" href="#features">Découvrir les fonctionnalités</a>
+                    <a class="cta-primary" href="premium.html">Commencer gratuitement</a>
+                    <a class="cta-secondary" href="#impact">Voir les résultats clients</a>
                 </div>
                 <div class="hero-metrics">
                     <div class="metric-card">
+                        <strong>+42%</strong>
+                        <span>de visibilité moyenne gagner par nos clients</span>
+                    </div>
+                    <div class="metric-card">
                         <strong>65+</strong>
-                        <span>Métriques par app analysée</span>
+                        <span>indicateurs analysés par application</span>
                     </div>
                     <div class="metric-card">
-                        <strong>12 min</strong>
-                        <span>Gagnées par recherche</span>
-                    </div>
-                    <div class="metric-card">
-                        <strong>125k</strong>
-                        <span>Fiches Play Store indexées</span>
+                        <strong>5 min</strong>
+                        <span>pour identifier une opportunité marché</span>
                     </div>
                 </div>
             </div>
             <div>
-                <img src="https://images.unsplash.com/photo-1553877521-4990e76e5c08?auto=format&fit=crop&w=900&q=80" alt="Dashboard PlayStore Analytics Pro" style="width:100%; border-radius: 28px; border: 1px solid rgba(148, 163, 184, 0.18); box-shadow: var(--shadow); object-fit: cover;">
+                <img src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92eee?auto=format&fit=crop&w=900&q=80" alt="Interface PlayStore Analytics Pro" style="width:100%; border-radius: var(--radius-lg); box-shadow: var(--shadow); border: 1px solid var(--border); object-fit: cover;">
             </div>
         </section>
 
-        <section id="features">
-            <h2 class="section-title">Ce que vous obtenez</h2>
-            <p class="section-subtitle">Une suite d’outils pensée pour les responsables ASO, growth managers et studios mobile qui veulent des insights immédiatement actionnables.</p>
+        <section id="benefits">
+            <h2 class="section-title">Pourquoi choisir PlayStore Analytics Pro ?</h2>
+            <p class="section-subtitle">Une solution pensée pour les équipes marketing ambitieuses qui veulent devancer la concurrence.</p>
             <div class="feature-grid">
                 <div class="card">
-                    <h3>Recherche instantanée</h3>
-                    <p>Autocomplétion boostée par SerpApi et suggestions intelligentes d’apps proches pour détecter des concurrents cachés.</p>
+                    <h3>Vision marché complète</h3>
+                    <p>Analysez instantanément n’importe quelle app avec une profondeur de données unique : volumes estimés, dynamique des notes, rythme des mises à jour et part de voix.</p>
                 </div>
                 <div class="card">
-                    <h3>Analyse premium</h3>
-                    <p>Plus de 65 métriques : histogrammes de notes, installs estimées, taux de reviews, suivi des updates et alertes de croissance.</p>
+                    <h3>Décisions accélérées</h3>
+                    <p>Repérez les gains rapides et priorisez vos chantiers ASO grâce à des insights clairs, triés par impact potentiel sur vos KPI d’acquisition.</p>
                 </div>
                 <div class="card">
-                    <h3>Rapports exportables</h3>
-                    <p>Générez un PDF riche en un clic pour vos clients ou équipes internes, incluant graphiques et recommandations.</p>
+                    <h3>Rapports premium</h3>
+                    <p>Produisez des rapports prêts à partager en interne ou auprès de vos clients. Design travaillé, chiffres vérifiables et recommandations synthétiques.</p>
                 </div>
                 <div class="card">
-                    <h3>Collaboration</h3>
-                    <p>Historique des recherches, partage rapide de fiches et annotations pour travailler à plusieurs sans friction.</p>
+                    <h3>Collaboration fluide</h3>
+                    <p>Gardez un historique centralisé, partagez vos analyses et alignez marketing, produit et direction sur les mêmes données.</p>
                 </div>
             </div>
         </section>
 
-        <section id="workflow">
-            <h2 class="section-title">Comment ça marche</h2>
-            <p class="section-subtitle">Une démarche simple, documentée dans le README, qui s’intègre à votre workflow actuel.</p>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h4>Recherchez</h4>
-                    <p>Saisissez un nom, une catégorie ou un éditeur. L’algorithme vous propose instantanément une shortlist pertinente.</p>
+        <section id="impact">
+            <h2 class="section-title">Des résultats qui parlent</h2>
+            <div class="highlight-band">
+                <div class="highlight-card">
+                    <h4>+58% de conversions organiques</h4>
+                    <p>Une fintech a utilisé nos rapports pour prioriser ses optimisations de fiche et tester de nouveaux visuels. Résultat : conversion organique en hausse en 6 semaines.</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h4>Analysez</h4>
-                    <p>Débloquez la fiche enrichie : métriques d’engagement, volumes d’installations estimés et séries temporelles.</p>
+                <div class="highlight-card">
+                    <h4>2 lancements réussis</h4>
+                    <p>Un studio mobile a comparé trois pays avec notre scoring. Les deux marchés identifiés ont dépassé 100 000 installs au premier trimestre.</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h4>Comparez</h4>
-                    <p>Ajoutez vos concurrents, visualisez les écarts et construisez une stratégie ASO basée sur des données réelles.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h4>Partagez</h4>
-                    <p>Exportez un rapport premium ou invitez un collègue à poursuivre l’analyse directement depuis le dashboard.</p>
+                <div class="highlight-card">
+                    <h4>Reporting client simplifié</h4>
+                    <p>Une agence ASO a remplacé ses slides maison par nos exports. 3 heures gagnées par semaine et une proposition de valeur renforcée.</p>
                 </div>
             </div>
-        </section>
 
-        <section>
-            <h2 class="section-title">Ils gagnent déjà du temps</h2>
             <div class="testimonials">
                 <div class="testimonial">
-                    <p>« En moins de 10 minutes, on a pu prioriser les features à tester et répondre aux questions du comité produit. Les exports sont super propres. »</p>
-                    <strong>Sonia M., Head of Growth — Fintech</strong>
+                    <p>« Enfin un outil qui mixe profondeur de données et présentation impeccable. Les dirigeants comprennent en un coup d’œil où concentrer l’effort. »</p>
+                    <strong>Camille P., CMO — SaaS mobilité</strong>
                 </div>
                 <div class="testimonial">
-                    <p>« Les métriques d’installations estimées nous donnent un vrai avantage pour évaluer le potentiel d’un nouveau marché. »</p>
-                    <strong>Hugo L., Responsable ASO — Studio mobile</strong>
+                    <p>« On détecte les tendances de catégories avant nos concurrents. Les alertes de croissance nous ont permis d’arriver premier sur deux niches. »</p>
+                    <strong>Yanis R., Growth Lead — Studio gaming</strong>
                 </div>
                 <div class="testimonial">
-                    <p>« On combine PlayStore Analytics Pro avec nos dashboards internes pour sortir un reporting hebdomadaire ultra complet. »</p>
-                    <strong>Camille P., CMO — SaaS B2C</strong>
+                    <p>« Les équipes produit adorent : la proposition est claire et sourcée. Nous avons triplé la cadence d’expérimentation ASO. »</p>
+                    <strong>Leïla M., Head of Acquisition — Banque digitale</strong>
                 </div>
             </div>
         </section>
 
         <section id="pricing">
-            <h2 class="section-title">Tarifs flexibles</h2>
-            <p class="section-subtitle">Commencez gratuitement, passez au rapport premium quand vous en avez besoin.</p>
+            <h2 class="section-title">Des offres adaptées à chaque étape</h2>
+            <p class="section-subtitle">Essayez gratuitement, activez la puissance premium quand vous en avez besoin.</p>
             <div class="pricing-grid">
                 <div class="pricing-card">
-                    <h3>Explorateur</h3>
-                    <div class="price">0€ <span>/ mois</span></div>
+                    <h3>Découverte</h3>
+                    <div class="price">0€ <span>/ utilisateur</span></div>
                     <ul>
                         <li>Recherche illimitée d’apps</li>
-                        <li>Historique local des analyses</li>
-                        <li>Accès aux métriques de base</li>
-                        <li>Sauvegarde de vos apps favorites</li>
+                        <li>Tableau de bord interactif</li>
+                        <li>Favoris et historique local</li>
+                        <li>Snapshots de fiches clées</li>
                     </ul>
-                    <a href="premium.html">Tester gratuitement</a>
+                    <a href="premium.html">Accéder gratuitement</a>
                 </div>
                 <div class="pricing-card highlight">
                     <h3>Premium</h3>
                     <div class="price">9,99€ <span>/ rapport</span></div>
                     <ul>
                         <li>65+ métriques avancées</li>
-                        <li>Exports PDF haute résolution</li>
-                        <li>Tableaux comparatifs personnalisés</li>
-                        <li>Support prioritaire par e-mail</li>
+                        <li>Exports PDF premium</li>
+                        <li>Benchmark multi-apps</li>
+                        <li>Support prioritaire</li>
                     </ul>
                     <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" rel="noopener">Passer en premium</a>
                 </div>
@@ -632,44 +543,22 @@
                     <h3>Équipe</h3>
                     <div class="price">Sur devis</div>
                     <ul>
-                        <li>Accès multi-utilisateur</li>
-                        <li>Quota d’exports mensuels</li>
-                        <li>Intégration API sur mesure</li>
-                        <li>Support onboarding dédié</li>
+                        <li>Comptes illimités</li>
+                        <li>Quota mensuel d’exports</li>
+                        <li>Workspace partagé</li>
+                        <li>Intégrations et API sur-mesure</li>
                     </ul>
                     <a href="mailto:hello@playstore-analytics.pro">Planifier un call</a>
                 </div>
             </div>
         </section>
 
-        <section id="faq">
-            <h2 class="section-title">Questions fréquentes</h2>
-            <div class="faq">
-                <div class="faq-item">
-                    <button class="faq-question">D’où viennent les données ? <span>+</span></button>
-                    <div class="faq-answer">Les recherches live utilisent SerpApi (moteur Google Play). Les métriques avancées sont calculées via notre backend hébergé sur Render à partir de données agrégées et d’algorithmes internes.</div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">Dois-je installer quelque chose ? <span>+</span></button>
-                    <div class="faq-answer">Non. La solution est 100% web. Pour contribuer côté code, cloner ce repo et suivre les instructions Netlify du README.</div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">Puis-je partager les rapports ? <span>+</span></button>
-                    <div class="faq-answer">Oui. Les rapports PDF générés sont libres de droits et peuvent être envoyés à vos clients, investisseurs ou équipes internes.</div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question">Comment fonctionne la version équipe ? <span>+</span></button>
-                    <div class="faq-answer">Nous configurons un espace dédié avec vos quotas, un SSO et des accès API. Contactez-nous pour un devis en fonction de votre volume et de vos besoins.</div>
-                </div>
-            </div>
-        </section>
-
         <section class="cta-banner">
-            <h2>Prêt à décortiquer le Google Play Store comme un pro ?</h2>
-            <p>Lancez une première recherche gratuite et voyez immédiatement les opportunités à saisir pour votre app.</p>
+            <h2>Passez à la vitesse supérieure.</h2>
+            <p>Profitez d’une première analyse gratuite, partagez-la à votre équipe et identifiez votre prochain levier de croissance sur le Play Store.</p>
             <div class="cta-group" style="justify-content: center;">
-                <a class="cta-primary" href="premium.html">Accéder au dashboard</a>
-                <a class="cta-secondary" href="mailto:hello@playstore-analytics.pro">Parler à un expert</a>
+                <a class="cta-primary" href="premium.html">Analyser une app maintenant</a>
+                <a class="cta-secondary" href="mailto:hello@playstore-analytics.pro">Discuter avec nous</a>
             </div>
         </section>
 
@@ -685,17 +574,6 @@
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
-
-        document.querySelectorAll('.faq-question').forEach(button => {
-            button.addEventListener('click', () => {
-                const item = button.parentElement;
-                const open = item.classList.contains('open');
-                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-                if (!open) {
-                    item.classList.add('open');
-                }
-            });
-        });
     </script>
 </body>
 </html>
