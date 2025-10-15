@@ -245,6 +245,95 @@
             font-size: 0.95rem;
         }
 
+        .demo-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 42px;
+            align-items: center;
+            padding: 48px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(120deg, rgba(99, 102, 241, 0.08), rgba(20, 184, 166, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            margin-bottom: 90px;
+        }
+
+        .demo-copy h3 {
+            font-size: clamp(2.1rem, 5vw, 2.6rem);
+            color: #111827;
+            margin-bottom: 18px;
+        }
+
+        .demo-copy p {
+            color: var(--muted);
+            margin-bottom: 20px;
+            font-size: 1.02rem;
+        }
+
+        .demo-points {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .demo-points li::before {
+            content: "•";
+            color: var(--accent);
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .demo-preview {
+            position: relative;
+            border-radius: 26px;
+            overflow: hidden;
+            background: var(--white);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.12);
+        }
+
+        .demo-preview img {
+            width: 100%;
+            display: block;
+            filter: blur(14px);
+            transform: scale(1.05);
+        }
+
+        .demo-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 12px;
+            background: rgba(99, 102, 241, 0.35);
+            color: var(--white);
+            padding: 24px;
+        }
+
+        .demo-overlay span {
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.85;
+        }
+
+        .demo-overlay strong {
+            font-size: 1.25rem;
+        }
+
+        .demo-overlay a {
+            margin-top: 8px;
+            padding: 10px 20px;
+            border-radius: 999px;
+            background: var(--white);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
         .testimonials {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -402,6 +491,10 @@
                 padding: 32px;
             }
 
+            .demo-section {
+                padding: 32px;
+            }
+
             .cta-group {
                 flex-direction: column;
                 align-items: stretch;
@@ -434,7 +527,7 @@
                 <h1>Transformez vos décisions marketing avec la donnée Play Store en temps réel.</h1>
                 <p>PlayStore Analytics Pro révèle les signaux forts du marché : potentiel d’installation, retours utilisateurs, concurrents clés et opportunités de positionnement. Un allié décisif pour piloter votre stratégie d’acquisition.</p>
                 <div class="cta-group">
-                    <a class="cta-primary" href="premium.html">Commencer gratuitement</a>
+                    <a class="cta-primary" href="premium.html">Ouvrir le dashboard</a>
                     <a class="cta-secondary" href="#impact">Voir les résultats clients</a>
                 </div>
                 <div class="hero-metrics">
@@ -513,6 +606,26 @@
             </div>
         </section>
 
+        <section class="demo-section">
+            <div class="demo-copy">
+                <h3>Un rapport premium ultra visuel, prêt à partager.</h3>
+                <p>Vous voulez un aperçu ? Voici le rendu exact que vos clients ou votre direction recevront : graphiques soignés, insights actionnables, storytelling fluide.</p>
+                <ul class="demo-points">
+                    <li>Plus de 20 pages de graphiques et recommandations</li>
+                    <li>Mise en page premium prête à envoyer (PDF)</li>
+                    <li>Sections personnalisation : branding, commentaire, next steps</li>
+                </ul>
+            </div>
+            <div class="demo-preview">
+                <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=1000&q=80" alt="Aperçu rapport premium PlayStore Analytics Pro">
+                <div class="demo-overlay">
+                    <span>aperçu exclusif</span>
+                    <strong>Rapport premium flouté</strong>
+                    <a href="premium.html">Débloquer via le dashboard</a>
+                </div>
+            </div>
+        </section>
+
         <section id="pricing">
             <h2 class="section-title">Des offres adaptées à chaque étape</h2>
             <p class="section-subtitle">Essayez gratuitement, activez la puissance premium quand vous en avez besoin.</p>
@@ -537,7 +650,7 @@
                         <li>Benchmark multi-apps</li>
                         <li>Support prioritaire</li>
                     </ul>
-                    <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" rel="noopener">Passer en premium</a>
+                    <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" rel="noopener">Débloquer via le dashboard</a>
                 </div>
                 <div class="pricing-card">
                     <h3>Équipe</h3>
@@ -557,8 +670,8 @@
             <h2>Passez à la vitesse supérieure.</h2>
             <p>Profitez d’une première analyse gratuite, partagez-la à votre équipe et identifiez votre prochain levier de croissance sur le Play Store.</p>
             <div class="cta-group" style="justify-content: center;">
-                <a class="cta-primary" href="premium.html">Analyser une app maintenant</a>
-                <a class="cta-secondary" href="mailto:hello@playstore-analytics.pro">Discuter avec nous</a>
+                    <a class="cta-primary" href="premium.html">Ouvrir le dashboard</a>
+                    <a class="cta-secondary" href="mailto:hello@playstore-analytics.pro">Discuter avec nous</a>
             </div>
         </section>
 

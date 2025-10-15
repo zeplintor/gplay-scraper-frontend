@@ -10,14 +10,27 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+        :root {
+            --accent: #6366f1;
+            --accent-dark: #4338ca;
+            --accent-soft: rgba(99, 102, 241, 0.08);
+            --bg: #f6f7fb;
+            --white: #ffffff;
+            --text: #1f2937;
+            --muted: #64748b;
+            --border: #e5e7eb;
+            --radius: 18px;
+            --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.06);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #fafbfc;
-            color: #1f2937;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            padding: 24px;
+            padding: 28px;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
@@ -27,14 +40,13 @@
             margin: 0 auto;
         }
 
-        /* Header Style Airtable */
         header {
-            background: white;
-            padding: 24px 32px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e5e7eb;
+            background: var(--white);
+            padding: 26px 36px;
+            border-radius: var(--radius);
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(148, 163, 184, 0.18);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -43,81 +55,102 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .header-icon {
-            font-size: 1.75rem;
+            font-size: 1.9rem;
         }
 
         .header-text h1 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 600;
             color: #111827;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
 
         .subtitle {
-            color: #6b7280;
-            font-size: 0.875rem;
+            color: var(--muted);
+            font-size: 0.9rem;
             font-weight: 400;
         }
 
         .license-status {
-            background: #ecfdf5;
-            color: #059669;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 0.875rem;
+            background: rgba(16, 185, 129, 0.12);
+            color: #047857;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 0.9rem;
             font-weight: 600;
-            border: 1px solid #d1fae5;
+            border: 1px solid rgba(52, 211, 153, 0.25);
         }
 
-        /* Search Box Minimaliste */
         .search-box {
-            background: white;
-            padding: 24px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            border: 1px solid #e5e7eb;
+            background: var(--white);
+            padding: 28px 32px;
+            border-radius: var(--radius);
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .search-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .search-header span {
+            color: var(--muted);
+            font-size: 0.9rem;
         }
 
         .search-container {
             display: flex;
-            gap: 12px;
+            gap: 14px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         input {
             flex: 1;
-            padding: 10px 14px;
-            font-size: 0.875rem;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            border: 1px solid var(--border);
+            border-radius: 14px;
             transition: all 0.2s;
             font-family: 'Inter', sans-serif;
+            background: rgba(248, 250, 252, 0.75);
         }
         input:focus {
             outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+            background: var(--white);
         }
 
         button {
-            padding: 10px 20px;
-            font-size: 0.875rem;
+            padding: 12px 24px;
+            font-size: 0.95rem;
             font-weight: 600;
-            background: #6366f1;
-            color: white;
+            background: var(--accent);
+            color: var(--white);
             border: none;
-            border-radius: 6px;
+            border-radius: 14px;
             cursor: pointer;
             transition: all 0.2s;
             font-family: 'Inter', sans-serif;
+            box-shadow: var(--shadow-soft);
         }
         button:hover {
-            background: #4f46e5;
+            background: var(--accent-dark);
             transform: translateY(-1px);
         }
         button:active {
@@ -140,20 +173,20 @@
 
         .loading {
             text-align: center;
-            padding: 48px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            border: 1px solid #e5e7eb;
+            padding: 54px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(148, 163, 184, 0.18);
         }
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e5e7eb;
-            border-top: 3px solid #6366f1;
+            width: 44px;
+            height: 44px;
+            border: 3px solid rgba(148, 163, 184, 0.18);
+            border-top: 3px solid var(--accent);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px;
+            margin: 0 auto 18px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -164,28 +197,70 @@
             background: #111827;
             color: white;
             padding: 14px 20px;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.2);
             z-index: 10000;
             animation: slideIn 0.3s ease;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
             font-weight: 500;
         }
         @keyframes slideIn {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .toast.success { background: #10b981; }
         .toast.error { background: #ef4444; }
 
-        /* Cards Style Airtable */
         .card {
-            background: white;
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-            border: 1px solid #e5e7eb;
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .suggestions-panel {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-radius: 16px;
+            margin-top: 6px;
+            max-height: 360px;
+            overflow-y: auto;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.15);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            z-index: 1000;
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-actions > * {
+            flex-shrink: 0;
         }
 
         .app-hero {
@@ -664,14 +739,14 @@
             position: absolute;
             top: 100%;
             right: 0;
-            margin-top: 8px;
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            min-width: 200px;
+            margin-top: 10px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 22px 45px rgba(15, 23, 42, 0.12);
+            min-width: 220px;
             z-index: 1000;
             overflow: hidden;
-            border: 1px solid #e5e7eb;
+            border: 1px solid rgba(148, 163, 184, 0.18);
         }
 
         .export-menu.active {
@@ -691,16 +766,16 @@
         }
 
         .export-menu-item {
-            padding: 12px 16px;
+            padding: 14px 18px;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid #f3f4f6;
-            color: #374151;
+            gap: 12px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+            color: #1f2937;
             font-weight: 500;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
         }
 
         .export-menu-item:last-child {
@@ -708,12 +783,12 @@
         }
 
         .export-menu-item:hover {
-            background: #f9fafb;
-            padding-left: 20px;
+            background: rgba(99, 102, 241, 0.08);
+            padding-left: 22px;
         }
 
         .export-menu-item .icon {
-            font-size: 1.125rem;
+            font-size: 1.1rem;
         }
 
         .export-menu-item .label {
@@ -721,8 +796,8 @@
         }
 
         .export-menu-item .format {
-            font-size: 0.6875rem;
-            color: #9ca3af;
+            font-size: 0.7rem;
+            color: var(--muted);
             text-transform: uppercase;
             font-weight: 600;
         }
@@ -745,11 +820,11 @@
         .suggestion-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
+            gap: 14px;
+            padding: 14px 18px;
             cursor: pointer;
             transition: all 0.2s;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.12);
         }
 
         .suggestion-item:last-child {
@@ -757,15 +832,15 @@
         }
 
         .suggestion-item:hover {
-            background: #f9fafb;
+            background: rgba(99, 102, 241, 0.08);
         }
 
         .suggestion-icon {
             width: 48px;
             height: 48px;
-            border-radius: 10px;
+            border-radius: 12px;
             object-fit: cover;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
             flex-shrink: 0;
         }
 
@@ -786,7 +861,7 @@
 
         .suggestion-developer {
             font-size: 12px;
-            color: #6b7280;
+            color: var(--muted);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -804,14 +879,14 @@
         .search-loading {
             padding: 20px;
             text-align: center;
-            color: #6b7280;
+            color: var(--muted);
             font-size: 14px;
         }
 
         .search-empty {
             padding: 20px;
             text-align: center;
-            color: #6b7280;
+            color: var(--muted);
             font-size: 14px;
         }
     </style>
@@ -830,53 +905,59 @@
         </header>
 
         <div class="search-box">
-            <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px;">
-                    🔍 Rechercher une application par nom
-                </label>
-                <div style="position: relative;">
-                    <input type="text" id="appNameSearch" placeholder="Ex: Roblox, Instagram, TikTok..." style="width: 100%;">
-                    <div id="searchSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1.5px solid #d1d5db; border-radius: 8px; margin-top: 4px; max-height: 400px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 1000;"></div>
+            <div class="search-header">
+                <div>
+                    <h2>Recherche d’applications</h2>
+                    <span>Identifiez les opportunités Play Store en quelques secondes.</span>
                 </div>
-            </div>
-            <div style="margin-bottom: 8px;">
-                <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px;">
-                    📱 ID de l'application
-                </label>
-            </div>
-            <div class="search-container">
-                <input type="text" id="appId" placeholder="Ex: com.roblox.client" value="">
-                <button id="searchBtn">Analyser</button>
-                <button id="licenseBtn" class="license-btn">Licence</button>
-                <div class="export-container">
-                    <button id="exportBtn" class="export-btn">Exporter</button>
-                    <div id="exportMenu" class="export-menu">
-                        <div class="export-menu-item" data-format="pdf">
-                            <span class="icon">📄</span>
-                            <span class="label">Export PDF</span>
-                            <span class="format">PDF</span>
-                        </div>
-                        <div class="export-menu-item" data-format="json">
-                            <span class="icon">📊</span>
-                            <span class="label">Export JSON</span>
-                            <span class="format">JSON</span>
-                        </div>
-                        <div class="export-menu-item" data-format="csv">
-                            <span class="icon">📋</span>
-                            <span class="label">Export CSV</span>
-                            <span class="format">CSV</span>
-                        </div>
-                        <div class="export-menu-item" data-format="png">
-                            <span class="icon">🖼️</span>
-                            <span class="label">Export PNG</span>
-                            <span class="format">PNG</span>
-                        </div>
-                        <div class="export-menu-item" data-format="html">
-                            <span class="icon">🌐</span>
-                            <span class="label">Export HTML</span>
-                            <span class="format">HTML</span>
+                <div class="search-actions">
+                    <button id="licenseBtn" class="license-btn">Gérer la licence</button>
+                    <div class="export-container">
+                        <button id="exportBtn" class="export-btn">Exporter</button>
+                        <div id="exportMenu" class="export-menu">
+                            <div class="export-menu-item" data-format="pdf">
+                                <span class="icon">📄</span>
+                                <span class="label">Export PDF</span>
+                                <span class="format">PDF</span>
+                            </div>
+                            <div class="export-menu-item" data-format="json">
+                                <span class="icon">📊</span>
+                                <span class="label">Export JSON</span>
+                                <span class="format">JSON</span>
+                            </div>
+                            <div class="export-menu-item" data-format="csv">
+                                <span class="icon">📋</span>
+                                <span class="label">Export CSV</span>
+                                <span class="format">CSV</span>
+                            </div>
+                            <div class="export-menu-item" data-format="png">
+                                <span class="icon">🖼️</span>
+                                <span class="label">Export PNG</span>
+                                <span class="format">PNG</span>
+                            </div>
+                            <div class="export-menu-item" data-format="html">
+                                <span class="icon">🌐</span>
+                                <span class="label">Export HTML</span>
+                                <span class="format">HTML</span>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">🔍 Rechercher une application par nom</label>
+                <div class="input-wrapper">
+                    <input type="text" id="appNameSearch" placeholder="Ex: Roblox, Instagram, TikTok...">
+                    <div id="searchSuggestions" class="suggestions-panel"></div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">📱 ID de l'application</label>
+                <div class="search-container">
+                    <input type="text" id="appId" placeholder="Ex: com.roblox.client" value="">
+                    <button id="searchBtn">Analyser</button>
                 </div>
             </div>
         </div>
