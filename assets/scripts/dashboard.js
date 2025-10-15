@@ -139,6 +139,63 @@ document.getElementById('paywallModal')?.addEventListener('click', function(e) {
     }
 });
 
+// ============================================
+// WELCOME ONBOARDING MODAL
+// ============================================
+
+function showWelcomeModal() {
+    const modal = document.getElementById('welcomeModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function hideWelcomeModal() {
+    const modal = document.getElementById('welcomeModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    localStorage.setItem('hasVisitedDashboard', 'true');
+}
+
+// Check if first visit
+if (!localStorage.getItem('hasVisitedDashboard')) {
+    // Show welcome modal after 500ms
+    setTimeout(() => {
+        showWelcomeModal();
+    }, 500);
+}
+
+// Welcome modal event listeners
+document.getElementById('closeWelcome')?.addEventListener('click', hideWelcomeModal);
+document.getElementById('skipWelcome')?.addEventListener('click', hideWelcomeModal);
+document.getElementById('startExploring')?.addEventListener('click', hideWelcomeModal);
+
+// Quickstart buttons
+document.querySelectorAll('.quickstart-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const appId = this.dataset.appid;
+        const appName = this.querySelector('.qs-name').textContent;
+
+        document.getElementById('appId').value = appId;
+        hideWelcomeModal();
+
+        // Trigger analysis
+        document.getElementById('searchBtn').click();
+
+        toast(`🚀 Analyse de ${appName} lancée !`, 'success');
+    });
+});
+
+// Close welcome modal when clicking outside
+document.getElementById('welcomeModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideWelcomeModal();
+    }
+});
+
 async function fetchAppData(appId) {
     const encodedId = encodeURIComponent(appId);
     const response = await fetch(`${API}/api/analyze/${encodedId}`);

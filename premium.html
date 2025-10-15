@@ -27,7 +27,8 @@
                     <span id="licenseStatus" class="header-license-placeholder">En attente</span>
                 </div>
                 <div class="header-links">
-                    <a href="index.html" class="link-pill">Landing</a>
+                    <a href="index.html" class="link-pill">Accueil</a>
+                    <a href="pricing.html" class="link-pill">Tarifs</a>
                     <a href="mailto:hello@playstore-analytics.pro" class="link-pill">Support</a>
                 </div>
             </div>
@@ -132,6 +133,76 @@
         </div>
 
         <div id="reportContainer"></div>
+    </div>
+
+    <!-- Welcome Onboarding Modal -->
+    <div id="welcomeModal" class="welcome-modal" style="display: none;">
+        <div class="welcome-overlay"></div>
+        <div class="welcome-content">
+            <button class="welcome-close" id="closeWelcome">×</button>
+            <div class="welcome-icon">👋</div>
+            <h2>Bienvenue sur PlayStore Analytics Pro !</h2>
+            <p class="welcome-subtitle">Découvrez la puissance de l'analyse Play Store en quelques clics</p>
+
+            <div class="onboarding-steps">
+                <div class="onboarding-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Recherchez une application</h4>
+                        <p>Tapez le nom d'une app ou essayez avec nos exemples populaires</p>
+                    </div>
+                </div>
+                <div class="onboarding-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Analysez les données</h4>
+                        <p>3 analyses gratuites par jour • Données en temps réel</p>
+                    </div>
+                </div>
+                <div class="onboarding-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Exportez vos rapports</h4>
+                        <p>PDF, CSV, JSON • Format professionnel prêt à partager</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="welcome-quickstart">
+                <h3>🚀 Démarrage rapide</h3>
+                <div class="quickstart-grid">
+                    <button class="quickstart-btn" data-appid="com.roblox.client">
+                        <span class="qs-icon">🎮</span>
+                        <span class="qs-name">Roblox</span>
+                    </button>
+                    <button class="quickstart-btn" data-appid="com.instagram.android">
+                        <span class="qs-icon">📸</span>
+                        <span class="qs-name">Instagram</span>
+                    </button>
+                    <button class="quickstart-btn" data-appid="com.zhiliaoapp.musically">
+                        <span class="qs-icon">🎵</span>
+                        <span class="qs-name">TikTok</span>
+                    </button>
+                    <button class="quickstart-btn" data-appid="com.whatsapp">
+                        <span class="qs-icon">💬</span>
+                        <span class="qs-name">WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="welcome-actions">
+                <button class="welcome-btn-primary" id="startExploring">
+                    Commencer l'exploration
+                </button>
+                <button class="welcome-btn-secondary" id="skipWelcome">
+                    Passer l'introduction
+                </button>
+            </div>
+
+            <p class="welcome-footer">
+                💡 <strong>Astuce :</strong> Vous pouvez analyser gratuitement 3 applications par jour
+            </p>
+        </div>
     </div>
 
     <!-- Paywall Modal -->
