@@ -59,8 +59,54 @@ function validateLicenseFormat(key) {
     return regex.test(key.toUpperCase());
 }
 
-function isValidLicense(key) {
-    return VALID_LICENSE_KEYS.includes(key.toUpperCase());
+async function isValidLicense(key) {
+    // Validation via backend API
+    try {
+        const response = await fetch(`${API}/api/validate-license`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ key: key.toUpperCase() })
+        });
+
+        if (!response.ok) {
+            console.error('License validation HTTP error:', response.status);
+            return { valid: false, message: 'Erreur de communication avec le serveur' };
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.valid) {
+            return {
+                valid: true,
+                email: data.data?.email || 'user@example.com',
+                createdAt: data.data?.created_at,
+                expiresAt: data.data?.expires_at,
+                plan: data.data?.plan || 'premium'
+            };
+        }
+
+        return {
+            valid: false,
+            message: data.message || 'Clé de licence invalide'
+        };
+
+    } catch (error) {
+        console.error('License validation error:', error);
+        // Fallback vers validation locale si backend inaccessible
+        const isLocallyValid = VALID_LICENSE_KEYS.includes(key.toUpperCase());
+        if (isLocallyValid) {
+            return {
+                valid: true,
+                email: 'offline@local.cache',
+                createdAt: new Date().toISOString(),
+                expiresAt: null,
+                plan: 'premium'
+            };
+        }
+        return { valid: false, message: 'Impossible de vérifier la licence' };
+    }
 }
 
 function getLicenseData() {
@@ -74,15 +120,29 @@ function getLicenseData() {
     }
 }
 
-function saveLicenseData(key, email = 'user@example.com') {
+async function saveLicenseData(key) {
+    // Valider via backend d'abord
+    const validation = await isValidLicense(key);
+
+    if (!validation.valid) {
+        return { success: false, message: validation.message || 'Clé invalide' };
+    }
+
+    // Sauvegarder les données
     const data = {
         key: key,
-        email: email,
+        email: validation.email,
         activatedAt: new Date().toISOString(),
+        createdAt: validation.createdAt,
+        expiresAt: validation.expiresAt,
+        plan: validation.plan,
         hash: hashKey(key)
     };
+
     localStorage.setItem('licenseData', JSON.stringify(data));
     localStorage.setItem('license', hashKey(key)); // For backward compatibility
+
+    return { success: true };
 }
 
 function removeLicenseData() {
@@ -355,11 +415,12 @@ document.getElementById('licenseKeyInput')?.addEventListener('input', function(e
 });
 
 // Activate license button
-document.getElementById('activateLicenseBtn')?.addEventListener('click', function() {
+document.getElementById('activateLicenseBtn')?.addEventListener('click', async function() {
     const input = document.getElementById('licenseKeyInput');
     const key = input.value.trim().toUpperCase();
     const errorDiv = document.getElementById('licenseError');
     const successDiv = document.getElementById('licenseSuccess');
+    const btn = this;
 
     // Clear previous messages
     errorDiv.style.display = 'none';
@@ -373,33 +434,52 @@ document.getElementById('activateLicenseBtn')?.addEventListener('click', functio
         return;
     }
 
-    // Validate key
-    if (!isValidLicense(key)) {
-        errorDiv.textContent = '❌ Clé de licence invalide. Vérifiez votre clé ou contactez le support.';
+    // Show loading state
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = '🔄 Validation en cours...';
+
+    try {
+        // Validate via backend API
+        const result = await saveLicenseData(key);
+
+        if (!result.success) {
+            errorDiv.textContent = `❌ ${result.message || 'Clé de licence invalide. Vérifiez votre clé ou contactez le support.'}`;
+            errorDiv.style.display = 'block';
+            input.className = 'license-input invalid';
+            btn.disabled = false;
+            btn.textContent = originalText;
+            return;
+        }
+
+        // Success - activate license
+        hasLicense = true;
+
+        successDiv.textContent = '✓ Licence activée avec succès !';
+        successDiv.style.display = 'block';
+        input.className = 'license-input valid';
+
+        // Update UI
+        checkLicense();
+        if (fullData) generateReport(fullData);
+
+        // Show success toast and close modal after delay
+        toast('✓ Licence Premium activée !', 'success');
+
+        setTimeout(() => {
+            hideLicenseModal();
+            showLicenseModal(); // Reopen to show active view
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }, 1500);
+    } catch (error) {
+        console.error('License activation error:', error);
+        errorDiv.textContent = `❌ Erreur de validation: ${error.message}`;
         errorDiv.style.display = 'block';
         input.className = 'license-input invalid';
-        return;
+        btn.disabled = false;
+        btn.textContent = originalText;
     }
-
-    // Success - activate license
-    saveLicenseData(key);
-    hasLicense = true;
-
-    successDiv.textContent = '✓ Licence activée avec succès !';
-    successDiv.style.display = 'block';
-    input.className = 'license-input valid';
-
-    // Update UI
-    checkLicense();
-    if (fullData) generateReport(fullData);
-
-    // Show success toast and close modal after delay
-    toast('✓ Licence Premium activée !', 'success');
-
-    setTimeout(() => {
-        hideLicenseModal();
-        showLicenseModal(); // Reopen to show active view
-    }, 1500);
 });
 
 // Deactivate license button
