@@ -30,14 +30,113 @@ function toast(msg, type) {
     setTimeout(() => t.remove(), 3500);
 }
 
+// ============================================
+// LICENSE MANAGEMENT SYSTEM
+// ============================================
+
+const VALID_LICENSE_KEYS = [
+    'PSAP-TEST-2025-DEMO-KEY1',
+    'PSAP-DEMO-FREE-TRIAL-XYZ',
+    'PSAP-PROD-LIVE-FULL-ABC',
+    'PSAP-GOLD-USER-PREM-123',
+    'PSAP-ULTRA-MEGA-SUPER-XYZ'
+];
+
+function hashKey(key) {
+    // Simple hash for obfuscation (not cryptographic, just to avoid plain text)
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+        const char = key.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash.toString(36);
+}
+
+function validateLicenseFormat(key) {
+    // Format: PSAP-XXXX-XXXX-XXXX-XXXX (24 chars with dashes)
+    const regex = /^PSAP-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+    return regex.test(key.toUpperCase());
+}
+
+function isValidLicense(key) {
+    return VALID_LICENSE_KEYS.includes(key.toUpperCase());
+}
+
+function getLicenseData() {
+    const data = localStorage.getItem('licenseData');
+    if (!data) return null;
+
+    try {
+        return JSON.parse(data);
+    } catch (e) {
+        return null;
+    }
+}
+
+function saveLicenseData(key, email = 'user@example.com') {
+    const data = {
+        key: key,
+        email: email,
+        activatedAt: new Date().toISOString(),
+        hash: hashKey(key)
+    };
+    localStorage.setItem('licenseData', JSON.stringify(data));
+    localStorage.setItem('license', hashKey(key)); // For backward compatibility
+}
+
+function removeLicenseData() {
+    localStorage.removeItem('licenseData');
+    localStorage.removeItem('license');
+}
+
 function checkLicense() {
-    const license = localStorage.getItem('license');
-    if (license && (license === 'PREMIUM-2025' || license === 'TEST-LICENSE' || license.startsWith('GR-'))) {
+    const licenseData = getLicenseData();
+
+    if (licenseData && isValidLicense(licenseData.key)) {
         hasLicense = true;
         document.getElementById('licenseStatus').innerHTML =
             '<span class="license-status">✓ Premium Actif</span>';
+    } else {
+        hasLicense = false;
     }
+
     updateStatusBanner();
+}
+
+function showLicenseModal() {
+    const modal = document.getElementById('licenseModal');
+    const licenseData = getLicenseData();
+
+    if (licenseData && isValidLicense(licenseData.key)) {
+        // Show active license view
+        document.getElementById('noLicenseView').style.display = 'none';
+        document.getElementById('activeLicenseView').style.display = 'block';
+
+        // Populate license info
+        document.getElementById('licenseEmail').textContent = licenseData.email;
+        document.getElementById('licenseKey').textContent = licenseData.key;
+        document.getElementById('licenseDate').textContent = new Date(licenseData.activatedAt).toLocaleDateString('fr-FR');
+    } else {
+        // Show activation view
+        document.getElementById('noLicenseView').style.display = 'block';
+        document.getElementById('activeLicenseView').style.display = 'none';
+    }
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function hideLicenseModal() {
+    const modal = document.getElementById('licenseModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+
+    // Reset form
+    document.getElementById('licenseKeyInput').value = '';
+    document.getElementById('licenseKeyInput').className = 'license-input';
+    document.getElementById('licenseError').style.display = 'none';
+    document.getElementById('licenseSuccess').style.display = 'none';
 }
 
 // ============================================
@@ -212,20 +311,121 @@ async function fetchAppData(appId) {
     return payload.data;
 }
 
-document.getElementById('licenseBtn').onclick = function() {
-    const key = prompt('Entrez votre clé de licence :\n\nClés de test : PREMIUM-2025, TEST-LICENSE');
-    if (!key) return;
+// ============================================
+// LICENSE MODAL EVENT LISTENERS
+// ============================================
 
-    if (key === 'PREMIUM-2025' || key === 'TEST-LICENSE' || key.startsWith('GR-')) {
-        localStorage.setItem('license', key);
-        hasLicense = true;
-        toast('Licence activée avec succès', 'success');
-        checkLicense();
-        if (fullData) generateReport(fullData);
-    } else {
-        toast('Clé de licence invalide', 'error');
-    }
+// Open license modal
+document.getElementById('licenseBtn').onclick = function() {
+    showLicenseModal();
 };
+
+// Close license modal
+document.getElementById('closeLicense')?.addEventListener('click', hideLicenseModal);
+
+// Close when clicking outside
+document.getElementById('licenseModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideLicenseModal();
+    }
+});
+
+// Real-time format validation
+document.getElementById('licenseKeyInput')?.addEventListener('input', function(e) {
+    const key = e.target.value.toUpperCase();
+    e.target.value = key; // Auto uppercase
+
+    const errorDiv = document.getElementById('licenseError');
+    const successDiv = document.getElementById('licenseSuccess');
+
+    // Clear messages
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+
+    if (key.length === 0) {
+        e.target.className = 'license-input';
+        return;
+    }
+
+    if (validateLicenseFormat(key)) {
+        e.target.className = 'license-input valid';
+    } else {
+        e.target.className = 'license-input invalid';
+    }
+});
+
+// Activate license button
+document.getElementById('activateLicenseBtn')?.addEventListener('click', function() {
+    const input = document.getElementById('licenseKeyInput');
+    const key = input.value.trim().toUpperCase();
+    const errorDiv = document.getElementById('licenseError');
+    const successDiv = document.getElementById('licenseSuccess');
+
+    // Clear previous messages
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+
+    // Validate format
+    if (!validateLicenseFormat(key)) {
+        errorDiv.textContent = '❌ Format invalide. Le format attendu est : PSAP-XXXX-XXXX-XXXX-XXXX';
+        errorDiv.style.display = 'block';
+        input.className = 'license-input invalid';
+        return;
+    }
+
+    // Validate key
+    if (!isValidLicense(key)) {
+        errorDiv.textContent = '❌ Clé de licence invalide. Vérifiez votre clé ou contactez le support.';
+        errorDiv.style.display = 'block';
+        input.className = 'license-input invalid';
+        return;
+    }
+
+    // Success - activate license
+    saveLicenseData(key);
+    hasLicense = true;
+
+    successDiv.textContent = '✓ Licence activée avec succès !';
+    successDiv.style.display = 'block';
+    input.className = 'license-input valid';
+
+    // Update UI
+    checkLicense();
+    if (fullData) generateReport(fullData);
+
+    // Show success toast and close modal after delay
+    toast('✓ Licence Premium activée !', 'success');
+
+    setTimeout(() => {
+        hideLicenseModal();
+        showLicenseModal(); // Reopen to show active view
+    }, 1500);
+});
+
+// Deactivate license button
+document.getElementById('deactivateLicenseBtn')?.addEventListener('click', function() {
+    if (confirm('Êtes-vous sûr de vouloir désactiver votre licence Premium ?')) {
+        removeLicenseData();
+        hasLicense = false;
+        checkLicense();
+
+        toast('Licence désactivée', 'success');
+        hideLicenseModal();
+
+        // Regenerate report if there's data
+        if (fullData) generateReport(fullData);
+    }
+});
+
+// Test keys - click to copy
+document.querySelectorAll('.test-key').forEach(keyElement => {
+    keyElement.addEventListener('click', function() {
+        const key = this.dataset.key;
+        document.getElementById('licenseKeyInput').value = key;
+        document.getElementById('licenseKeyInput').dispatchEvent(new Event('input'));
+        toast('✓ Clé copiée dans le champ', 'success');
+    });
+});
 
 document.getElementById('searchBtn').onclick = async function() {
     const id = document.getElementById('appId').value.trim();
