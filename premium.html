@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlayStore Analytics Pro - Rapport Premium</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -637,6 +639,101 @@
             font-size: 1.1rem;
             opacity: 0.95;
         }
+
+        /* Export Menu Styles */
+        .export-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        .export-btn:hover {
+            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.6);
+        }
+
+        .export-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            min-width: 250px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .export-menu.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .export-menu-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .export-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .export-menu-item:hover {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding-left: 25px;
+        }
+
+        .export-menu-item .icon {
+            font-size: 1.3rem;
+        }
+
+        .export-menu-item .label {
+            flex: 1;
+        }
+
+        .export-menu-item .format {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 6rem;
+            font-weight: 900;
+            color: rgba(255, 0, 0, 0.08);
+            pointer-events: none;
+            z-index: 9999;
+            white-space: nowrap;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
@@ -652,6 +749,36 @@
                 <input type="text" id="appId" placeholder="Entrez l'ID de l'application (ex: com.roblox.client)" value="com.roblox.client">
                 <button id="searchBtn">🔍 Analyser</button>
                 <button id="licenseBtn" class="license-btn">🔑 Licence</button>
+                <div class="export-container">
+                    <button id="exportBtn" class="export-btn">📥 Exporter</button>
+                    <div id="exportMenu" class="export-menu">
+                        <div class="export-menu-item" data-format="pdf">
+                            <span class="icon">📄</span>
+                            <span class="label">Export PDF</span>
+                            <span class="format">PDF</span>
+                        </div>
+                        <div class="export-menu-item" data-format="json">
+                            <span class="icon">📊</span>
+                            <span class="label">Export JSON</span>
+                            <span class="format">JSON</span>
+                        </div>
+                        <div class="export-menu-item" data-format="csv">
+                            <span class="icon">📋</span>
+                            <span class="label">Export CSV</span>
+                            <span class="format">CSV</span>
+                        </div>
+                        <div class="export-menu-item" data-format="png">
+                            <span class="icon">🖼️</span>
+                            <span class="label">Export PNG</span>
+                            <span class="format">PNG</span>
+                        </div>
+                        <div class="export-menu-item" data-format="html">
+                            <span class="icon">🌐</span>
+                            <span class="label">Export HTML</span>
+                            <span class="format">HTML</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1245,6 +1372,408 @@ function generateReport(data) {
     html += '</div>';
     
     container.innerHTML = html;
+}
+
+// ============ EXPORT FUNCTIONS ============
+
+// Toggle Export Menu
+document.getElementById('exportBtn').onclick = function(e) {
+    e.stopPropagation();
+    const menu = document.getElementById('exportMenu');
+    menu.classList.toggle('active');
+};
+
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+    const menu = document.getElementById('exportMenu');
+    const exportContainer = document.querySelector('.export-container');
+    if (!exportContainer.contains(e.target)) {
+        menu.classList.remove('active');
+    }
+});
+
+// Export Menu Items Click Handler
+document.querySelectorAll('.export-menu-item').forEach(item => {
+    item.addEventListener('click', function() {
+        const format = this.dataset.format;
+        document.getElementById('exportMenu').classList.remove('active');
+
+        if (!fullData) {
+            toast('Veuillez d\'abord analyser une application', 'error');
+            return;
+        }
+
+        handleExport(format);
+    });
+});
+
+// Main Export Handler
+async function handleExport(format) {
+    const loadingToast = toast('Génération de l\'export en cours...', 'success');
+
+    try {
+        switch(format) {
+            case 'json':
+                exportJSON();
+                break;
+            case 'csv':
+                exportCSV();
+                break;
+            case 'pdf':
+                await exportPDF();
+                break;
+            case 'png':
+                await exportPNG();
+                break;
+            case 'html':
+                exportHTML();
+                break;
+        }
+        setTimeout(() => toast('✓ Export réussi !', 'success'), 500);
+    } catch(e) {
+        toast('✗ Erreur lors de l\'export: ' + e.message, 'error');
+        console.error('Export error:', e);
+    }
+}
+
+// Export JSON
+function exportJSON() {
+    const exportData = {
+        metadata: {
+            exportDate: new Date().toISOString(),
+            appId: document.getElementById('appId').value,
+            hasLicense: hasLicense,
+            version: '1.0'
+        },
+        data: fullData
+    };
+
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    downloadFile(blob, `${fullData.title || 'app'}_data.json`);
+}
+
+// Export CSV
+function exportCSV() {
+    const data = fullData;
+    let csv = 'Métrique,Valeur,Catégorie\n';
+
+    // Statistiques principales
+    csv += `Note moyenne,${data.score || 'N/A'},Statistiques\n`;
+    csv += `Nombre d'avis,${data.ratings || 0},Statistiques\n`;
+    csv += `Installations,${data.installs || 'N/A'},Statistiques\n`;
+    csv += `Reviews totales,${data.reviews || 0},Statistiques\n`;
+    csv += `Installations réelles,${data.realInstalls || 0},Statistiques\n`;
+    csv += `Installations/jour,${data.dailyInstalls || 0},Statistiques\n`;
+    csv += `Installations/mois,${data.monthlyInstalls || 0},Statistiques\n`;
+    csv += `Installations min,${data.minInstalls || 0},Statistiques\n`;
+
+    // Informations temporelles
+    csv += `Date de sortie,${data.released || 'N/A'},Temporel\n`;
+    csv += `Dernière MAJ,${data.lastUpdated || 'N/A'},Temporel\n`;
+    csv += `Âge (jours),${data.appAgeDays || 0},Temporel\n`;
+    csv += `Version actuelle,${data.version || 'N/A'},Temporel\n`;
+
+    if (hasLicense) {
+        // Informations techniques
+        csv += `Android minimum,API ${data.minAndroidApi || '?'},Technique\n`;
+        csv += `Android maximum,API ${data.maxAndroidApi || '?'},Technique\n`;
+        csv += `Publicités,${data.adSupported ? 'Oui' : 'Non'},Technique\n`;
+        csv += `Achats intégrés,${data.offersIAP ? 'Oui' : 'Non'},Technique\n`;
+
+        // SEO
+        csv += `Mots-clés uniques,${data.uniqueKeywords || 0},SEO\n`;
+        csv += `Total mots,${data.totalWords || 0},SEO\n`;
+        csv += `Score lisibilité,${data.readability?.flesch_score?.toFixed(1) || 'N/A'},SEO\n`;
+    }
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    downloadFile(blob, `${data.title || 'app'}_stats.csv`);
+}
+
+// Export PDF
+async function exportPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+
+    const data = fullData;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let yPos = 20;
+
+    // Header
+    doc.setFillColor(102, 126, 234);
+    doc.rect(0, 0, pageWidth, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.setFont(undefined, 'bold');
+    doc.text('PlayStore Analytics Pro', pageWidth/2, 20, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text('Rapport Premium Détaillé', pageWidth/2, 30, { align: 'center' });
+
+    // Watermark for free version
+    if (!hasLicense) {
+        doc.setTextColor(255, 0, 0);
+        doc.setFontSize(60);
+        doc.setFont(undefined, 'bold');
+        doc.saveGraphicsState();
+        doc.setGState(new doc.GState({ opacity: 0.1 }));
+        doc.text('VERSION GRATUITE', pageWidth/2, pageHeight/2, {
+            align: 'center',
+            angle: 45
+        });
+        doc.restoreGraphicsState();
+    }
+
+    yPos = 50;
+    doc.setTextColor(0, 0, 0);
+
+    // App Info
+    doc.setFontSize(18);
+    doc.setFont(undefined, 'bold');
+    doc.text(data.title || 'N/A', 15, yPos);
+    yPos += 8;
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Développeur: ${data.developer || 'N/A'}`, 15, yPos);
+    yPos += 6;
+    doc.text(`Genre: ${data.genre || 'N/A'}`, 15, yPos);
+    yPos += 6;
+    doc.text(`Date d'export: ${new Date().toLocaleDateString('fr-FR')}`, 15, yPos);
+    yPos += 12;
+
+    // Statistiques principales
+    doc.setFontSize(14);
+    doc.setFont(undefined, 'bold');
+    doc.setTextColor(102, 126, 234);
+    doc.text('📊 Statistiques Principales', 15, yPos);
+    yPos += 8;
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+
+    const stats = [
+        ['Note moyenne', `${data.score?.toFixed(1) || 'N/A'} ⭐`],
+        ['Nombre d\'avis', fmt(data.ratings || 0)],
+        ['Installations', data.installs || 'N/A'],
+        ['Reviews totales', fmt(data.reviews || 0)],
+        ['Installations réelles', fmt(data.realInstalls || 0)],
+        ['Installations/jour', fmt(data.dailyInstalls || 0)],
+        ['Installations/mois', fmt(data.monthlyInstalls || 0)]
+    ];
+
+    stats.forEach(([label, value]) => {
+        if (yPos > pageHeight - 20) {
+            doc.addPage();
+            yPos = 20;
+        }
+        doc.text(`${label}: ${value}`, 20, yPos);
+        yPos += 6;
+    });
+
+    yPos += 6;
+
+    // Informations temporelles
+    if (yPos > pageHeight - 40) {
+        doc.addPage();
+        yPos = 20;
+    }
+    doc.setFontSize(14);
+    doc.setFont(undefined, 'bold');
+    doc.setTextColor(102, 126, 234);
+    doc.text('📅 Informations Temporelles', 15, yPos);
+    yPos += 8;
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+
+    const temporal = [
+        ['Date de sortie', data.released || 'N/A'],
+        ['Dernière MAJ', data.lastUpdated || 'N/A'],
+        ['Âge de l\'app', `${data.appAgeDays || 0} jours`],
+        ['Version actuelle', data.version || 'N/A']
+    ];
+
+    temporal.forEach(([label, value]) => {
+        doc.text(`${label}: ${value}`, 20, yPos);
+        yPos += 6;
+    });
+
+    // Premium sections (only if licensed)
+    if (hasLicense) {
+        yPos += 6;
+        if (yPos > pageHeight - 40) {
+            doc.addPage();
+            yPos = 20;
+        }
+
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(102, 126, 234);
+        doc.text('🔧 Informations Techniques', 15, yPos);
+        yPos += 8;
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+
+        const technical = [
+            ['Android minimum', `API ${data.minAndroidApi || '?'}+`],
+            ['Android maximum', `API ${data.maxAndroidApi || '?'}`],
+            ['Publicités', data.adSupported ? 'Oui' : 'Non'],
+            ['Achats intégrés', data.offersIAP ? 'Oui' : 'Non'],
+            ['Prix IAP', data.inAppProductPrice || 'N/A']
+        ];
+
+        technical.forEach(([label, value]) => {
+            if (yPos > pageHeight - 20) {
+                doc.addPage();
+                yPos = 20;
+            }
+            doc.text(`${label}: ${value}`, 20, yPos);
+            yPos += 6;
+        });
+    } else {
+        yPos += 10;
+        doc.setFontSize(12);
+        doc.setTextColor(255, 152, 0);
+        doc.setFont(undefined, 'bold');
+        doc.text('🔒 Débloquez toutes les données premium pour 9,99€', 15, yPos);
+    }
+
+    // Footer on all pages
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.setFont(undefined, 'normal');
+        doc.text(`Page ${i} sur ${totalPages}`, pageWidth/2, pageHeight - 10, { align: 'center' });
+        doc.text('Généré par PlayStore Analytics Pro', pageWidth/2, pageHeight - 5, { align: 'center' });
+    }
+
+    doc.save(`${data.title || 'app'}_report.pdf`);
+}
+
+// Export PNG
+async function exportPNG() {
+    const container = document.getElementById('reportContainer');
+    if (!container || !container.innerHTML) {
+        toast('Aucun rapport à exporter', 'error');
+        return;
+    }
+
+    // Add watermark if no license
+    let watermark = null;
+    if (!hasLicense) {
+        watermark = document.createElement('div');
+        watermark.className = 'watermark';
+        watermark.textContent = 'VERSION GRATUITE';
+        document.body.appendChild(watermark);
+    }
+
+    const canvas = await html2canvas(container, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        logging: false,
+        useCORS: true
+    });
+
+    // Remove watermark
+    if (watermark) {
+        watermark.remove();
+    }
+
+    canvas.toBlob(blob => {
+        downloadFile(blob, `${fullData.title || 'app'}_report.png`);
+    });
+}
+
+// Export HTML
+function exportHTML() {
+    const data = fullData;
+    const container = document.getElementById('reportContainer');
+
+    if (!container || !container.innerHTML) {
+        toast('Aucun rapport à exporter', 'error');
+        return;
+    }
+
+    // Get all styles from the page
+    const styles = Array.from(document.styleSheets)
+        .map(sheet => {
+            try {
+                return Array.from(sheet.cssRules)
+                    .map(rule => rule.cssText)
+                    .join('\n');
+            } catch (e) {
+                return '';
+            }
+        })
+        .join('\n');
+
+    const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${data.title || 'App'} - PlayStore Analytics Report</title>
+    <style>
+        ${styles}
+        body {
+            margin: 0;
+            padding: 20px;
+            background: white;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        ${!hasLicense ? `
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 6rem;
+            font-weight: 900;
+            color: rgba(255, 0, 0, 0.08);
+            pointer-events: none;
+            z-index: 9999;
+            white-space: nowrap;
+        }
+        ` : ''}
+    </style>
+</head>
+<body>
+    ${!hasLicense ? '<div class="watermark">VERSION GRATUITE</div>' : ''}
+    <div class="container">
+        <div style="text-align:center;margin-bottom:30px;padding:30px;background:linear-gradient(135deg, #667eea, #764ba2);color:white;border-radius:20px;">
+            <h1 style="margin:0 0 10px 0;font-size:2.5rem;">💎 PlayStore Analytics Pro</h1>
+            <p style="margin:0;font-size:1.2rem;">Rapport généré le ${new Date().toLocaleDateString('fr-FR')}</p>
+        </div>
+        ${container.innerHTML}
+        <div style="text-align:center;margin-top:40px;padding:20px;color:#666;border-top:2px solid #e0e0e0;">
+            <p>Généré par <strong>PlayStore Analytics Pro</strong></p>
+            <p style="font-size:0.9rem;">https://votresite.com</p>
+        </div>
+    </div>
+</body>
+</html>`;
+
+    const blob = new Blob([html], { type: 'text/html' });
+    downloadFile(blob, `${data.title || 'app'}_report.html`);
+}
+
+// Utility function to download files
+function downloadFile(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 checkLicense();
