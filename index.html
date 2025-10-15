@@ -3,348 +3,699 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlayStore Analytics Pro</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <title>PlayStore Analytics Pro — Analysez le Google Play Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; padding: 20px; min-height: 100vh; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        header { background: white; padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
-        h1 { font-size: 2.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-        .tabs { display: flex; gap: 10px; background: white; padding: 10px; border-radius: 15px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 15px; background: transparent; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; transition: all 0.3s; }
-        .tab-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .box { background: white; padding: 30px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 15px; font-size: 16px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 15px; }
-        button { padding: 15px 30px; font-size: 16px; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s; margin-right: 10px; }
-        button:hover { transform: translateY(-2px); }
-        .result { background: white; padding: 30px; border-radius: 15px; margin-bottom: 20px; }
-        .app-header { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #f0f0f0; }
-        .app-icon { width: 100px; height: 100px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
-        .stat-card { background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; transition: all 0.3s; }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .stat-label { font-size: 0.85rem; color: #666; text-transform: uppercase; margin-bottom: 10px; font-weight: 600; }
-        .stat-value { font-size: 2rem; font-weight: bold; color: #667eea; }
-        .loading { text-align: center; padding: 40px; }
-        .spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 10000; }
-        .toast.success { background: #4caf50; }
-        .toast.error { background: #f44336; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; overflow-y: auto; padding: 20px; }
-        .modal-content { background: white; max-width: 1000px; margin: 0 auto; border-radius: 20px; }
-        .modal-header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 30px; border-radius: 20px 20px 0 0; display: flex; justify-content: space-between; align-items: center; }
-        .modal-close { background: none; border: none; color: white; font-size: 30px; cursor: pointer; padding: 0; width: 40px; height: 40px; }
-        .modal-body { padding: 40px; max-height: 80vh; overflow-y: auto; }
-        .premium-section { margin-bottom: 40px; }
-        .premium-section h4 { color: #667eea; font-size: 1.4rem; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #e0e0e0; }
-        .blur-section { position: relative; filter: blur(4px); pointer-events: none; user-select: none; }
-        .unlock-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: linear-gradient(135deg, #ff9800, #f57c00); color: white; padding: 20px 40px; border-radius: 50px; font-weight: bold; font-size: 1.2rem; z-index: 10; box-shadow: 0 8px 25px rgba(0,0,0,0.3); white-space: nowrap; }
-        .chart-container { background: #f8f9fa; padding: 25px; border-radius: 15px; margin: 25px 0; }
-        .bar-chart { display: flex; align-items: flex-end; gap: 15px; height: 220px; margin-top: 30px; }
-        .bar { flex: 1; background: linear-gradient(to top, #667eea, #4caf50); border-radius: 8px 8px 0 0; position: relative; transition: transform 0.3s; }
-        .bar:hover { transform: translateY(-5px); }
-        .bar-value { position: absolute; top: -30px; width: 100%; text-align: center; font-weight: bold; color: #333; font-size: 0.9rem; }
-        .bar-label { position: absolute; bottom: -30px; width: 100%; text-align: center; font-size: 0.85rem; color: #666; font-weight: 600; }
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .info-item { background: #f8f9fa; padding: 18px; border-radius: 10px; border-left: 4px solid #667eea; }
-        .info-label { font-size: 0.8rem; color: #666; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.5px; }
-        .info-value { font-size: 1.15rem; font-weight: 700; color: #333; }
-        .cta-section { text-align: center; padding: 50px 40px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 15px; color: white; margin-top: 40px; }
-        .cta-section h3 { font-size: 2rem; margin-bottom: 15px; }
-        .price-tag { background: #4caf50; color: white; padding: 15px 30px; border-radius: 15px; display: inline-block; font-size: 2rem; font-weight: bold; margin: 25px 0; box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
-        .features-list { list-style: none; text-align: left; max-width: 550px; margin: 30px auto; }
-        .features-list li { padding: 12px 0; padding-left: 35px; position: relative; font-size: 1.05rem; }
-        .features-list li::before { content: '✓'; position: absolute; left: 0; font-weight: bold; font-size: 1.4rem; color: #4caf50; background: white; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        :root {
+            --bg: #0f172a;
+            --bg-soft: #111c33;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #14b8a6 100%);
+            --text: #0f172a;
+            --text-light: #64748b;
+            --border: rgba(148, 163, 184, 0.18);
+            --white: #ffffff;
+            --accent: #6366f1;
+            --accent-soft: rgba(99, 102, 241, 0.1);
+            --shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent 45%), radial-gradient(circle at bottom left, rgba(20, 184, 166, 0.18), transparent 50%), #0b1120;
+            color: rgba(226, 232, 240, 0.9);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px 80px 24px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .logo span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            font-size: 0.95rem;
+        }
+
+        nav a {
+            color: rgba(226, 232, 240, 0.75);
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover {
+            color: #f8fafc;
+        }
+
+        .nav-cta {
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.14);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            color: #f8fafc;
+            font-weight: 500;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.25);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 48px;
+            align-items: center;
+            margin-bottom: 96px;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: rgba(226, 232, 240, 0.9);
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: clamp(2.6rem, 6vw, 3.6rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            color: #f8fafc;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: rgba(226, 232, 240, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .cta-group a {
+            padding: 14px 28px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cta-primary {
+            background: var(--gradient);
+            color: #f8fafc;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .cta-secondary {
+            background: rgba(148, 163, 184, 0.12);
+            color: rgba(226, 232, 240, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .cta-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .metric-card {
+            padding: 18px 20px;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .metric-card strong {
+            display: block;
+            font-size: 1.4rem;
+            color: #f8fafc;
+        }
+
+        .metric-card span {
+            font-size: 0.85rem;
+            color: rgba(148, 163, 184, 0.8);
+        }
+
+        section {
+            margin-bottom: 90px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 2.6rem);
+            font-weight: 600;
+            color: #f8fafc;
+            margin-bottom: 18px;
+        }
+
+        .section-subtitle {
+            color: rgba(226, 232, 240, 0.7);
+            max-width: 620px;
+            margin-bottom: 42px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            padding: 28px;
+            border-radius: 20px;
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+
+        .card h3 {
+            color: #f8fafc;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: rgba(226, 232, 240, 0.65);
+            font-size: 0.95rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 22px;
+        }
+
+        .step {
+            position: relative;
+            padding: 26px;
+            border-radius: 18px;
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(148, 163, 184, 0.14);
+        }
+
+        .step-number {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c7d2fe;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .step h4 {
+            color: #f8fafc;
+            margin-bottom: 10px;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .testimonial {
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 20px;
+            padding: 26px;
+        }
+
+        .testimonial p {
+            font-size: 0.95rem;
+            color: rgba(226, 232, 240, 0.78);
+            margin-bottom: 20px;
+        }
+
+        .testimonial strong {
+            display: block;
+            color: #f8fafc;
+            font-size: 0.95rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .pricing-card {
+            border-radius: 24px;
+            padding: 32px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .pricing-card.highlight {
+            background: rgba(99, 102, 241, 0.16);
+            border-color: rgba(99, 102, 241, 0.45);
+            box-shadow: 0 30px 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: rgba(226, 232, 240, 0.6);
+            font-weight: 500;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+            color: rgba(226, 232, 240, 0.75);
+            font-size: 0.93rem;
+        }
+
+        .pricing-card ul li::before {
+            content: "✔";
+            color: #34d399;
+            margin-right: 8px;
+        }
+
+        .pricing-card a {
+            margin-top: auto;
+            text-align: center;
+            padding: 14px;
+            border-radius: 12px;
+            background: rgba(148, 163, 184, 0.18);
+            color: #f8fafc;
+            font-weight: 600;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            transition: transform 0.2s ease;
+        }
+
+        .pricing-card.highlight a {
+            background: var(--gradient);
+            border: none;
+        }
+
+        .pricing-card a:hover {
+            transform: translateY(-2px);
+        }
+
+        .faq {
+            display: grid;
+            gap: 16px;
+        }
+
+        .faq-item {
+            background: rgba(15, 23, 42, 0.55);
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            color: #f8fafc;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .faq-question span {
+            font-size: 1.4rem;
+            color: rgba(148, 163, 184, 0.7);
+        }
+
+        .faq-answer {
+            padding: 0 24px 20px 24px;
+            color: rgba(226, 232, 240, 0.75);
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .cta-banner {
+            padding: 48px;
+            border-radius: 28px;
+            background: linear-gradient(120deg, rgba(99, 102, 241, 0.38), rgba(20, 184, 166, 0.35));
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.2);
+        }
+
+        .cta-banner h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            color: #f8fafc;
+            margin-bottom: 18px;
+        }
+
+        .cta-banner p {
+            color: rgba(226, 232, 240, 0.75);
+            margin-bottom: 32px;
+        }
+
+        footer {
+            margin-top: 90px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: space-between;
+            color: rgba(148, 163, 184, 0.6);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: rgba(226, 232, 240, 0.7);
+        }
+
+        @media (max-width: 960px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+
+            .hero {
+                gap: 32px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 24px 18px 70px 18px;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            header {
+                align-items: center;
+            }
+
+            nav {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="page">
         <header>
-            <h1>🔍 PlayStore Analytics Pro</h1>
-            <p>Analyse complète d'applications Android</p>
-            <div id="licenseStatus"></div>
+            <div class="logo">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.5 2L3 20.5H20.5L13.5 2Z" fill="url(#grad)"/>
+                    <defs>
+                        <linearGradient id="grad" x1="3" y1="2" x2="23" y2="21" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#6366F1"/>
+                            <stop offset="0.5" stop-color="#8B5CF6"/>
+                            <stop offset="1" stop-color="#14B8A6"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>PlayStore Analytics Pro</span>
+            </div>
+            <nav>
+                <a href="#features">Fonctionnalités</a>
+                <a href="#workflow">Process</a>
+                <a href="#pricing">Tarifs</a>
+                <a href="#faq">FAQ</a>
+                <a class="nav-cta" href="premium.html">Accéder à l'application</a>
+            </nav>
         </header>
 
-        <div class="tabs">
-            <button class="tab-btn active" id="tab1">🔍 Analyse</button>
-            <button class="tab-btn" id="tab2">⚙️ Licence</button>
-        </div>
-
-        <div id="content1" class="tab-content active">
-            <div class="box">
-                <input type="text" id="appId" placeholder="ID app (ex: com.roblox.client)" value="com.roblox.client">
-                <button id="searchBtn">🔍 Analyser</button>
+        <section class="hero">
+            <div>
+                <div class="hero-tag">🔍 L'intelligence ASO taillée pour les équipes marketing</div>
+                <h1>Analysez le Google Play Store et sortez vos apps du lot.</h1>
+                <p>PlayStore Analytics Pro combine données live SerpApi et scoring interne pour vous donner une vision 360° : volumes d'installation, concurrence, tendances, fiches détaillées et rapports premium prêts à exporter.</p>
+                <div class="cta-group">
+                    <a class="cta-primary" href="premium.html">Commencer l'analyse</a>
+                    <a class="cta-secondary" href="#features">Découvrir les fonctionnalités</a>
+                </div>
+                <div class="hero-metrics">
+                    <div class="metric-card">
+                        <strong>65+</strong>
+                        <span>Métriques par app analysée</span>
+                    </div>
+                    <div class="metric-card">
+                        <strong>12 min</strong>
+                        <span>Gagnées par recherche</span>
+                    </div>
+                    <div class="metric-card">
+                        <strong>125k</strong>
+                        <span>Fiches Play Store indexées</span>
+                    </div>
+                </div>
             </div>
-            <div id="loading1" class="loading" style="display:none;"><div class="spinner"></div><p>Chargement...</p></div>
-            <div id="result1"></div>
-        </div>
-
-        <div id="content2" class="tab-content">
-            <div class="box">
-                <h3>🔑 Activer Licence</h3>
-                <p>Entrez votre clé Gumroad :</p>
-                <input id="licenseKey" placeholder="PREMIUM-2025">
-                <button id="activateBtn">✓ Activer</button>
-                <br><br>
-                <p><strong>Clés de test :</strong> PREMIUM-2025, TEST-LICENSE</p>
-                <br>
-                <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank">
-                    <button style="background: linear-gradient(135deg, #4caf50, #45a049);">💳 Acheter Licence - 9.99€</button>
-                </a>
-                <hr style="margin:30px 0">
-                <h3>💾 Cache</h3>
-                <p id="cacheInfo">Cache vide</p>
-                <button id="clearCacheBtn" style="background: linear-gradient(135deg, #f44336, #d32f2f);">🗑️ Vider Cache</button>
+            <div>
+                <img src="https://images.unsplash.com/photo-1553877521-4990e76e5c08?auto=format&fit=crop&w=900&q=80" alt="Dashboard PlayStore Analytics Pro" style="width:100%; border-radius: 28px; border: 1px solid rgba(148, 163, 184, 0.18); box-shadow: var(--shadow); object-fit: cover;">
             </div>
-        </div>
+        </section>
+
+        <section id="features">
+            <h2 class="section-title">Ce que vous obtenez</h2>
+            <p class="section-subtitle">Une suite d’outils pensée pour les responsables ASO, growth managers et studios mobile qui veulent des insights immédiatement actionnables.</p>
+            <div class="feature-grid">
+                <div class="card">
+                    <h3>Recherche instantanée</h3>
+                    <p>Autocomplétion boostée par SerpApi et suggestions intelligentes d’apps proches pour détecter des concurrents cachés.</p>
+                </div>
+                <div class="card">
+                    <h3>Analyse premium</h3>
+                    <p>Plus de 65 métriques : histogrammes de notes, installs estimées, taux de reviews, suivi des updates et alertes de croissance.</p>
+                </div>
+                <div class="card">
+                    <h3>Rapports exportables</h3>
+                    <p>Générez un PDF riche en un clic pour vos clients ou équipes internes, incluant graphiques et recommandations.</p>
+                </div>
+                <div class="card">
+                    <h3>Collaboration</h3>
+                    <p>Historique des recherches, partage rapide de fiches et annotations pour travailler à plusieurs sans friction.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="workflow">
+            <h2 class="section-title">Comment ça marche</h2>
+            <p class="section-subtitle">Une démarche simple, documentée dans le README, qui s’intègre à votre workflow actuel.</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Recherchez</h4>
+                    <p>Saisissez un nom, une catégorie ou un éditeur. L’algorithme vous propose instantanément une shortlist pertinente.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Analysez</h4>
+                    <p>Débloquez la fiche enrichie : métriques d’engagement, volumes d’installations estimés et séries temporelles.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Comparez</h4>
+                    <p>Ajoutez vos concurrents, visualisez les écarts et construisez une stratégie ASO basée sur des données réelles.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Partagez</h4>
+                    <p>Exportez un rapport premium ou invitez un collègue à poursuivre l’analyse directement depuis le dashboard.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">Ils gagnent déjà du temps</h2>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p>« En moins de 10 minutes, on a pu prioriser les features à tester et répondre aux questions du comité produit. Les exports sont super propres. »</p>
+                    <strong>Sonia M., Head of Growth — Fintech</strong>
+                </div>
+                <div class="testimonial">
+                    <p>« Les métriques d’installations estimées nous donnent un vrai avantage pour évaluer le potentiel d’un nouveau marché. »</p>
+                    <strong>Hugo L., Responsable ASO — Studio mobile</strong>
+                </div>
+                <div class="testimonial">
+                    <p>« On combine PlayStore Analytics Pro avec nos dashboards internes pour sortir un reporting hebdomadaire ultra complet. »</p>
+                    <strong>Camille P., CMO — SaaS B2C</strong>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing">
+            <h2 class="section-title">Tarifs flexibles</h2>
+            <p class="section-subtitle">Commencez gratuitement, passez au rapport premium quand vous en avez besoin.</p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Explorateur</h3>
+                    <div class="price">0€ <span>/ mois</span></div>
+                    <ul>
+                        <li>Recherche illimitée d’apps</li>
+                        <li>Historique local des analyses</li>
+                        <li>Accès aux métriques de base</li>
+                        <li>Sauvegarde de vos apps favorites</li>
+                    </ul>
+                    <a href="premium.html">Tester gratuitement</a>
+                </div>
+                <div class="pricing-card highlight">
+                    <h3>Premium</h3>
+                    <div class="price">9,99€ <span>/ rapport</span></div>
+                    <ul>
+                        <li>65+ métriques avancées</li>
+                        <li>Exports PDF haute résolution</li>
+                        <li>Tableaux comparatifs personnalisés</li>
+                        <li>Support prioritaire par e-mail</li>
+                    </ul>
+                    <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" rel="noopener">Passer en premium</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Équipe</h3>
+                    <div class="price">Sur devis</div>
+                    <ul>
+                        <li>Accès multi-utilisateur</li>
+                        <li>Quota d’exports mensuels</li>
+                        <li>Intégration API sur mesure</li>
+                        <li>Support onboarding dédié</li>
+                    </ul>
+                    <a href="mailto:hello@playstore-analytics.pro">Planifier un call</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2 class="section-title">Questions fréquentes</h2>
+            <div class="faq">
+                <div class="faq-item">
+                    <button class="faq-question">D’où viennent les données ? <span>+</span></button>
+                    <div class="faq-answer">Les recherches live utilisent SerpApi (moteur Google Play). Les métriques avancées sont calculées via notre backend hébergé sur Render à partir de données agrégées et d’algorithmes internes.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Dois-je installer quelque chose ? <span>+</span></button>
+                    <div class="faq-answer">Non. La solution est 100% web. Pour contribuer côté code, cloner ce repo et suivre les instructions Netlify du README.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Puis-je partager les rapports ? <span>+</span></button>
+                    <div class="faq-answer">Oui. Les rapports PDF générés sont libres de droits et peuvent être envoyés à vos clients, investisseurs ou équipes internes.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Comment fonctionne la version équipe ? <span>+</span></button>
+                    <div class="faq-answer">Nous configurons un espace dédié avec vos quotas, un SSO et des accès API. Contactez-nous pour un devis en fonction de votre volume et de vos besoins.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-banner">
+            <h2>Prêt à décortiquer le Google Play Store comme un pro ?</h2>
+            <p>Lancez une première recherche gratuite et voyez immédiatement les opportunités à saisir pour votre app.</p>
+            <div class="cta-group" style="justify-content: center;">
+                <a class="cta-primary" href="premium.html">Accéder au dashboard</a>
+                <a class="cta-secondary" href="mailto:hello@playstore-analytics.pro">Parler à un expert</a>
+            </div>
+        </section>
+
+        <footer>
+            <div>© <span id="year"></span> PlayStore Analytics Pro. Tous droits réservés.</div>
+            <div>
+                <a href="premium.html">Dashboard</a> ·
+                <a href="mailto:hello@playstore-analytics.pro">Contact</a> ·
+                <a href="#">Mentions légales</a>
+            </div>
+        </footer>
     </div>
 
-    <div id="premiumModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>💎 Rapport Premium Complet</h2>
-                <button class="modal-close" id="closeModal">×</button>
-            </div>
-            <div class="modal-body" id="premiumContent"></div>
-        </div>
-    </div>
-</body>
-<script>
-const API='https://gplay-scraper-backend.onrender.com';
-let fullData=null;
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-document.getElementById('tab1').onclick=()=>{document.getElementById('content1').classList.add('active');document.getElementById('content2').classList.remove('active');document.getElementById('tab1').classList.add('active');document.getElementById('tab2').classList.remove('active')};
-document.getElementById('tab2').onclick=()=>{document.getElementById('content2').classList.add('active');document.getElementById('content1').classList.remove('active');document.getElementById('tab2').classList.add('active');document.getElementById('tab1').classList.remove('active')};
-
-function fmt(e){return e?e>=1e9?(e/1e9).toFixed(1)+'B':e>=1e6?(e/1e6).toFixed(1)+'M':e>=1e3?(e/1e3).toFixed(1)+'K':e.toString():'0'}
-function toast(e,t){const a=document.createElement('div');a.className='toast '+t;a.textContent=e;document.body.appendChild(a);setTimeout(()=>a.remove(),3e3)}
-function cache(e,t){if(t){const a=JSON.parse(localStorage.getItem('cache')||'{}');a[e]={data:t,time:Date.now()};localStorage.setItem('cache',JSON.stringify(a))}else{const t=JSON.parse(localStorage.getItem('cache')||'{}');if(t[e]&&Date.now()-t[e].time<864e5)return t[e].data;return null}}
-
-function checkLicense(){const e=localStorage.getItem('license');if(e&&(e==='PREMIUM-2025'||e==='TEST-LICENSE'||e.startsWith('GR-'))){document.getElementById('licenseStatus').innerHTML="<span style='background:#4caf50;color:white;padding:8px 20px;border-radius:20px;display:inline-block;margin-top:15px;'>✓ Premium Actif</span>"}}
-
-document.getElementById('activateBtn').onclick=function(){const e=document.getElementById('licenseKey').value.trim();if(!e)return toast('Entrez une clé','error');if(e==='PREMIUM-2025'||e==='TEST-LICENSE'||e.startsWith('GR-')){localStorage.setItem('license',e);toast('Licence activée !','success');checkLicense()}else{toast('Clé invalide','error')}};
-
-document.getElementById('clearCacheBtn').onclick=function(){localStorage.removeItem('cache');toast('Cache vidé','success')};
-
-document.getElementById('searchBtn').onclick=async function(){
-    const id=document.getElementById('appId').value.trim();
-    if(!id)return toast('Entrez un ID','error');
-    
-    const cached=cache(id);
-    if(cached){displayResult(cached);loadFullData(id);return toast('Chargé du cache','success')}
-    
-    document.getElementById('loading1').style.display='block';
-    document.getElementById('result1').innerHTML='';
-    
-    try{
-        const res=await fetch(API+'/api/search/'+id);
-        const data=await res.json();
-        if(data.success){
-            cache(id,data.data);
-            displayResult(data.data);
-            loadFullData(id);
-        }else{toast('App non trouvée','error')}
-    }catch(e){toast('Erreur: '+e.message,'error')}
-    document.getElementById('loading1').style.display='none'
-};
-
-async function loadFullData(id){
-    try{
-        const res=await fetch(API+'/api/analyze/'+id);
-        const data=await res.json();
-        if(data.success)fullData=data.data;
-    }catch(e){}
-}
-
-function displayResult(e){
-    const t=document.createElement('div');
-    t.className='result';
-    t.innerHTML='<div class="app-header"><img class="app-icon" src="'+(e.icon||'')+'"><div><h2></h2><p></p><span style="background:#667eea;color:white;padding:5px 15px;border-radius:20px;"></span></div></div><div class="stats-grid"><div class="stat-card"><div class="stat-label">Note</div><div class="stat-value">'+(e.score?e.score.toFixed(1):'N/A')+' ⭐</div></div><div class="stat-card"><div class="stat-label">Avis</div><div class="stat-value">'+fmt(e.ratings||0)+'</div></div><div class="stat-card"><div class="stat-label">Installations</div><div class="stat-value">'+(e.installs||'N/A')+'</div></div><div class="stat-card"><div class="stat-label">Prix</div><div class="stat-value">'+(e.free?'Gratuit':'$'+(e.price||'N/A'))+'</div></div></div><p style="background:#f8f9fa;padding:20px;border-radius:10px;"></p><div style="text-align:center;margin-top:30px;padding:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:15px;color:white;"><h3 style="margin-bottom:15px;">💎 Rapport Premium Complet</h3><p style="margin-bottom:20px;">65+ métriques • Graphiques • Analyse ASO</p><button id="showPremiumBtn" style="background:white;color:#667eea;margin-right:10px;">🔓 Voir l\'Aperçu</button><a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank"><button style="background:#4caf50;">💳 Acheter - 9.99€</button></a></div>';
-    
-    t.querySelector('h2').textContent=e.title||'N/A';
-    t.querySelector('p').textContent=e.developer||'N/A';
-    t.querySelector('span').textContent=e.genre||'N/A';
-    t.querySelector('p:last-of-type').innerHTML='<strong>Description:</strong><br>'+(e.summary||'N/A');
-    
-    document.getElementById('result1').innerHTML='';
-    document.getElementById('result1').appendChild(t);
-    
-    document.getElementById('showPremiumBtn').onclick=showPremiumModal;
-}
-
-function showPremiumModal(){
-    if(!fullData)return toast('Chargement des données...','error');
-    
-    const d=fullData;
-    const h=d.histogram||[0,0,0,0,0];
-    const maxH=Math.max(...h);
-    
-    let html='<div class="premium-section"><h4>📊 Statistiques Détaillées Avancées</h4><div class="info-grid">';
-    html+='<div class="info-item"><div class="info-label">Installs Réelles</div><div class="info-value">'+fmt(d.realInstalls||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Installs/Jour</div><div class="info-value">'+fmt(d.dailyInstalls||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Installs/Mois</div><div class="info-value">'+fmt(d.monthlyInstalls||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Reviews Totales</div><div class="info-value">'+fmt(d.reviews||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Installs Min</div><div class="info-value">'+fmt(d.minInstalls||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Installs Min/Jour</div><div class="info-value">'+fmt(d.minDailyInstalls||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Installs Min/Mois</div><div class="info-value">'+fmt(d.minMonthlyInstalls||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Real Daily Installs</div><div class="info-value">'+fmt(d.realDailyInstalls||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Real Monthly Installs</div><div class="info-value">'+fmt(d.realMonthlyInstalls||0)+'</div></div>';
-    html+='</div></div>';
-    
-    html+='<div class="premium-section"><h4>⭐ Distribution Complète des Notes</h4><div class="chart-container"><div class="bar-chart">';
-    for(let i=0;i<5;i++){
-        const height=maxH>0?(h[i]/maxH)*100:0;
-        html+='<div class="bar" style="height:'+height+'%"><div class="bar-value">'+fmt(h[i])+'</div><div class="bar-label">'+(i+1)+'★</div></div>';
-    }
-    html+='</div></div></div>';
-    
-    html+='<div class="premium-section"><h4>📅 Informations Temporelles</h4><div class="info-grid">';
-    html+='<div class="info-item"><div class="info-label">Date Sortie</div><div class="info-value">'+(d.released||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Dernière MAJ</div><div class="info-value">'+(d.lastUpdated||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Âge (jours)</div><div class="info-value">'+(d.appAgeDays||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Version Actuelle</div><div class="info-value">'+(d.version||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Timestamp MAJ</div><div class="info-value">'+(d.updatedTimestamp||'N/A')+'</div></div>';
-    html+='</div></div>';
-    
-    html+='<div class="premium-section blur-section"><div class="unlock-badge">🔒 Premium - 9.99€</div><h4>🔧 Informations Techniques Complètes</h4><div class="info-grid">';
-    html+='<div class="info-item"><div class="info-label">Android Requis</div><div class="info-value">API '+(d.minAndroidApi||'?')+'+</div></div>';
-    html+='<div class="info-item"><div class="info-label">Android Max</div><div class="info-value">API '+(d.maxAndroidApi||'?')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Version Android</div><div class="info-value">'+(d.androidVersion||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">App Bundle</div><div class="info-value">'+(d.appBundle||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Classification</div><div class="info-value">'+(d.contentRating||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Publicités</div><div class="info-value">'+(d.adSupported?'✓ Oui':'✗ Non')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Contient Ads</div><div class="info-value">'+(d.containsAds?'✓ Oui':'✗ Non')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Achats Intégrés</div><div class="info-value">'+(d.offersIAP?'✓ Oui':'✗ Non')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Prix IAP</div><div class="info-value">'+(d.inAppProductPrice||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Prix Original</div><div class="info-value">'+(d.originalPrice||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">En Solde</div><div class="info-value">'+(d.sale?'✓ Oui':'✗ Non')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Disponible</div><div class="info-value">'+(d.available?'✓ Oui':'✗ Non')+'</div></div>';
-    html+='</div></div>';
-    
-    html+='<div class="premium-section blur-section"><div class="unlock-badge">🔒 Premium - 9.99€</div><h4>👨‍💻 Informations Développeur</h4><div class="info-grid">';
-    html+='<div class="info-item"><div class="info-label">Developer ID</div><div class="info-value">'+(d.developerId||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Email</div><div class="info-value" style="font-size:0.85rem;">'+(d.developerEmail||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Website</div><div class="info-value" style="font-size:0.85rem;">'+(d.developerWebsite?'Disponible':'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Téléphone</div><div class="info-value">'+(d.developerPhone||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Adresse</div><div class="info-value" style="font-size:0.8rem;">'+(d.developerAddress?'Disponible':'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Privacy Policy</div><div class="info-value">'+(d.privacyPolicy?'✓':'✗')+'</div></div>';
-    html+='</div></div>';
-    
-    html+='<div class="premium-section blur-section"><div class="unlock-badge">🔒 Premium - 9.99€</div><h4>🔍 Analyse SEO & ASO</h4><div class="info-grid">';
-    html+='<div class="info-item"><div class="info-label">Mots-Clés Uniques</div><div class="info-value">'+(d.uniqueKeywords||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Total Mots</div><div class="info-value">'+(d.totalWords||0)+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Score Lisibilité</div><div class="info-value">'+(d.readability?.flesch_score?.toFixed(1)||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Niveau Lecture</div><div class="info-value" style="font-size:0.9rem;">'+(d.readability?.flesch_level||'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Longueur Phrases</div><div class="info-value">'+(d.readability?.avg_sentence_length?.toFixed(1)||'N/A')+'</div></div>';
-    html+='</div>';
-    
-    if(d.topKeywords){
-        html+='<div style="margin-top:20px;"><strong style="color:#667eea;">🏷️ Top Keywords:</strong><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">';
-        const topK=Object.entries(d.topKeywords).slice(0,10);
-        topK.forEach(([k,v])=>{html+='<span style="background:#667eea;color:white;padding:6px 12px;border-radius:20px;font-size:0.85rem;">'+k+' ('+v+')</span>'});
-        html+='</div></div>';
-    }
-    
-    if(d.topBigrams){
-        html+='<div style="margin-top:15px;"><strong style="color:#764ba2;">📊 Top Bigrams:</strong><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">';
-        const topB=Object.entries(d.topBigrams).slice(0,8);
-        topB.forEach(([k,v])=>{html+='<span style="background:#764ba2;color:white;padding:6px 12px;border-radius:20px;font-size:0.85rem;">'+k+' ('+v+')</span>'});
-        html+='</div></div>';
-    }
-    
-    if(d.competitiveKeywords){
-        html+='<div style="margin-top:15px;"><strong style="color:#f57c00;">🎯 Competitive Keywords:</strong><div style="margin-top:10px;background:#fff3e0;padding:15px;border-radius:10px;font-size:0.9rem;">';
-        for(let cat in d.competitiveKeywords){
-            html+='<div style="margin-bottom:8px;"><strong>'+cat+':</strong> '+d.competitiveKeywords[cat].join(', ')+'</div>';
-        }
-        html+='</div></div>';
-    }
-    html+='</div>';
-    
-    html+='<div class="premium-section blur-section"><div class="unlock-badge">🔒 Premium - 9.99€</div><h4>🖼️ Médias & Visuels</h4>';
-    if(d.screenshots&&d.screenshots.length>0){
-        html+='<div><strong>📸 Screenshots ('+d.screenshots.length+'):</strong><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:15px;">';
-        d.screenshots.slice(0,6).forEach(url=>{html+='<img src="'+url+'" style="width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">'});
-        html+='</div></div>';
-    }
-    if(d.headerImage){
-        html+='<div style="margin-top:20px;"><strong>🎨 Header Image:</strong><br><img src="'+d.headerImage+'" style="width:100%;max-width:600px;border-radius:10px;margin-top:10px;"></div>';
-    }
-    if(d.video){
-        html+='<div style="margin-top:20px;"><strong>🎥 Video Promo:</strong><br><a href="'+d.video+'" target="_blank" style="color:#667eea;">Voir la vidéo →</a></div>';
-    }
-    if(d.videoImage){
-        html+='<div style="margin-top:15px;"><strong>📹 Video Thumbnail:</strong><br><img src="'+d.videoImage+'" style="width:100%;max-width:400px;border-radius:10px;margin-top:10px;"></div>';
-    }
-    html+='</div>';
-    
-    html+='<div class="premium-section blur-section"><div class="unlock-badge">🔒 Premium - 9.99€</div><h4>🔐 Permissions & Sécurité</h4>';
-    if(d.permissions&&Object.keys(d.permissions).length>0){
-        html+='<div><strong>🛡️ Permissions Requises:</strong><div style="margin-top:15px;">';
-        for(let perm in d.permissions){
-            html+='<div style="background:#f8f9fa;padding:12px;border-radius:8px;margin-bottom:10px;border-left:4px solid #ff9800;">';
-            html+='<strong style="color:#ff9800;">'+perm+'</strong><ul style="margin:8px 0 0 20px;">';
-            d.permissions[perm].forEach(p=>{html+='<li style="color:#666;font-size:0.9rem;">'+p+'</li>'});
-            html+='</ul></div>';
-        }
-        html+='</div></div>';
-    }
-    if(d.dataSafety&&d.dataSafety.length>0){
-        html+='<div style="margin-top:20px;"><strong>🔒 Data Safety:</strong><ul style="margin-top:10px;">';
-        d.dataSafety.forEach(s=>{html+='<li style="padding:6px 0;color:#666;">'+s+'</li>'});
-        html+='</ul></div>';
-    }
-    html+='</div>';
-    
-    html+='<div class="premium-section blur-section"><div class="unlock-badge">🔒 Premium - 9.99€</div><h4>💬 Reviews Récentes</h4>';
-    if(d.reviewsData&&d.reviewsData.length>0){
-        html+='<div style="margin-top:15px;">';
-        d.reviewsData.slice(0,3).forEach(r=>{
-            html+='<div style="background:#f8f9fa;padding:15px;border-radius:10px;margin-bottom:12px;">';
-            html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">';
-            if(r.avatar)html+='<img src="'+r.avatar+'" style="width:40px;height:40px;border-radius:50%;">';
-            html+='<div><strong>'+r.user+'</strong><div style="color:#ff9800;font-size:0.9rem;">'+('⭐'.repeat(r.rating))+'</div></div>';
-            html+='</div>';
-            html+='<p style="color:#666;font-size:0.95rem;line-height:1.6;">'+r.text+'</p>';
-            if(r.version)html+='<div style="font-size:0.85rem;color:#999;margin-top:8px;">Version: '+r.version+'</div>';
-            html+='</div>';
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                const open = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!open) {
+                    item.classList.add('open');
+                }
+            });
         });
-        html+='</div>';
-    }
-    html+='</div>';
-    
-    html+='<div class="premium-section blur-section"><div class="unlock-badge">🔒 Premium - 9.99€</div><h4>📱 Informations Supplémentaires</h4><div class="info-grid">';
-    html+='<div class="info-item"><div class="info-label">App URL</div><div class="info-value" style="font-size:0.75rem;">'+(d.appUrl?'Play Store':'N/A')+'</div></div>';
-    html+='<div class="info-item"><div class="info-label">Genre ID</div><div class="info-value">'+(d.genreId||'N/A')+'</div></div>';
-    if(d.categories&&d.categories.length>0){
-        html+='<div class="info-item"><div class="info-label">Catégories</div><div class="info-value" style="font-size:0.85rem;">'+d.categories.join(', ')+'</div></div>';
-    }
-    if(d.whatsNew&&d.whatsNew.length>0){
-        html+='<div class="info-item" style="grid-column:1/-1;"><div class="info-label">Nouveautés</div><div class="info-value" style="font-size:0.9rem;"><ul style="margin-top:8px;">';
-        d.whatsNew.slice(0,5).forEach(w=>{html+='<li style="margin:5px 0;color:#666;">'+w+'</li>'});
-        html+='</ul></div></div>';
-    }
-    html+='</div></div>';
-    
-    html+='<div class="cta-section"><h3>🎁 Débloquez TOUTES les Données</h3><div class="price-tag">9,99€</div>';
-    html+='<p style="font-size:1.2rem;margin:20px 0;"><strong>65+ métriques • Screenshots • Reviews • Keywords • Permissions</strong></p>';
-    html+='<ul class="features-list"><li>Toutes les statistiques détaillées</li><li>Historique complet 30 jours</li><li>Export PDF professionnel</li><li>Graphiques avancés interactifs</li><li>Comparaison avec concurrents</li><li>Alertes automatiques par email</li><li>Analyse ASO complète</li><li>Top keywords & bigrams</li><li>Screenshots & vidéos</li><li>Permissions détaillées</li><li>Reviews récentes</li><li>Support prioritaire 24/7</li></ul>';
-    html+='<a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank"><button style="background:white;color:#667eea;font-size:1.2rem;padding:18px 50px;">💳 Acheter sur Gumroad</button></a>';
-    html+='<p style="margin-top:20px;font-size:0.95rem;opacity:0.9;">✓ Paiement sécurisé • Accès instantané • Garantie 30 jours</p>';
-    html+='</div>';
-    
-    document.getElementById('premiumContent').innerHTML=html;
-    document.getElementById('premiumModal').style.display='block';
-}
-
-document.getElementById('closeModal').onclick=()=>{document.getElementById('premiumModal').style.display='none'};
-document.getElementById('premiumModal').onclick=function(e){if(e.target===this)this.style.display='none'};
-
-checkLicense();
-</script>
+    </script>
+</body>
 </html>
