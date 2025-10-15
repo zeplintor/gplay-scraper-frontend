@@ -205,6 +205,97 @@
         </div>
     </div>
 
+    <!-- License Management Modal -->
+    <div id="licenseModal" class="license-modal" style="display: none;">
+        <div class="license-overlay"></div>
+        <div class="license-content">
+            <button class="license-close" id="closeLicense">×</button>
+
+            <!-- Mode: No License -->
+            <div id="noLicenseView" class="license-view">
+                <div class="license-icon">🔑</div>
+                <h2>Activer votre licence Premium</h2>
+                <p class="license-subtitle">Entrez votre clé de licence pour débloquer toutes les fonctionnalités</p>
+
+                <div class="license-input-group">
+                    <label for="licenseKeyInput">Clé de licence</label>
+                    <input
+                        type="text"
+                        id="licenseKeyInput"
+                        class="license-input"
+                        placeholder="PSAP-XXXX-XXXX-XXXX-XXXX"
+                        maxlength="24"
+                        autocomplete="off"
+                    >
+                    <div id="licenseError" class="license-error" style="display: none;"></div>
+                    <div id="licenseSuccess" class="license-success" style="display: none;"></div>
+                </div>
+
+                <button id="activateLicenseBtn" class="license-btn-primary">
+                    Activer la licence
+                </button>
+
+                <div class="license-divider">
+                    <span>ou</span>
+                </div>
+
+                <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" class="license-btn-secondary">
+                    💳 Acheter une licence (9,99€)
+                </a>
+
+                <div class="license-help">
+                    <p><strong>Clés de test disponibles :</strong></p>
+                    <div class="test-keys">
+                        <code class="test-key" data-key="PSAP-TEST-2025-DEMO-KEY1">PSAP-TEST-2025-DEMO-KEY1</code>
+                        <code class="test-key" data-key="PSAP-DEMO-FREE-TRIAL-XYZ">PSAP-DEMO-FREE-TRIAL-XYZ</code>
+                    </div>
+                    <p class="help-note">Cliquez sur une clé pour la copier</p>
+                </div>
+            </div>
+
+            <!-- Mode: License Active -->
+            <div id="activeLicenseView" class="license-view" style="display: none;">
+                <div class="license-icon success">✓</div>
+                <h2>Licence Premium Active</h2>
+                <p class="license-subtitle">Profitez de toutes les fonctionnalités illimitées</p>
+
+                <div class="license-info-card">
+                    <div class="license-info-row">
+                        <span class="info-label">📧 Email</span>
+                        <span class="info-value" id="licenseEmail">-</span>
+                    </div>
+                    <div class="license-info-row">
+                        <span class="info-label">🔑 Clé</span>
+                        <span class="info-value" id="licenseKey">-</span>
+                    </div>
+                    <div class="license-info-row">
+                        <span class="info-label">📅 Activée le</span>
+                        <span class="info-value" id="licenseDate">-</span>
+                    </div>
+                    <div class="license-info-row">
+                        <span class="info-label">⏰ Statut</span>
+                        <span class="info-value status-badge">✓ Active</span>
+                    </div>
+                </div>
+
+                <div class="license-features">
+                    <h3>Fonctionnalités débloquées :</h3>
+                    <ul>
+                        <li>✓ Analyses illimitées</li>
+                        <li>✓ 65+ métriques avancées</li>
+                        <li>✓ Export PDF professionnel</li>
+                        <li>✓ Analyse CSV en batch</li>
+                        <li>✓ Support prioritaire</li>
+                    </ul>
+                </div>
+
+                <button id="deactivateLicenseBtn" class="license-btn-danger">
+                    Désactiver la licence
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Paywall Modal -->
     <div id="paywallModal" class="paywall-modal" style="display: none;">
         <div class="paywall-overlay"></div>
