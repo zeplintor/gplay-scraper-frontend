@@ -174,10 +174,10 @@
                 hero: {
                     tag: '🚀 Booster la croissance de vos apps Android',
                     title: 'Transformez vos décisions marketing avec la donnée Play Store en temps réel.',
-                    desc: 'PlayStore Analytics Pro révèle les signaux forts du marché : potentiel d’installation, retours utilisateurs, concurrents clés et opportunités de positionnement.',
+                    desc: 'PlayStore Analytics Pro révèle les signaux forts du marché : potentiel d'installation, retours utilisateurs, concurrents clés et opportunités de positionnement.',
                     primary: 'Essayer gratuitement (3 analyses/jour)',
                     secondary: 'Voir les résultats clients',
-                    note: 'Aucune carte bancaire requise • Upgrade à 9,99€ pour analyses illimitées'
+                    note: 'Aucune carte bancaire requise • Licence Premium à 9,99€ (paiement unique)'
                 },
                 metrics: [
                     '+42% de visibilité moyenne gagnée par nos clients',
@@ -223,10 +223,10 @@
                 pricing_title: 'Des offres adaptées à chaque étape',
                 pricing_subtitle: 'Essayez gratuitement, activez la puissance premium quand vous en avez besoin.',
                 cta_banner: {
-                    title: 'Passez à la vitesse supérieure.',
-                    desc: 'Profitez d’une première analyse gratuite et identifiez votre prochain levier de croissance.',
-                    primary: 'Accéder au dashboard',
-                    secondary: 'Discuter avec nous'
+                    title: 'Prêt à débloquer le plein potentiel ?',
+                    desc: 'Démarrez gratuitement ou passez directement Premium pour 9,99€ — paiement unique, analyses illimitées à vie.',
+                    primary: 'Obtenir Premium (9,99€)',
+                    secondary: 'Essayer gratuitement'
                 },
                 footer: {
                     dashboard: 'Dashboard',
@@ -449,7 +449,7 @@
                     desc: 'PlayStore Analytics Pro surfaces key market signals: install potential, user feedback, competitors and positioning opportunities.',
                     primary: 'Try for free (3 analyses/day)',
                     secondary: 'See customer results',
-                    note: 'No credit card required • Upgrade to €9.99 for unlimited analyses'
+                    note: 'No credit card required • Premium license €9.99 (one-time payment)'
                 },
                 metrics: [
                     '+42% average visibility lift for our clients',
@@ -495,10 +495,10 @@
                 pricing_title: 'Plans for every stage',
                 pricing_subtitle: 'Start for free, unlock premium power when you need it.',
                 cta_banner: {
-                    title: 'Take it to the next level.',
-                    desc: 'Enjoy your first analysis for free and spot your next growth lever.',
-                    primary: 'Open the dashboard',
-                    secondary: 'Talk to us'
+                    title: 'Ready to unlock full potential?',
+                    desc: 'Start free or go Premium for €9.99 — one-time payment, unlimited analyses forever.',
+                    primary: 'Get Premium (€9.99)',
+                    secondary: 'Try for free'
                 },
                 footer: {
                     dashboard: 'Dashboard',
@@ -703,7 +703,7 @@
                     desc: 'يكشف PlayStore Analytics Pro إشارات السوق: الإمكانيات، تقييمات المستخدمين، المنافسون، وفرص التمركز.',
                     primary: 'جرّب مجانًا (3 تحليلات/اليوم)',
                     secondary: 'شاهد نتائج العملاء',
-                    note: 'لا حاجة لبطاقة ائتمان • الترقية إلى 9.99€ للتحليلات غير المحدودة'
+                    note: 'لا حاجة لبطاقة ائتمان • رخصة بريميوم 9.99€ (دفعة واحدة)'
                 },
                 metrics: [
                     '+%42 متوسط زيادة الظهور لعملائنا',
@@ -749,10 +749,10 @@
                 pricing_title: 'خطط لكل مرحلة',
                 pricing_subtitle: 'ابدأ مجانًا، وافتح قوة بريميوم عند الحاجة.',
                 cta_banner: {
-                    title: 'انطلق إلى المستوى التالي.',
-                    desc: 'استفد من تحليل مجاني وحدد رافعة النمو التالية لديك.',
-                    primary: 'افتح لوحة التحكم',
-                    secondary: 'تواصل معنا'
+                    title: 'مستعد لإطلاق الطاقة الكاملة؟',
+                    desc: 'ابدأ مجانًا أو انتقل مباشرة إلى بريميوم مقابل 9.99€ — دفعة واحدة، تحليلات غير محدودة مدى الحياة.',
+                    primary: 'احصل على بريميوم (9.99€)',
+                    secondary: 'جرّب مجانًا'
                 },
                 footer: {
                     dashboard: 'اللوحة',
@@ -957,7 +957,7 @@
                     desc: 'PlayStore Analytics Pro 揭示市场信号：安装潜力、用户反馈、竞争对手与定位机会。',
                     primary: '免费试用（每日 3 次）',
                     secondary: '查看客户成果',
-                    note: '无需信用卡 • 升级 9.99€ 获得无限分析'
+                    note: '无需信用卡 • 高级许可证 9.99€（一次性付款）'
                 },
                 metrics: [
                     '客户平均曝光度提升 42%',
@@ -991,10 +991,10 @@
                 pricing_title: '适用于每个阶段的方案',
                 pricing_subtitle: '免费起步，需要时解锁高级功能。',
                 cta_banner: {
-                    title: '迈向新高度。',
-                    desc: '享受第一次免费分析，找出下一步增长突破口。',
-                    primary: '打开控制台',
-                    secondary: '联系我们'
+                    title: '准备好释放全部潜力了吗？',
+                    desc: '免费开始或直接购买高级版 9.99€ — 一次性付款，终身无限分析。',
+                    primary: '获取高级版（9.99€）',
+                    secondary: '免费试用'
                 },
                 footer: {
                     dashboard: '控制台',
