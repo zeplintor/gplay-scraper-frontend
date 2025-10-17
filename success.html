@@ -268,37 +268,30 @@
     </div>
 
     <script>
-        // Configuration
-        const API = 'https://gplay-scraper-backend.onrender.com'; // Remplacez par votre URL backend
-
-        // Récupérer le session_id depuis l'URL
+        const API = 'https://gplay-scraper-backend.onrender.com';
         const urlParams = new URLSearchParams(window.location.search);
         const sessionId = urlParams.get('session_id');
 
         if (!sessionId) {
-            document.getElementById('loadingState').innerHTML = '<p style="color: #ef4444;">❌ Session invalide. Veuillez réessayer.</p>';
+            document.getElementById('loadingState').innerHTML = '<p style="color: #ef4444;">Session invalide.</p>';
         } else {
-            // Récupérer les infos de la session Stripe
             fetch(`${API}/api/checkout-status/${sessionId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Afficher les infos
                         document.getElementById('amount').textContent = `${data.amount_total.toFixed(2)} ${data.currency.toUpperCase()}`;
                         document.getElementById('email').textContent = data.customer_email;
-
-                        // Afficher le contenu
                         document.getElementById('loadingState').style.display = 'none';
                         document.getElementById('successContent').style.display = 'block';
                     } else {
-                        throw new Error(data.error || 'Erreur inconnue');
+                        throw new Error(data.error || 'Erreur');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     document.getElementById('loadingState').innerHTML = `
-                        <p style="color: #ef4444;">❌ Impossible de récupérer les informations.</p>
-                        <p style="font-size: 12px; margin-top: 8px;">Vérifiez votre email pour votre clé de licence.</p>
+                        <p style="color: #ef4444;">Impossible de récupérer les informations.</p>
+                        <p style="font-size: 12px; margin-top: 8px;">Vérifiez votre email.</p>
                         <a href="premium.html" class="btn btn-primary" style="margin-top: 16px; display: inline-block;">
                             Activer ma licence
                         </a>

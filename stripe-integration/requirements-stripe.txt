@@ -1,2 +1,0 @@
-# Dépendance Stripe à ajouter dans votre requirements.txt du backend
-stripe>=5.0.0
