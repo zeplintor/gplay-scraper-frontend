@@ -174,7 +174,7 @@
                 hero: {
                     tag: '🚀 Booster la croissance de vos apps Android',
                     title: 'Transformez vos décisions marketing avec la donnée Play Store en temps réel.',
-                    desc: 'PlayStore Analytics Pro révèle les signaux forts du marché : potentiel d'installation, retours utilisateurs, concurrents clés et opportunités de positionnement.',
+                    desc: 'PlayStore Analytics Pro révèle les signaux forts du marché : potentiel d\'installation, retours utilisateurs, concurrents clés et opportunités de positionnement.',
                     primary: 'Essayer gratuitement (3 analyses/jour)',
                     secondary: 'Voir les résultats clients',
                     note: 'Aucune carte bancaire requise • Licence Premium à 9,99€ (paiement unique)'
