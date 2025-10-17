@@ -2091,3 +2091,51 @@ button:hover {
         padding: 32px 24px;
     }
 }
+
+.language-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-right: 16px;
+}
+
+.language-selector label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.language-selector select {
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+body.rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+body.rtl .header-right,
+body.rtl .search-actions,
+body.rtl .header-links {
+    flex-direction: row-reverse;
+}
+
+body.rtl .header-text,
+body.rtl .search-box,
+body.rtl .card {
+    text-align: right;
+}
+
+body.rtl .license-info-row,
+body.rtl .license-features ul,
+body.rtl .batch-controls,
+body.rtl .batch-info {
+    flex-direction: row-reverse;
+}

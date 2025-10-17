@@ -14,6 +14,21 @@ const batchProgress = document.getElementById('batchProgress');
 let batchQueue = [];
 let batchRunning = false;
 
+const languageSelect = document.getElementById('languageSelect');
+if (languageSelect && window.i18n) {
+    languageSelect.value = i18n.getLanguage();
+    languageSelect.addEventListener('change', (e) => {
+        i18n.setLanguage(e.target.value);
+    });
+}
+
+window.addEventListener('i18n:languageChanged', () => {
+    if (languageSelect) {
+        languageSelect.value = i18n.getLanguage();
+    }
+    updateStatusBanner();
+});
+
 function fmt(n) {
     if (!n) return '0';
     if (n >= 1e9) return (n/1e9).toFixed(1) + 'B';
@@ -72,7 +87,7 @@ async function isValidLicense(key) {
 
         if (!response.ok) {
             console.error('License validation HTTP error:', response.status);
-            return { valid: false, message: 'Erreur de communication avec le serveur' };
+            return { valid: false, message: 'SERVER_ERROR' };
         }
 
         const data = await response.json();
@@ -105,7 +120,7 @@ async function isValidLicense(key) {
                 plan: 'premium'
             };
         }
-        return { valid: false, message: 'Impossible de vérifier la licence' };
+        return { valid: false, message: 'SERVER_ERROR' };
     }
 }
 
@@ -155,8 +170,7 @@ function checkLicense() {
 
     if (licenseData && isValidLicense(licenseData.key)) {
         hasLicense = true;
-        document.getElementById('licenseStatus').innerHTML =
-            '<span class="license-status">✓ Premium Actif</span>';
+        document.getElementById('licenseStatus').innerHTML = `<span class="license-status">${i18n.t('premium.license.status_active')}</span>`;
     } else {
         hasLicense = false;
     }
@@ -176,7 +190,9 @@ function showLicenseModal() {
         // Populate license info
         document.getElementById('licenseEmail').textContent = licenseData.email;
         document.getElementById('licenseKey').textContent = licenseData.key;
-        document.getElementById('licenseDate').textContent = new Date(licenseData.activatedAt).toLocaleDateString('fr-FR');
+        const localeMap = { fr: 'fr-FR', en: 'en-US', ar: 'ar', zh: 'zh-CN' };
+        const locale = localeMap[i18n.getLanguage()] || 'fr-FR';
+        document.getElementById('licenseDate').textContent = new Date(licenseData.activatedAt).toLocaleDateString(locale);
     } else {
         // Show activation view
         document.getElementById('noLicenseView').style.display = 'block';
@@ -241,17 +257,22 @@ function updateStatusBanner() {
     const banner = document.getElementById('statusBanner');
     if (!banner) return;
 
+    const statusEl = document.getElementById('licenseStatus');
+
     if (hasLicense) {
         banner.className = 'status-banner premium';
         banner.innerHTML = `
             <div class="status-banner-left">
                 <span class="status-icon">💎</span>
                 <div class="status-text">
-                    <h3>Premium Actif</h3>
-                    <p>Analyses illimitées • Toutes les fonctionnalités débloquées</p>
+                    <h3>${i18n.t('premium.status.premium.title')}</h3>
+                    <p>${i18n.t('premium.status.premium.description')}</p>
                 </div>
             </div>
         `;
+        if (statusEl) {
+            statusEl.innerHTML = `<span class="license-status">${i18n.t('premium.license.status_active')}</span>`;
+        }
     } else {
         const remaining = getRemainingAnalyses();
         banner.className = 'status-banner free';
@@ -259,15 +280,18 @@ function updateStatusBanner() {
             <div class="status-banner-left">
                 <span class="status-icon">🆓</span>
                 <div class="status-text">
-                    <h3>Mode Gratuit</h3>
-                    <p>Analyses gratuites aujourd'hui</p>
+                    <h3>${i18n.t('premium.status.free.title')}</h3>
+                    <p>${i18n.t('premium.status.free.description')}</p>
                 </div>
-                <span class="status-counter">${remaining}/3 restantes</span>
+                <span class="status-counter">${i18n.t('premium.status.free.remaining', { count: remaining })}</span>
             </div>
             <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" class="status-upgrade-btn">
-                💎 Passer Premium
+                ${i18n.t('premium.status.free.cta')}
             </a>
         `;
+        if (statusEl) {
+            statusEl.textContent = i18n.t('premium.header.status_placeholder');
+        }
     }
 }
 
@@ -344,7 +368,7 @@ document.querySelectorAll('.quickstart-btn').forEach(btn => {
         // Trigger analysis
         document.getElementById('searchBtn').click();
 
-        toast(`🚀 Analyse de ${appName} lancée !`, 'success');
+        toast(i18n.t('premium.toast.quickstart_launch', { app: appName }), 'success');
     });
 });
 
@@ -428,7 +452,7 @@ document.getElementById('activateLicenseBtn')?.addEventListener('click', async f
 
     // Validate format
     if (!validateLicenseFormat(key)) {
-        errorDiv.textContent = '❌ Format invalide. Le format attendu est : PSAP-XXXX-XXXX-XXXX-XXXX';
+        errorDiv.textContent = `❌ ${i18n.t('premium.errors.format')}`;
         errorDiv.style.display = 'block';
         input.className = 'license-input invalid';
         return;
@@ -437,14 +461,26 @@ document.getElementById('activateLicenseBtn')?.addEventListener('click', async f
     // Show loading state
     btn.disabled = true;
     const originalText = btn.textContent;
-    btn.textContent = '🔄 Validation en cours...';
+    btn.textContent = i18n.t('premium.license.activating');
 
     try {
         // Validate via backend API
         const result = await saveLicenseData(key);
 
         if (!result.success) {
-            errorDiv.textContent = `❌ ${result.message || 'Clé de licence invalide. Vérifiez votre clé ou contactez le support.'}`;
+            const backendMessage = result.message || '';
+            const messageMap = {
+                'Licence expirée': 'premium.toast.license_expired',
+                'Licence expirée.': 'premium.toast.license_expired',
+                'Licence revokée': 'premium.toast.license_revoked',
+                'Licence revoked': 'premium.toast.license_revoked',
+                'Licence invalide': 'premium.toast.license_invalid',
+                'Clé invalide': 'premium.toast.license_invalid',
+                'Clé de licence invalide': 'premium.toast.license_invalid',
+                'SERVER_ERROR': 'premium.toast.server_error'
+            };
+            const translationKey = messageMap[backendMessage] || 'premium.toast.license_invalid';
+            errorDiv.textContent = `❌ ${i18n.t(translationKey)}`;
             errorDiv.style.display = 'block';
             input.className = 'license-input invalid';
             btn.disabled = false;
@@ -455,7 +491,7 @@ document.getElementById('activateLicenseBtn')?.addEventListener('click', async f
         // Success - activate license
         hasLicense = true;
 
-        successDiv.textContent = '✓ Licence activée avec succès !';
+        successDiv.textContent = `✅ ${i18n.t('premium.toast.license_activated')}`;
         successDiv.style.display = 'block';
         input.className = 'license-input valid';
 
@@ -464,7 +500,7 @@ document.getElementById('activateLicenseBtn')?.addEventListener('click', async f
         if (fullData) generateReport(fullData);
 
         // Show success toast and close modal after delay
-        toast('✓ Licence Premium activée !', 'success');
+        toast(i18n.t('premium.toast.license_activated'), 'success');
 
         setTimeout(() => {
             hideLicenseModal();
@@ -484,12 +520,12 @@ document.getElementById('activateLicenseBtn')?.addEventListener('click', async f
 
 // Deactivate license button
 document.getElementById('deactivateLicenseBtn')?.addEventListener('click', function() {
-    if (confirm('Êtes-vous sûr de vouloir désactiver votre licence Premium ?')) {
+    if (confirm(i18n.t('premium.confirm.deactivate'))) {
         removeLicenseData();
         hasLicense = false;
         checkLicense();
 
-        toast('Licence désactivée', 'success');
+        toast(i18n.t('premium.toast.license_deactivated'), 'success');
         hideLicenseModal();
 
         // Regenerate report if there's data
@@ -503,21 +539,21 @@ document.querySelectorAll('.test-key').forEach(keyElement => {
         const key = this.dataset.key;
         document.getElementById('licenseKeyInput').value = key;
         document.getElementById('licenseKeyInput').dispatchEvent(new Event('input'));
-        toast('✓ Clé copiée dans le champ', 'success');
+        toast(i18n.t('premium.toast.key_copied'), 'success');
     });
 });
 
 document.getElementById('searchBtn').onclick = async function() {
     const id = document.getElementById('appId').value.trim();
     if (!id) {
-        toast('Veuillez entrer un ID d\'application', 'error');
+        toast(i18n.t('premium.toast.missing_id'), 'error');
         return;
     }
 
     // ✅ Check freemium limit BEFORE analyzing
     if (!canAnalyze()) {
         showPaywall();
-        toast('Limite gratuite atteinte (3/jour)', 'error');
+        toast(i18n.t('premium.toast.limit_reached'), 'error');
         return;
     }
 
@@ -534,10 +570,10 @@ document.getElementById('searchBtn').onclick = async function() {
         }
 
         generateReport(data);
-        toast('Analyse terminée', 'success');
+        toast(i18n.t('premium.toast.analyze_success'), 'success');
     } catch (e) {
         console.error('Analyse error:', e);
-        toast('Erreur: ' + e.message, 'error');
+        toast(i18n.t('premium.toast.analyze_error', { message: e.message }), 'error');
     } finally {
         if (loadingEl) loadingEl.style.display = 'none';
     }
@@ -944,7 +980,7 @@ document.querySelectorAll('.export-menu-item').forEach(item => {
         if (exportMenu) exportMenu.classList.remove('active');
 
         if (!fullData) {
-            toast('Veuillez d\'abord analyser une application', 'error');
+            toast(i18n.t('premium.toast.no_report'), 'error');
             return;
         }
 
@@ -961,7 +997,7 @@ document.querySelectorAll('.share-menu-item').forEach(item => {
 });
 
 async function handleExport(format) {
-    toast('Génération en cours...', 'success');
+    toast(i18n.t('premium.toast.generating'), 'success');
 
     try {
         switch(format) {
@@ -981,23 +1017,24 @@ async function handleExport(format) {
                 exportHTML();
                 break;
         }
-        setTimeout(() => toast('Export réussi', 'success'), 500);
+        setTimeout(() => toast(i18n.t('premium.toast.export_success'), 'success'), 500);
     } catch(e) {
-        toast('Erreur lors de l\'export: ' + e.message, 'error');
+        toast(i18n.t('premium.toast.export_error', { message: e.message }), 'error');
         console.error('Export error:', e);
     }
 }
 
 function handleShare(action) {
     if (!fullData) {
-        toast('Analysez une application avant de partager', 'error');
+        toast(i18n.t('premium.toast.analyze_before_share'), 'error');
         return;
     }
 
     if (action === 'email') {
-        const subject = encodeURIComponent(`Rapport PlayStore – ${fullData.title || fullData.appId || 'Application'}`);
+        const fallbackTitle = i18n.t('premium.share.unknown_app');
+        const subject = encodeURIComponent(i18n.t('premium.share.summary_title', { title: fullData.title || fullData.appId || fallbackTitle }));
         const summary = buildReportSummary();
-        const body = encodeURIComponent(summary + '\n\nGénéré avec PlayStore Analytics Pro.');
+        const body = encodeURIComponent(summary + '\n\n' + i18n.t('premium.share.generated_with'));
         window.location.href = `mailto:?subject=${subject}&body=${body}`;
         return;
     }
@@ -1006,7 +1043,7 @@ function handleShare(action) {
         const summary = buildReportSummary();
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(summary)
-                .then(() => toast('Résumé copié dans le presse-papiers', 'success'))
+                .then(() => toast(i18n.t('premium.toast.copy_success'), 'success'))
                 .catch(() => fallbackCopy(summary));
         } else {
             fallbackCopy(summary);
@@ -1017,14 +1054,15 @@ function handleShare(action) {
 function buildReportSummary() {
     const appIdInput = document.getElementById('appId');
     const appId = fullData.appId || (appIdInput ? appIdInput.value : '');
+    const title = fullData.title || appId || i18n.t('premium.share.unknown_app');
     const lines = [
-        `Rapport PlayStore – ${fullData.title || appId || 'Application'}`,
-        `ID : ${appId || 'N/A'}`,
-        `Note moyenne : ${fullData.score ? fullData.score.toFixed(1) : 'N/A'}`,
-        `Avis : ${fmt(fullData.ratings || 0)}`,
-        `Installations : ${fullData.installs || 'N/A'}`,
-        fullData.genre ? `Catégorie : ${fullData.genre}` : null,
-        appId ? `Lien : https://play.google.com/store/apps/details?id=${appId}` : null
+        i18n.t('premium.share.summary_title', { title }),
+        i18n.t('premium.share.summary_id', { id: appId || 'N/A' }),
+        i18n.t('premium.share.summary_rating', { rating: fullData.score ? fullData.score.toFixed(1) : 'N/A' }),
+        i18n.t('premium.share.summary_reviews', { reviews: fmt(fullData.ratings || 0) }),
+        i18n.t('premium.share.summary_installs', { installs: fullData.installs || 'N/A' }),
+        fullData.genre ? i18n.t('premium.share.summary_category', { category: fullData.genre }) : null,
+        appId ? i18n.t('premium.share.summary_link', { link: `https://play.google.com/store/apps/details?id=${appId}` }) : null
     ].filter(Boolean);
     return lines.join('\n');
 }
@@ -1039,9 +1077,9 @@ function fallbackCopy(text) {
     textarea.select();
     try {
         document.execCommand('copy');
-        toast('Résumé copié dans le presse-papiers', 'success');
+        toast(i18n.t('premium.toast.copy_success'), 'success');
     } catch (err) {
-        toast('Impossible de copier automatiquement', 'error');
+        toast(i18n.t('premium.toast.copy_error'), 'error');
     } finally {
         document.body.removeChild(textarea);
     }
@@ -1677,7 +1715,7 @@ async function exportPDF() {
 async function exportPNG() {
     const container = document.getElementById('reportContainer');
     if (!container || !container.innerHTML) {
-        toast('Aucun rapport à exporter', 'error');
+        toast(i18n.t('premium.toast.no_report'), 'error');
         return;
     }
 
@@ -1710,7 +1748,7 @@ function exportHTML() {
     const container = document.getElementById('reportContainer');
 
     if (!container || !container.innerHTML) {
-        toast('Aucun rapport à exporter', 'error');
+        toast(i18n.t('premium.toast.no_report'), 'error');
         return;
     }
 
@@ -1859,9 +1897,9 @@ if (startBatchBtn) {
     startBatchBtn.addEventListener('click', () => {
         if (!batchQueue.length || batchRunning) {
             if (!batchQueue.length) {
-                toast('Importez un fichier CSV avant de lancer l\'analyse en série', 'error');
+                toast(i18n.t('premium.toast.csv_required'), 'error');
             } else if (batchRunning) {
-                toast('Une analyse est déjà en cours', 'error');
+                toast(i18n.t('premium.toast.batch_running'), 'error');
             }
             return;
         }
@@ -1871,7 +1909,7 @@ if (startBatchBtn) {
 
 function handleCSVImport(event) {
     if (batchRunning) {
-        toast('Une analyse est déjà en cours. Patientez avant de réimporter un CSV.', 'error');
+        toast(i18n.t('premium.toast.batch_running'), 'error');
         event.target.value = '';
         return;
     }
@@ -1886,7 +1924,7 @@ function handleCSVImport(event) {
             const ids = parseCsvContent(String(content));
 
             if (!ids.length) {
-                toast('CSV vide ou colonne appId introuvable', 'error');
+                toast(i18n.t('premium.toast.csv_invalid'), 'error');
                 resetBatchUI();
                 return;
             }
@@ -1895,12 +1933,12 @@ function handleCSVImport(event) {
             toast(`${ids.length} application${ids.length > 1 ? 's' : ''} détectée${ids.length > 1 ? 's' : ''}`, 'success');
         } catch (err) {
             console.error('CSV parse error:', err);
-            toast('Impossible de lire ce fichier CSV', 'error');
+            toast(i18n.t('premium.toast.csv_read_error'), 'error');
             resetBatchUI();
         }
     };
     reader.onerror = () => {
-        toast('Erreur lors de la lecture du fichier CSV', 'error');
+        toast(i18n.t('premium.toast.csv_read_error'), 'error');
         resetBatchUI();
     };
     reader.readAsText(file);
@@ -2025,7 +2063,7 @@ async function runBatchQueue() {
         startBatchBtn.textContent = 'Relancer l\'analyse';
     }
 
-    toast('Analyse en série terminée', 'success');
+    toast(i18n.t('premium.toast.batch_complete'), 'success');
 }
 
 async function processBatchItem(item) {
@@ -2046,7 +2084,7 @@ async function processBatchItem(item) {
                 if (item.data) {
                     fullData = item.data;
                     generateReport(item.data);
-                    toast(`Rapport chargé : ${item.data.title || item.appId}`, 'success');
+                    toast(i18n.t('premium.toast.report_loaded', { name: item.data.title || item.appId }), 'success');
                 }
             });
         }
@@ -2058,7 +2096,7 @@ async function processBatchItem(item) {
         updateBatchProgress(item, 100);
         updateBatchStatus(item, 'Échec', 'error');
         item.barEl?.classList.add('error');
-        toast(`Échec pour ${item.appId}`, 'error');
+        toast(i18n.t('premium.toast.batch_item_failed', { app: item.appId }), 'error');
     }
 }
 
@@ -2160,7 +2198,7 @@ function displaySuggestions(apps) {
             document.getElementById('appNameSearch').value = appTitle;
             suggestionsDiv.style.display = 'none';
 
-            toast(`✓ ${appTitle} sélectionné`, 'success');
+            toast(i18n.t('premium.toast.app_selected', { app: appTitle }), 'success');
         });
     });
 }
