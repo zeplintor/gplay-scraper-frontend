@@ -1,0 +1,55 @@
+# Sensitive Documentation
+stripe-integration/
+backend-integration/
+docs/stripe/
+docs/backend/
+**/SETUP*.md
+**/INTEGRATION*.md
+**/GUIDE*.md
+**/QUICK-START*.md
+**/FINAL-SETUP*.md
+
+# Environment Files
+.env
+.env.local
+.env.development
+.env.production
+*.pem
+*.key
+
+# API Keys & Secrets
+secrets/
+keys/
+credentials/
+config/secrets.js
+config/keys.js
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+
+# Backup Files
+*.bak
+*_backup.*
+premium_backup.html
+
+# Node modules (if any)
+node_modules/
+package-lock.json
