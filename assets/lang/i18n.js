@@ -173,8 +173,8 @@
                 },
                 hero: {
                     tag: '🚀 Booster la croissance de vos apps Android',
-                    title: 'Transformez vos décisions marketing avec la donnée Play Store en temps réel.',
-                    desc: 'PlayStore Analytics Pro révèle les signaux forts du marché : potentiel d\'installation, retours utilisateurs, concurrents clés et opportunités de positionnement.',
+                    title: 'Outil d\'Analyse Google Play Store : ASO, Métriques & Rapports pour Applications Android',
+                    desc: 'PlayStore Analytics Pro révèle les signaux forts du marché : potentiel d\'installation, retours utilisateurs, analyse concurrentielle et opportunités ASO. Un allié décisif pour piloter votre stratégie d\'acquisition mobile.',
                     primary: 'Essayer gratuitement (3 analyses/jour)',
                     secondary: 'Voir les résultats clients',
                     note: 'Aucune carte bancaire requise • Licence Premium à 9,99€ (paiement unique)'
@@ -184,8 +184,8 @@
                     '65+ indicateurs analysés par application',
                     '5 min pour identifier une opportunité marché'
                 ],
-                benefits_title: 'Pourquoi choisir PlayStore Analytics Pro ?',
-                benefits_subtitle: 'Une solution pensée pour les équipes marketing ambitieuses qui veulent devancer la concurrence.',
+                benefits_title: 'Pourquoi choisir PlayStore Analytics Pro pour votre ASO ?',
+                benefits_subtitle: 'Une solution pensée pour les équipes marketing ambitieuses qui veulent devancer la concurrence sur Google Play Store.',
                 benefits: [
                     {
                         title: 'Vision marché complète',
@@ -204,12 +204,12 @@
                         desc: 'Gardez un historique centralisé et alignez toutes les équipes sur les mêmes données.'
                     }
                 ],
-                impact_title: 'Des résultats qui parlent',
+                impact_title: 'Résultats clients : +42% de visibilité Play Store avec notre outil ASO',
                 demo: {
-                    title: 'Un rapport premium ultra visuel, prêt à partager.',
+                    title: 'Rapports ASO professionnels : exports PDF Play Store personnalisables',
                     desc: 'Voici le rendu exact que vos clients ou votre direction recevront : graphiques soignés, insights actionnables, storytelling fluide.',
                     points: [
-                        'Plus de 20 pages de graphiques et recommandations',
+                        'Plus de 20 pages de graphiques et recommandations ASO',
                         'Mise en page premium prête à envoyer (PDF)',
                         'Sections personnalisation : branding, commentaire, next steps'
                     ],
@@ -220,8 +220,8 @@
                         { title: 'Tableaux comparatifs', desc: 'Benchmarks UX, monétisation, features critiques.' }
                     ]
                 },
-                pricing_title: 'Des offres adaptées à chaque étape',
-                pricing_subtitle: 'Essayez gratuitement, activez la puissance premium quand vous en avez besoin.',
+                pricing_title: 'Tarifs Analyse Play Store : Essai Gratuit & Licence Premium à 9,99€',
+                pricing_subtitle: 'Essayez gratuitement 3 analyses par jour, puis passez Premium pour des analyses illimitées à vie.',
                 cta_banner: {
                     title: 'Prêt à débloquer le plein potentiel ?',
                     desc: 'Démarrez gratuitement ou passez directement Premium pour 9,99€ — paiement unique, analyses illimitées à vie.',
@@ -445,8 +445,8 @@
                 },
                 hero: {
                     tag: '🚀 Boost your Android apps growth',
-                    title: 'Turn marketing decisions into wins with real-time Play Store data.',
-                    desc: 'PlayStore Analytics Pro surfaces key market signals: install potential, user feedback, competitors and positioning opportunities.',
+                    title: 'Google Play Store Analytics Tool: ASO, Metrics & Reports for Android Apps',
+                    desc: 'PlayStore Analytics Pro reveals key market signals: install potential, user feedback, competitive analysis and ASO opportunities. A decisive ally for your mobile acquisition strategy.',
                     primary: 'Try for free (3 analyses/day)',
                     secondary: 'See customer results',
                     note: 'No credit card required • Premium license €9.99 (one-time payment)'
@@ -456,8 +456,8 @@
                     '65+ indicators analyzed per application',
                     '5 minutes to detect a market opportunity'
                 ],
-                benefits_title: 'Why choose PlayStore Analytics Pro?',
-                benefits_subtitle: 'A solution designed for ambitious marketing teams who want to stay ahead.',
+                benefits_title: 'Why choose PlayStore Analytics Pro for your ASO?',
+                benefits_subtitle: 'A solution designed for ambitious marketing teams who want to stay ahead on Google Play Store.',
                 benefits: [
                     {
                         title: 'Complete market view',
@@ -476,12 +476,12 @@
                         desc: 'Keep a centralized history and align every team on the same data.'
                     }
                 ],
-                impact_title: 'Results that speak',
+                impact_title: 'Customer results: +42% Play Store visibility with our ASO tool',
                 demo: {
-                    title: 'A premium report, ready to share.',
+                    title: 'Professional ASO Reports: Customizable Play Store PDF Exports',
                     desc: 'See the exact output your stakeholders will receive: polished visuals, actionable insights, compelling storytelling.',
                     points: [
-                        '20+ pages of charts and recommendations',
+                        '20+ pages of charts and ASO recommendations',
                         'Premium layout ready to send (PDF)',
                         'Customizable sections: branding, comments, next steps'
                     ],
@@ -492,8 +492,8 @@
                         { title: 'Comparison tables', desc: 'UX, monetization and feature benchmarks.' }
                     ]
                 },
-                pricing_title: 'Plans for every stage',
-                pricing_subtitle: 'Start for free, unlock premium power when you need it.',
+                pricing_title: 'Play Store Analysis Pricing: Free Trial & €9.99 Premium License',
+                pricing_subtitle: 'Try 3 free analyses per day, then upgrade to Premium for unlimited lifetime analyses.',
                 cta_banner: {
                     title: 'Ready to unlock full potential?',
                     desc: 'Start free or go Premium for €9.99 — one-time payment, unlimited analyses forever.',
@@ -710,8 +710,8 @@
                     'أكثر من 65 مؤشراً يتم تحليله لكل تطبيق',
                     '5 دقائق لاكتشاف فرصة سوقية'
                 ],
-                benefits_title: 'لماذا تختار PlayStore Analytics Pro؟',
-                benefits_subtitle: 'حل موجّه لفرق التسويق الطموحة للبقاء في الصدارة.',
+                benefits_title: 'لماذا تختار PlayStore Analytics Pro لـ ASO؟',
+                benefits_subtitle: 'حل موجّه لفرق التسويق الطموحة للبقاء في الصدارة على Google Play Store.',
                 benefits: [
                     {
                         title: 'رؤية سوقية شاملة',
@@ -964,8 +964,8 @@
                     '每个应用分析 65+ 指标',
                     '5 分钟内发现市场机会'
                 ],
-                benefits_title: '为何选择 PlayStore Analytics Pro？',
-                benefits_subtitle: '为追求领先的营销团队量身打造的解决方案。',
+                benefits_title: '为何选择 PlayStore Analytics Pro 进行 ASO？',
+                benefits_subtitle: '为追求领先的营销团队量身打造，专注 Google Play Store。',
                 benefits: [
                     { title: '全面市场视角', desc: '即时深入分析任意应用。' },
                     { title: '快速决策', desc: '以影响力为导向的洞察帮您确定 ASO 优先级。' },
