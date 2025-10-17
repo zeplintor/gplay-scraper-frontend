@@ -16,20 +16,29 @@
             <div class="header-left">
                 <span class="header-icon">💎</span>
                 <div class="header-text">
-                    <h1>PlayStore Analytics Pro</h1>
-                    <p class="subtitle">Rapport Premium ultra détaillé</p>
+                    <h1 data-i18n="premium.header.title">PlayStore Analytics Pro</h1>
+                    <p class="subtitle" data-i18n="premium.header.subtitle">Rapport Premium ultra détaillé</p>
                 </div>
             </div>
             <div class="header-right">
-                <div class="header-badge">Dashboard Premium</div>
+                <div class="header-badge" data-i18n="premium.header.badge">Dashboard Premium</div>
+                <div class="language-selector">
+                    <label for="languageSelect" data-i18n="common.language_label">Langue</label>
+                    <select id="languageSelect">
+                        <option value="fr" data-i18n="common.languages.fr">Français</option>
+                        <option value="en" data-i18n="common.languages.en">English</option>
+                        <option value="ar" data-i18n="common.languages.ar">العربية</option>
+                        <option value="zh" data-i18n="common.languages.zh">中文</option>
+                    </select>
+                </div>
                 <div class="header-meta">
-                    <span class="header-meta-label">Statut licence</span>
-                    <span id="licenseStatus" class="header-license-placeholder">En attente</span>
+                    <span class="header-meta-label" data-i18n="premium.header.status_label">Statut licence</span>
+                    <span id="licenseStatus" class="header-license-placeholder" data-i18n="premium.header.status_placeholder">En attente</span>
                 </div>
                 <div class="header-links">
-                    <a href="index.html" class="link-pill">Accueil</a>
-                    <a href="pricing.html" class="link-pill">Tarifs</a>
-                    <a href="mailto:hello@playstore-analytics.pro" class="link-pill">Support</a>
+                    <a href="index.html" class="link-pill" data-i18n="premium.header.links.home">Accueil</a>
+                    <a href="pricing.html" class="link-pill" data-i18n="premium.header.links.pricing">Tarifs</a>
+                    <a href="mailto:hello@playstore-analytics.pro" class="link-pill" data-i18n="premium.header.links.support">Support</a>
                 </div>
             </div>
         </header>
@@ -42,26 +51,26 @@
         <div class="search-box">
             <div class="search-header">
                 <div>
-                    <h2>Recherche d’applications</h2>
-                    <span>Identifiez les opportunités Play Store en quelques secondes.</span>
+                    <h2 data-i18n="premium.search.title">Recherche d’applications</h2>
+                    <span data-i18n="premium.search.subtitle">Identifiez les opportunités Play Store en quelques secondes.</span>
                 </div>
                 <div class="search-actions">
-                    <button id="licenseBtn" class="license-btn">Gérer la licence</button>
+                    <button id="licenseBtn" class="license-btn" data-i18n="premium.actions.license">Gérer la licence</button>
                     <div class="actions-dropdown">
-                        <button id="shareBtn" class="secondary-btn">Partager</button>
+                        <button id="shareBtn" class="secondary-btn" data-i18n="premium.actions.share">Partager</button>
                         <div class="share-menu" id="shareMenu">
                             <div class="share-menu-item" data-share="email">
                                 <span class="icon">✉️</span>
-                                <span class="label">Envoyer par email</span>
+                                <span class="label" data-i18n="premium.actions.share_email">Envoyer par email</span>
                             </div>
                             <div class="share-menu-item" data-share="clipboard">
                                 <span class="icon">📋</span>
-                                <span class="label">Copier un résumé</span>
+                                <span class="label" data-i18n="premium.actions.share_clipboard">Copier un résumé</span>
                             </div>
                         </div>
                     </div>
                     <div class="export-container">
-                        <button id="exportBtn" class="export-btn">Exporter</button>
+                        <button id="exportBtn" class="export-btn" data-i18n="premium.actions.export">Exporter</button>
                         <div id="exportMenu" class="export-menu">
                             <div class="export-menu-item" data-format="pdf">
                                 <span class="icon">📄</span>
@@ -94,18 +103,18 @@
             </div>
 
             <div class="input-group">
-                <label class="input-label">🔍 Rechercher une application par nom</label>
+                <label class="input-label" data-i18n="premium.search.input_name">🔍 Rechercher une application par nom</label>
                 <div class="input-wrapper">
-                    <input type="text" id="appNameSearch" placeholder="Ex: Roblox, Instagram, TikTok...">
+                    <input type="text" id="appNameSearch" placeholder="Ex: Roblox, Instagram, TikTok..." data-i18n-placeholder="premium.search.input_name_placeholder">
                     <div id="searchSuggestions" class="suggestions-panel"></div>
                 </div>
             </div>
 
             <div class="input-group">
-                <label class="input-label">📱 ID de l'application</label>
+                <label class="input-label" data-i18n="premium.search.input_id">📱 ID de l'application</label>
                 <div class="search-container">
-                    <input type="text" id="appId" placeholder="Ex: com.roblox.client" value="">
-                    <button id="searchBtn">Analyser</button>
+                    <input type="text" id="appId" placeholder="Ex: com.roblox.client" value="" data-i18n-placeholder="premium.search.input_id_placeholder">
+                    <button id="searchBtn" data-i18n="premium.search.analyze_btn">Analyser</button>
                 </div>
             </div>
         </div>
@@ -113,15 +122,15 @@
         <div class="card batch-card">
             <div class="batch-header">
                 <div>
-                    <h2>Analyse en série (CSV)</h2>
-                    <p>Importez un fichier contenant une colonne <code>appId</code> pour lancer des analyses successives.</p>
+                    <h2 data-i18n="premium.batch.title">Analyse en série (CSV)</h2>
+                    <p data-i18n-html="premium.batch.subtitle">Importez un fichier contenant une colonne <code>appId</code> pour lancer des analyses successives.</p>
                 </div>
                 <div class="batch-controls">
                     <label class="upload-label">
                         <input type="file" id="csvInput" accept=".csv">
-                        <span>Importer un CSV</span>
+                        <span data-i18n="premium.batch.import">Importer un CSV</span>
                     </label>
-                    <button id="startBatchBtn" class="secondary-btn" disabled>Démarrer l'analyse</button>
+                    <button id="startBatchBtn" class="secondary-btn" disabled data-i18n="premium.batch.start">Démarrer l'analyse</button>
                 </div>
             </div>
             <div id="batchProgress" class="batch-progress"></div>
@@ -129,7 +138,7 @@
 
         <div id="loading" class="loading" style="display:none;">
             <div class="spinner"></div>
-            <p style="font-size:0.9375rem; font-weight:600; color:#6366f1; margin-top:12px;">Analyse en cours...</p>
+            <p style="font-size:0.9375rem; font-weight:600; color:#6366f1; margin-top:12px;" data-i18n="premium.loading">Analyse en cours...</p>
         </div>
 
         <div id="reportContainer"></div>
@@ -141,35 +150,35 @@
         <div class="welcome-content">
             <button class="welcome-close" id="closeWelcome">×</button>
             <div class="welcome-icon">👋</div>
-            <h2>Bienvenue sur PlayStore Analytics Pro !</h2>
-            <p class="welcome-subtitle">Découvrez la puissance de l'analyse Play Store en quelques clics</p>
+            <h2 data-i18n="premium.welcome.title">Bienvenue sur PlayStore Analytics Pro !</h2>
+            <p class="welcome-subtitle" data-i18n="premium.welcome.subtitle">Découvrez la puissance de l'analyse Play Store en quelques clics</p>
 
             <div class="onboarding-steps">
                 <div class="onboarding-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h4>Recherchez une application</h4>
-                        <p>Tapez le nom d'une app ou essayez avec nos exemples populaires</p>
+                        <h4 data-i18n="premium.welcome.step1_title">Recherchez une application</h4>
+                        <p data-i18n="premium.welcome.step1_desc">Tapez le nom d'une app ou essayez avec nos exemples populaires</p>
                     </div>
                 </div>
                 <div class="onboarding-step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h4>Analysez les données</h4>
-                        <p>3 analyses gratuites par jour • Données en temps réel</p>
+                        <h4 data-i18n="premium.welcome.step2_title">Analysez les données</h4>
+                        <p data-i18n="premium.welcome.step2_desc">3 analyses gratuites par jour • Données en temps réel</p>
                     </div>
                 </div>
                 <div class="onboarding-step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h4>Exportez vos rapports</h4>
-                        <p>PDF, CSV, JSON • Format professionnel prêt à partager</p>
+                        <h4 data-i18n="premium.welcome.step3_title">Exportez vos rapports</h4>
+                        <p data-i18n="premium.welcome.step3_desc">PDF, CSV, JSON • Format professionnel prêt à partager</p>
                     </div>
                 </div>
             </div>
 
             <div class="welcome-quickstart">
-                <h3>🚀 Démarrage rapide</h3>
+                <h3 data-i18n="premium.welcome.quickstart_title">🚀 Démarrage rapide</h3>
                 <div class="quickstart-grid">
                     <button class="quickstart-btn" data-appid="com.roblox.client">
                         <span class="qs-icon">🎮</span>
@@ -191,15 +200,15 @@
             </div>
 
             <div class="welcome-actions">
-                <button class="welcome-btn-primary" id="startExploring">
+                <button class="welcome-btn-primary" id="startExploring" data-i18n="premium.welcome.start">
                     Commencer l'exploration
                 </button>
-                <button class="welcome-btn-secondary" id="skipWelcome">
+                <button class="welcome-btn-secondary" id="skipWelcome" data-i18n="premium.welcome.skip">
                     Passer l'introduction
                 </button>
             </div>
 
-            <p class="welcome-footer">
+            <p class="welcome-footer" data-i18n="premium.welcome.footer">
                 💡 <strong>Astuce :</strong> Vous pouvez analyser gratuitement 3 applications par jour
             </p>
         </div>
@@ -214,11 +223,11 @@
             <!-- Mode: No License -->
             <div id="noLicenseView" class="license-view">
                 <div class="license-icon">🔑</div>
-                <h2>Activer votre licence Premium</h2>
-                <p class="license-subtitle">Entrez votre clé de licence pour débloquer toutes les fonctionnalités</p>
+                <h2 data-i18n="premium.license.modal_title">Activer votre licence Premium</h2>
+                <p class="license-subtitle" data-i18n="premium.license.modal_subtitle">Entrez votre clé de licence pour débloquer toutes les fonctionnalités</p>
 
                 <div class="license-input-group">
-                    <label for="licenseKeyInput">Clé de licence</label>
+                    <label for="licenseKeyInput" data-i18n="premium.license.input_label">Clé de licence</label>
                     <input
                         type="text"
                         id="licenseKeyInput"
@@ -231,7 +240,7 @@
                     <div id="licenseSuccess" class="license-success" style="display: none;"></div>
                 </div>
 
-                <button id="activateLicenseBtn" class="license-btn-primary">
+                <button id="activateLicenseBtn" class="license-btn-primary" data-i18n="premium.license.activate_btn">
                     Activer la licence
                 </button>
 
@@ -239,57 +248,57 @@
                     <span>ou</span>
                 </div>
 
-                <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" class="license-btn-secondary">
+                <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" class="license-btn-secondary" data-i18n="premium.license.buy_btn">
                     💳 Acheter une licence (9,99€)
                 </a>
 
                 <div class="license-help">
-                    <p><strong>Clés de test disponibles :</strong></p>
+                    <p><strong data-i18n="premium.license.test_keys_title">Clés de test disponibles :</strong></p>
                     <div class="test-keys">
                         <code class="test-key" data-key="PSAP-TEST-2025-DEMO-KEY1">PSAP-TEST-2025-DEMO-KEY1</code>
                         <code class="test-key" data-key="PSAP-DEMO-FREE-TRIAL-XYZ">PSAP-DEMO-FREE-TRIAL-XYZ</code>
                     </div>
-                    <p class="help-note">Cliquez sur une clé pour la copier</p>
+                    <p class="help-note" data-i18n="premium.license.test_hint">Cliquez sur une clé pour la copier</p>
                 </div>
             </div>
 
             <!-- Mode: License Active -->
             <div id="activeLicenseView" class="license-view" style="display: none;">
                 <div class="license-icon success">✓</div>
-                <h2>Licence Premium Active</h2>
-                <p class="license-subtitle">Profitez de toutes les fonctionnalités illimitées</p>
+                <h2 data-i18n="premium.license.active_title">Licence Premium Active</h2>
+                <p class="license-subtitle" data-i18n="premium.license.active_subtitle">Profitez de toutes les fonctionnalités illimitées</p>
 
                 <div class="license-info-card">
                     <div class="license-info-row">
-                        <span class="info-label">📧 Email</span>
+                        <span class="info-label" data-i18n="premium.license.info_email">📧 Email</span>
                         <span class="info-value" id="licenseEmail">-</span>
                     </div>
                     <div class="license-info-row">
-                        <span class="info-label">🔑 Clé</span>
+                        <span class="info-label" data-i18n="premium.license.info_key">🔑 Clé</span>
                         <span class="info-value" id="licenseKey">-</span>
                     </div>
                     <div class="license-info-row">
-                        <span class="info-label">📅 Activée le</span>
+                        <span class="info-label" data-i18n="premium.license.info_activated">📅 Activée le</span>
                         <span class="info-value" id="licenseDate">-</span>
                     </div>
                     <div class="license-info-row">
-                        <span class="info-label">⏰ Statut</span>
-                        <span class="info-value status-badge">✓ Active</span>
+                        <span class="info-label" data-i18n="premium.license.info_status">⏰ Statut</span>
+                        <span class="info-value status-badge" data-i18n="premium.license.status_active">✓ Active</span>
                     </div>
                 </div>
 
                 <div class="license-features">
-                    <h3>Fonctionnalités débloquées :</h3>
+                    <h3 data-i18n="premium.license.features_title">Fonctionnalités débloquées :</h3>
                     <ul>
-                        <li>✓ Analyses illimitées</li>
-                        <li>✓ 65+ métriques avancées</li>
-                        <li>✓ Export PDF professionnel</li>
-                        <li>✓ Analyse CSV en batch</li>
-                        <li>✓ Support prioritaire</li>
+                        <li data-i18n="premium.license.feature_unlimited">✓ Analyses illimitées</li>
+                        <li data-i18n="premium.license.feature_metrics">✓ 65+ métriques avancées</li>
+                        <li data-i18n="premium.license.feature_export">✓ Export PDF professionnel</li>
+                        <li data-i18n="premium.license.feature_batch">✓ Analyse CSV en batch</li>
+                        <li data-i18n="premium.license.feature_support">✓ Support prioritaire</li>
                     </ul>
                 </div>
 
-                <button id="deactivateLicenseBtn" class="license-btn-danger">
+                <button id="deactivateLicenseBtn" class="license-btn-danger" data-i18n="premium.license.deactivate_btn">
                     Désactiver la licence
                 </button>
             </div>
@@ -302,53 +311,54 @@
         <div class="paywall-content">
             <button class="paywall-close" id="closePaywall">×</button>
             <div class="paywall-icon">🚀</div>
-            <h2>Limite gratuite atteinte !</h2>
-            <p class="paywall-subtitle">Vous avez utilisé vos <strong>3 analyses gratuites</strong> aujourd'hui.</p>
+            <h2 data-i18n="premium.paywall.title">Limite gratuite atteinte !</h2>
+            <p class="paywall-subtitle" data-i18n-html="premium.paywall.subtitle">Vous avez utilisé vos <strong>3 analyses gratuites</strong> aujourd'hui.</p>
 
             <div class="paywall-comparison">
                 <div class="paywall-col free-col">
                     <div class="paywall-col-header">
-                        <h3>Gratuit</h3>
-                        <div class="paywall-price">0€</div>
+                        <h3 data-i18n="premium.paywall.free_title">Gratuit</h3>
+                        <div class="paywall-price" data-i18n="premium.paywall.free_price">0€</div>
                     </div>
                     <ul class="paywall-features">
-                        <li class="limited">3 analyses par jour</li>
-                        <li class="limited">Données de base uniquement</li>
-                        <li class="limited">Export avec watermark</li>
-                        <li class="limited">Sections premium floutées</li>
+                        <li class="limited" data-i18n="premium.paywall.free_features.0">3 analyses par jour</li>
+                        <li class="limited" data-i18n="premium.paywall.free_features.1">Données de base uniquement</li>
+                        <li class="limited" data-i18n="premium.paywall.free_features.2">Export avec watermark</li>
+                        <li class="limited" data-i18n="premium.paywall.free_features.3">Sections premium floutées</li>
                     </ul>
                 </div>
 
                 <div class="paywall-col premium-col">
-                    <div class="paywall-badge">RECOMMANDÉ</div>
+                    <div class="paywall-badge" data-i18n="premium.paywall.premium_badge">RECOMMANDÉ</div>
                     <div class="paywall-col-header">
-                        <h3>Premium</h3>
-                        <div class="paywall-price">9,99€</div>
+                        <h3 data-i18n="premium.paywall.premium_title">Premium</h3>
+                        <div class="paywall-price" data-i18n="premium.paywall.premium_price">9,99€</div>
                     </div>
                     <ul class="paywall-features">
-                        <li class="included">✓ Analyses illimitées</li>
-                        <li class="included">✓ 65+ métriques complètes</li>
-                        <li class="included">✓ Export PDF professionnel</li>
-                        <li class="included">✓ Analyse CSV en batch</li>
-                        <li class="included">✓ Toutes sections débloquées</li>
-                        <li class="included">✓ Support prioritaire</li>
+                        <li class="included" data-i18n="premium.paywall.premium_features.0">✓ Analyses illimitées</li>
+                        <li class="included" data-i18n="premium.paywall.premium_features.1">✓ 65+ métriques complètes</li>
+                        <li class="included" data-i18n="premium.paywall.premium_features.2">✓ Export PDF professionnel</li>
+                        <li class="included" data-i18n="premium.paywall.premium_features.3">✓ Analyse CSV en batch</li>
+                        <li class="included" data-i18n="premium.paywall.premium_features.4">✓ Toutes sections débloquées</li>
+                        <li class="included" data-i18n="premium.paywall.premium_features.5">✓ Support prioritaire</li>
                     </ul>
                 </div>
             </div>
 
             <div class="paywall-actions">
-                <a href="https://votresite.gumroad.com/l/playstore-pro" class="paywall-btn-primary" target="_blank">
+                <a href="https://votresite.gumroad.com/l/playstore-pro" class="paywall-btn-primary" target="_blank" data-i18n="premium.paywall.primary_cta">
                     💎 Débloquer Premium - 9,99€
                 </a>
-                <button class="paywall-btn-secondary" id="paywallWaitTomorrow">
+                <button class="paywall-btn-secondary" id="paywallWaitTomorrow" data-i18n="premium.paywall.secondary_cta">
                     Revenir demain (3 nouvelles analyses)
                 </button>
             </div>
 
-            <p class="paywall-footer">💳 Paiement sécurisé • Accès instantané • Garantie 30 jours</p>
+            <p class="paywall-footer" data-i18n="premium.paywall.footer">💳 Paiement sécurisé • Accès instantané • Garantie 30 jours</p>
         </div>
     </div>
 
+<script src="assets/lang/i18n.js"></script>
 <script src="assets/scripts/dashboard.js"></script>
 </body>
 </html>

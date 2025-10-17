@@ -533,3 +533,52 @@
                 align-items: stretch;
             }
         }
+
+.language-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.language-selector label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.language-selector select {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+body.rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+body.rtl header,
+body.rtl nav,
+body.rtl .hero,
+body.rtl .feature-grid,
+body.rtl .demo-section,
+body.rtl .pricing-grid {
+    direction: rtl;
+}
+
+body.rtl nav {
+    flex-direction: row-reverse;
+}
+
+body.rtl .cta-group {
+    flex-direction: row-reverse;
+}
+
+body.rtl footer {
+    justify-content: space-between;
+}
