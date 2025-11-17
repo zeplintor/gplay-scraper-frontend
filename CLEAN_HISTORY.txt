@@ -1,0 +1,113 @@
+================================================================================
+NETTOYAGE DE L'HISTORIQUE GIT - PROCÉDURE POUR SUPPRIMER LES FICHIERS SENSIBLES
+================================================================================
+
+ATTENTION: Cette procédure va RÉÉCRIRE l'historique Git complet.
+Tous les collaborateurs devront re-cloner le repository après cette opération.
+
+================================================================================
+OPTION 1: Utiliser BFG Repo-Cleaner (RECOMMANDÉ - Plus rapide)
+================================================================================
+
+1. Installer BFG:
+   Mac: brew install bfg
+   Ou télécharger: https://rtyley.github.io/bfg-repo-cleaner/
+
+2. Faire un backup:
+   git clone --mirror https://github.com/zeplintor/gplay-scraper-frontend.git backup-repo.git
+
+3. Cloner à nouveau:
+   git clone https://github.com/zeplintor/gplay-scraper-frontend.git
+   cd gplay-scraper-frontend
+
+4. Supprimer les dossiers sensibles de l'historique:
+   bfg --delete-folders stripe-integration
+   bfg --delete-folders backend-integration
+
+5. Nettoyer et compresser le repo:
+   git reflog expire --expire=now --all
+   git gc --prune=now --aggressive
+
+6. Forcer le push (DANGEREUX):
+   git push --force
+
+================================================================================
+OPTION 2: Utiliser git filter-branch (Plus lent mais intégré)
+================================================================================
+
+1. Faire un backup:
+   git clone https://github.com/zeplintor/gplay-scraper-frontend.git backup-repo
+
+2. Supprimer les dossiers de l'historique:
+   git filter-branch --force --index-filter \
+   "git rm -rf --cached --ignore-unmatch stripe-integration backend-integration" \
+   --prune-empty --tag-name-filter cat -- --all
+
+3. Nettoyer:
+   git reflog expire --expire=now --all
+   git gc --prune=now --aggressive
+
+4. Forcer le push (DANGEREUX):
+   git push origin --force --all
+   git push origin --force --tags
+
+================================================================================
+APRÈS LE NETTOYAGE
+================================================================================
+
+1. Informer tous les collaborateurs de re-cloner:
+   git clone https://github.com/zeplintor/gplay-scraper-frontend.git
+
+2. Vérifier que les fichiers sont bien supprimés:
+   git log --all --pretty=format: --name-only --diff-filter=A | grep stripe-integration
+   (Doit retourner rien)
+
+3. Supprimer ce fichier:
+   rm CLEAN_HISTORY.txt
+   git add CLEAN_HISTORY.txt
+   git commit -m "chore: remove cleanup instructions"
+   git push
+
+================================================================================
+POURQUOI FAIRE CELA ?
+================================================================================
+
+Les fichiers supprimés restent dans l'historique Git, donc quelqu'un qui clone
+le repo peut toujours accéder aux anciens commits et voir:
+
+- stripe-integration/README.md (guide complet d'intégration Stripe)
+- stripe-integration/QUICK-START.md (procédure pas-à-pas)
+- stripe-integration/FINAL-SETUP.md (configuration détaillée)
+- backend-integration/INTEGRATION-GUIDE.md (architecture backend)
+- Et tous les fichiers de code d'exemple
+
+En nettoyant l'historique, ces fichiers disparaissent complètement du repository.
+
+================================================================================
+ALTERNATIVE: Créer un nouveau repository
+================================================================================
+
+Si vous préférez éviter de réécrire l'historique:
+
+1. Créer un nouveau repo GitHub vide: gplay-scraper-frontend-clean
+
+2. Copier uniquement les fichiers actuels (pas le .git):
+   rsync -av --exclude='.git' gplay-scraper-frontend/ gplay-scraper-frontend-clean/
+
+3. Initialiser Git:
+   cd gplay-scraper-frontend-clean
+   git init
+   git add .
+   git commit -m "Initial commit - clean version"
+
+4. Pousser vers le nouveau repo:
+   git remote add origin https://github.com/zeplintor/gplay-scraper-frontend-clean.git
+   git push -u origin main
+
+5. Archiver l'ancien repo et utiliser le nouveau
+
+Cette méthode est plus simple mais vous perdez l'historique des commits.
+
+================================================================================
+FIN
+================================================================================

@@ -1,6 +1,6 @@
-// Configuration
-const STRIPE_PUBLIC_KEY = 'pk_test_516gcEPE3C1fEFRcak1XcgQfA4brYmEHCGdW3oK5bm8onVnVq1yiBUs7RwCiTOKuCpFx97ZGvRjVcNWoq9i1do5DI00j7eZfkTq';
-const API_URL = 'https://gplay-scraper-backend.onrender.com';
+// Configuration - utilise CONFIG depuis config.js
+const STRIPE_PUBLIC_KEY = window.CONFIG?.STRIPE_PUBLIC_KEY || 'pk_test_...';
+const API_URL = window.CONFIG?.API_URL || 'https://gplay-scraper-api.onrender.com';
 
 async function buyPremium(plan = 'premium', email = null) {
     try {

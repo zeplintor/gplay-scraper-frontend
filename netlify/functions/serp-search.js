@@ -29,7 +29,7 @@ exports.handler = async function(event) {
         };
     }
 
-    const apiKey = process.env.SERPAPI_KEY || 'bbfe6148f9e6efe12cb7d3451240a3e1d3ab52c4d4e8838e25d6af043f21d6c7';
+    const apiKey = process.env.SERPAPI_KEY;
 
     if (!apiKey) {
         return {
