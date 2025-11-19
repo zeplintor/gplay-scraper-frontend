@@ -4,217 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarifs - PlayStore Analytics Pro</title>
+    <meta name="description" content="Licence Premium à 9,99€ - Analyses illimitées à vie + 65+ métriques avancées + Exports PDF">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles/landing.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(180deg, #fafbfc 0%, #f3f4f6 100%);
-            color: #1f2937;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 700;
-            color: #111827;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            font-size: 28px;
-        }
-
-        .nav {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-
-        .nav a {
-            color: #6b7280;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 15px;
-            transition: color 0.2s;
-        }
-
-        .nav a:hover {
-            color: #6366f1;
-        }
-
-        .nav-cta {
-            background: var(--gradient-primary);
-            color: white !important;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-
-        /* Hero Section */
-        .hero {
+        .pricing-hero {
             text-align: center;
-            padding: 80px 0 60px;
+            padding: 100px 48px 60px;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.03) 100%);
         }
 
-        .hero-tag {
-            display: inline-block;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
-            color: #6366f1;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 24px;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 900;
-            color: #111827;
+        .pricing-hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            color: var(--text);
             margin-bottom: 20px;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.02em;
         }
 
-        .hero-gradient {
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: #6b7280;
+        .pricing-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto 40px;
         }
 
-        .billing-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 60px;
-        }
-
-        .billing-toggle span {
-            font-size: 16px;
-            font-weight: 600;
-            color: #6b7280;
-        }
-
-        .billing-toggle span.active {
-            color: #111827;
-        }
-
-        .toggle-switch {
-            width: 56px;
-            height: 32px;
-            background: #e5e7eb;
-            border-radius: 20px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .toggle-switch.active {
-            background: var(--gradient-primary);
-        }
-
-        .toggle-slider {
-            width: 26px;
-            height: 26px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            transition: transform 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .toggle-switch.active .toggle-slider {
-            transform: translateX(24px);
-        }
-
-        .discount-badge {
-            display: inline-block;
-            background: var(--gradient-success);
-            color: white;
-            padding: 4px 12px;
+        .pricing-toggle {
+            display: inline-flex;
+            background: rgba(99, 102, 241, 0.1);
+            padding: 6px;
             border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-left: 8px;
+            gap: 4px;
         }
 
-        /* Pricing Cards */
+        .pricing-toggle button {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-toggle button.active {
+            background: var(--white);
+            color: var(--accent);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 48px;
+        }
+
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 32px;
             margin-bottom: 80px;
         }
 
         .pricing-card {
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 20px;
+            background: var(--white);
+            border-radius: 24px;
             padding: 40px;
+            border: 2px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
         .pricing-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
         }
 
         .pricing-card.featured {
-            border-color: #6366f1;
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
             transform: scale(1.05);
         }
 
@@ -222,588 +97,673 @@
             transform: scale(1.05) translateY(-8px);
         }
 
-        .popular-badge {
+        .pricing-badge {
             position: absolute;
-            top: -12px;
+            top: -16px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--gradient-primary);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-purple) 100%);
             color: white;
-            padding: 6px 20px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 8px 20px;
+            border-radius: 999px;
+            font-size: 0.875rem;
             font-weight: 700;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
         }
 
-        .plan-name {
-            font-size: 18px;
+        .pricing-name {
+            font-size: 1.5rem;
             font-weight: 700;
-            color: #111827;
+            color: var(--text);
             margin-bottom: 12px;
         }
 
-        .plan-description {
-            font-size: 14px;
-            color: #6b7280;
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
             margin-bottom: 24px;
-            min-height: 40px;
+            line-height: 1.6;
         }
 
-        .plan-price {
-            margin-bottom: 8px;
+        .pricing-price {
+            margin-bottom: 32px;
         }
 
-        .price-amount {
-            font-size: 48px;
-            font-weight: 900;
-            color: #111827;
+        .pricing-amount {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1;
+            letter-spacing: -0.03em;
         }
 
-        .price-currency {
-            font-size: 24px;
+        .pricing-amount .currency {
+            font-size: 2rem;
             vertical-align: super;
             margin-right: 4px;
         }
 
-        .price-period {
-            font-size: 16px;
-            color: #6b7280;
+        .pricing-amount .decimal {
+            font-size: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-period {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
             font-weight: 500;
+            margin-top: 8px;
         }
 
-        .price-note {
-            font-size: 13px;
-            color: #9ca3af;
-            margin-bottom: 32px;
-        }
-
-        .plan-features {
+        .pricing-features {
             list-style: none;
             margin-bottom: 32px;
+            flex-grow: 1;
         }
 
-        .plan-features li {
+        .pricing-features li {
             padding: 12px 0;
-            font-size: 15px;
-            color: #374151;
             display: flex;
             align-items: flex-start;
             gap: 12px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
         }
 
-        .plan-features li::before {
+        .pricing-features li::before {
             content: "✓";
-            color: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent);
+            border-radius: 50%;
             font-weight: 700;
-            font-size: 18px;
             flex-shrink: 0;
         }
 
-        .plan-btn {
+        .pricing-cta {
+            display: block;
             width: 100%;
             padding: 16px;
             border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 1rem;
             text-align: center;
             text-decoration: none;
-            display: block;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             border: 2px solid transparent;
         }
 
-        .plan-btn.primary {
-            background: var(--gradient-primary);
+        .pricing-cta.primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-purple) 100%);
             color: white;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
-        .plan-btn.primary:hover {
+        .pricing-cta.primary:hover {
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
-        .plan-btn.secondary {
-            background: white;
-            color: #6366f1;
-            border-color: #6366f1;
+        .pricing-cta.secondary {
+            background: transparent;
+            color: var(--accent);
+            border-color: var(--accent);
         }
 
-        .plan-btn.secondary:hover {
-            background: #f9fafb;
+        .pricing-cta.secondary:hover {
+            background: rgba(99, 102, 241, 0.05);
         }
 
-        /* Comparison Table */
+        /* Comparaison Section */
         .comparison-section {
-            padding: 80px 0;
-            background: white;
+            background: var(--white);
+            padding: 80px 48px;
+            margin: 0 -48px;
         }
 
-        .section-header {
+        .comparison-section h2 {
             text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-header h2 {
-            font-size: 40px;
-            font-weight: 800;
-            color: #111827;
-            margin-bottom: 16px;
-        }
-
-        .section-header p {
-            font-size: 18px;
-            color: #6b7280;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 48px;
         }
 
         .comparison-table {
             max-width: 1000px;
             margin: 0 auto;
-            border: 1px solid #e5e7eb;
+            background: var(--white);
             border-radius: 16px;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
-        .table-header {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            background: linear-gradient(135deg, #f9fafb, #f3f4f6);
-            padding: 24px;
-            font-weight: 700;
-            color: #374151;
-            border-bottom: 2px solid #e5e7eb;
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .table-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            padding: 20px 24px;
-            border-bottom: 1px solid #f3f4f6;
-            align-items: center;
+        .comparison-table th {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-purple) 100%);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.125rem;
         }
 
-        .table-row:last-child {
+        .comparison-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table tr:last-child td {
             border-bottom: none;
         }
 
-        .table-row:hover {
-            background: #fafbfc;
+        .comparison-table tr:nth-child(even) {
+            background: rgba(99, 102, 241, 0.02);
         }
 
-        .feature-name {
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .feature-value {
-            text-align: center;
-            color: #6b7280;
-        }
-
-        .check {
+        .check-icon {
             color: #10b981;
-            font-size: 24px;
+            font-size: 1.25rem;
             font-weight: 700;
         }
 
-        .cross {
-            color: #d1d5db;
-            font-size: 20px;
+        .cross-icon {
+            color: #ef4444;
+            font-size: 1.25rem;
+            font-weight: 700;
         }
 
         /* FAQ Section */
         .faq-section {
-            padding: 80px 0;
+            padding: 80px 48px;
+        }
+
+        .faq-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .faq-section p {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            margin-bottom: 48px;
         }
 
         .faq-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
-            max-width: 1000px;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         .faq-item {
-            background: white;
-            padding: 32px;
+            background: var(--white);
+            padding: 28px;
             border-radius: 16px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
         }
 
-        .faq-item h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #111827;
+        .faq-item:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .faq-question {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text);
             margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
         }
 
-        .faq-item p {
-            font-size: 15px;
-            color: #6b7280;
-            line-height: 1.7;
-        }
-
-        /* CTA Banner */
-        .cta-banner {
-            text-align: center;
-            padding: 80px 24px;
-            background: var(--gradient-primary);
+        .faq-question::before {
+            content: "Q";
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-purple) 100%);
             color: white;
-            border-radius: 24px;
-            margin: 80px auto;
+            border-radius: 8px;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
-        .cta-banner h2 {
-            font-size: 40px;
-            font-weight: 800;
+        .faq-answer {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding-left: 44px;
+        }
+
+        .faq-answer strong {
+            color: var(--text);
+        }
+
+        /* CTA Final */
+        .final-cta {
+            text-align: center;
+            padding: 80px 48px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            margin: 0 -48px;
+        }
+
+        .final-cta h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
             margin-bottom: 16px;
         }
 
-        .cta-banner p {
-            font-size: 18px;
-            opacity: 0.95;
+        .final-cta p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
             margin-bottom: 32px;
         }
 
-        .cta-buttons {
+        .final-cta .cta-group {
             display: flex;
-            gap: 16px;
             justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        .cta-btn {
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .cta-btn.white {
-            background: white;
-            color: #6366f1;
-        }
-
-        .cta-btn.white:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .cta-btn.outline {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .cta-btn.outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 40px 24px;
-            color: #6b7280;
-            font-size: 14px;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        /* Responsive */
-        @media (max-width: 968px) {
-            .pricing-grid {
-                grid-template-columns: 1fr;
+        @media (max-width: 960px) {
+            .pricing-container {
+                padding: 60px 24px;
             }
 
             .pricing-card.featured {
                 transform: scale(1);
             }
 
-            .hero h1 {
-                font-size: 40px;
-            }
-
-            .table-header, .table-row {
-                grid-template-columns: 2fr 1fr 1fr 1fr;
-                font-size: 14px;
-            }
-
             .faq-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .comparison-section,
+            .final-cta {
+                margin: 0 -24px;
+                padding: 60px 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .pricing-hero {
+                padding: 80px 20px 40px;
+            }
+
+            .pricing-container {
+                padding: 40px 20px;
+            }
+
+            .pricing-amount {
+                font-size: 3rem;
+            }
+
+            .comparison-table {
+                font-size: 0.875rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 12px;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="index.html" class="logo">
-                    <span class="logo-icon">💎</span>
-                    <span>PlayStore Analytics Pro</span>
-                </a>
-                <nav class="nav">
-                    <a href="index.html">Accueil</a>
-                    <a href="pricing.html">Tarifs</a>
-                    <a href="index.html#impact">Témoignages</a>
-                    <a href="premium.html" class="nav-cta">Dashboard</a>
-                </nav>
+    <div class="page">
+        <header>
+            <div class="logo">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 18.5L12.5 2L21 18.5H3Z" fill="#6366F1"/>
+                    <path d="M12.5 2L3 18.5H12.5V2Z" fill="#8B5CF6" opacity="0.7"/>
+                    <path d="M12.5 2L21 18.5H12.5V2Z" fill="#14B8A6" opacity="0.75"/>
+                </svg>
+                <span>PlayStore Analytics Pro</span>
+            </div>
+            <nav>
+                <a href="index.html">Accueil</a>
+                <a href="premium.html">Dashboard</a>
+                <a href="#faq">FAQ</a>
+                <a class="nav-cta" href="premium.html">Essayer gratuitement</a>
+            </nav>
+        </header>
+
+        <div class="pricing-hero">
+            <h1>Tarifs Simples et Transparents</h1>
+            <p>Commencez gratuitement, passez Premium quand vous êtes prêt. Sans abonnement, paiement unique.</p>
+        </div>
+
+        <div class="pricing-container">
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-name">Gratuit</div>
+                    <div class="pricing-desc">Parfait pour découvrir l'outil et tester quelques analyses</div>
+
+                    <div class="pricing-price">
+                        <div class="pricing-amount">
+                            <span class="currency">€</span>0
+                        </div>
+                        <div class="pricing-period">Pour toujours</div>
+                    </div>
+
+                    <ul class="pricing-features">
+                        <li>3 analyses par jour</li>
+                        <li>Recherche d'applications</li>
+                        <li>Métriques de base (20+)</li>
+                        <li>Dashboard interactif</li>
+                        <li>Données en temps réel</li>
+                        <li>Historique local</li>
+                    </ul>
+
+                    <a href="premium.html" class="pricing-cta secondary">Commencer gratuitement →</a>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">⭐ LE PLUS POPULAIRE</div>
+                    <div class="pricing-name">Premium</div>
+                    <div class="pricing-desc">Pour les pros qui veulent aller plus loin dans l'analyse ASO</div>
+
+                    <div class="pricing-price">
+                        <div class="pricing-amount">
+                            <span class="currency">€</span>9<span class="decimal">,99</span>
+                        </div>
+                        <div class="pricing-period">Paiement unique • À vie</div>
+                    </div>
+
+                    <ul class="pricing-features">
+                        <li><strong>Analyses illimitées</strong></li>
+                        <li><strong>65+ métriques avancées</strong></li>
+                        <li><strong>Exports PDF professionnels</strong></li>
+                        <li>Analyse CSV en batch</li>
+                        <li>Comparaison d'applications</li>
+                        <li>Historique illimité</li>
+                        <li>Données concurrents</li>
+                        <li>Support prioritaire par email</li>
+                        <li>Mises à jour gratuites à vie</li>
+                    </ul>
+
+                    <a href="#buy-premium" class="pricing-cta primary">Obtenir Premium →</a>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-name">Entreprise</div>
+                    <div class="pricing-desc">Pour les équipes et agences avec besoins spécifiques</div>
+
+                    <div class="pricing-price">
+                        <div class="pricing-amount" style="font-size: 2rem;">
+                            Sur devis
+                        </div>
+                        <div class="pricing-period">Contactez-nous</div>
+                    </div>
+
+                    <ul class="pricing-features">
+                        <li>Tout Premium inclus</li>
+                        <li>Comptes d'équipe illimités</li>
+                        <li>Workspace partagé</li>
+                        <li>API personnalisée</li>
+                        <li>Intégrations sur-mesure</li>
+                        <li>Formation dédiée</li>
+                        <li>Support prioritaire 24/7</li>
+                        <li>SLA garanti</li>
+                        <li>Facturation mensuelle/annuelle</li>
+                    </ul>
+
+                    <a href="mailto:hello@playstore-analytics.pro?subject=Demande Entreprise" class="pricing-cta secondary">Nous contacter →</a>
+                </div>
             </div>
         </div>
-    </header>
 
-    <div class="container">
-        <section class="hero">
-            <div class="hero-tag">💰 Tarifs simples et transparents</div>
-            <h1>Choisissez le plan qui <span class="hero-gradient">vous convient</span></h1>
-            <p>Commencez gratuitement avec 3 analyses par jour, puis passez Premium quand vous en avez besoin.</p>
-        </section>
-
-        <div class="pricing-grid">
-            <!-- Free Plan -->
-            <div class="pricing-card">
-                <div class="plan-name">Découverte</div>
-                <div class="plan-description">Parfait pour découvrir la puissance de l'outil</div>
-                <div class="plan-price">
-                    <span class="price-amount">
-                        <span class="price-currency">0</span>€
-                    </span>
-                    <span class="price-period">/ toujours</span>
-                </div>
-                <div class="price-note">Aucune carte bancaire requise</div>
-                <ul class="plan-features">
-                    <li>3 analyses par jour</li>
-                    <li>Recherche d'apps par nom</li>
-                    <li>Données de base (stats, notes)</li>
-                    <li>Tableau de bord interactif</li>
-                    <li>Export avec watermark</li>
-                </ul>
-                <a href="premium.html" class="plan-btn secondary">Commencer gratuitement</a>
-            </div>
-
-            <!-- Premium Plan -->
-            <div class="pricing-card featured">
-                <div class="popular-badge">Le plus populaire</div>
-                <div class="plan-name">Premium</div>
-                <div class="plan-description">Pour les professionnels qui veulent aller plus loin</div>
-                <div class="plan-price">
-                    <span class="price-amount">
-                        <span class="price-currency">9</span>,99€
-                    </span>
-                    <span class="price-period">/ licence à vie</span>
-                </div>
-                <div class="price-note">Paiement unique • Accès permanent</div>
-                <ul class="plan-features">
-                    <li>Analyses illimitées</li>
-                    <li>65+ métriques avancées</li>
-                    <li>Export PDF professionnel</li>
-                    <li>Analyse CSV en batch</li>
-                    <li>Keywords & SEO complets</li>
-                    <li>Permissions détaillées</li>
-                    <li>Reviews et sentiments</li>
-                    <li>Support prioritaire</li>
-                </ul>
-                <button class="plan-btn primary buy-premium-btn" data-plan="premium">💳 Acheter Premium (9,99€)</button>
-            </div>
-
-            <!-- Enterprise Plan -->
-            <div class="pricing-card">
-                <div class="plan-name">Équipe</div>
-                <div class="plan-description">Solution sur-mesure pour les équipes et agences</div>
-                <div class="plan-price">
-                    <span class="price-amount" style="font-size: 32px;">Sur devis</span>
-                </div>
-                <div class="price-note">Contactez-nous pour un devis</div>
-                <ul class="plan-features">
-                    <li>Comptes illimités</li>
-                    <li>Quota mensuel d'exports</li>
-                    <li>Workspace partagé</li>
-                    <li>Branding personnalisé</li>
-                    <li>API dédiée</li>
-                    <li>Intégrations sur-mesure</li>
-                    <li>Onboarding & formation</li>
-                    <li>Support dédié 24/7</li>
-                </ul>
-                <a href="mailto:hello@playstore-analytics.pro" class="plan-btn secondary">Nous contacter</a>
-            </div>
-        </div>
-    </div>
-
-    <section class="comparison-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Comparaison détaillée</h2>
-                <p>Toutes les fonctionnalités en un coup d'œil</p>
-            </div>
-
+        <!-- Tableau comparatif -->
+        <div class="comparison-section">
+            <h2>Comparaison Détaillée</h2>
             <div class="comparison-table">
-                <div class="table-header">
-                    <div>Fonctionnalité</div>
-                    <div>Découverte</div>
-                    <div>Premium</div>
-                    <div>Équipe</div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Analyses par jour</div>
-                    <div class="feature-value">3</div>
-                    <div class="feature-value"><strong>Illimité</strong></div>
-                    <div class="feature-value"><strong>Illimité</strong></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Recherche d'applications</div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Données de base (stats, notes)</div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">65+ métriques avancées</div>
-                    <div class="feature-value"><span class="cross">—</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Keywords & SEO</div>
-                    <div class="feature-value"><span class="cross">—</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Reviews & Sentiments</div>
-                    <div class="feature-value"><span class="cross">—</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Export PDF professionnel</div>
-                    <div class="feature-value">Avec watermark</div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Export JSON/CSV</div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Analyse CSV en batch</div>
-                    <div class="feature-value"><span class="cross">—</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Comptes utilisateurs</div>
-                    <div class="feature-value">1</div>
-                    <div class="feature-value">1</div>
-                    <div class="feature-value"><strong>Illimité</strong></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Workspace partagé</div>
-                    <div class="feature-value"><span class="cross">—</span></div>
-                    <div class="feature-value"><span class="cross">—</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Branding personnalisé</div>
-                    <div class="feature-value"><span class="cross">—</span></div>
-                    <div class="feature-value"><span class="cross">—</span></div>
-                    <div class="feature-value"><span class="check">✓</span></div>
-                </div>
-
-                <div class="table-row">
-                    <div class="feature-name">Support</div>
-                    <div class="feature-value">Email</div>
-                    <div class="feature-value">Prioritaire</div>
-                    <div class="feature-value"><strong>24/7 Dédié</strong></div>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fonctionnalité</th>
+                            <th style="text-align: center;">Gratuit</th>
+                            <th style="text-align: center;">Premium</th>
+                            <th style="text-align: center;">Entreprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Analyses par jour</strong></td>
+                            <td style="text-align: center;">3</td>
+                            <td style="text-align: center;"><strong>Illimité</strong></td>
+                            <td style="text-align: center;"><strong>Illimité</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Métriques disponibles</strong></td>
+                            <td style="text-align: center;">20+</td>
+                            <td style="text-align: center;"><strong>65+</strong></td>
+                            <td style="text-align: center;"><strong>65+</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Export PDF</strong></td>
+                            <td style="text-align: center;"><span class="cross-icon">✗</span></td>
+                            <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                            <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Analyse CSV (batch)</strong></td>
+                            <td style="text-align: center;"><span class="cross-icon">✗</span></td>
+                            <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                            <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Comparaison apps</strong></td>
+                            <td style="text-align: center;"><span class="cross-icon">✗</span></td>
+                            <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                            <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Historique</strong></td>
+                            <td style="text-align: center;">Local</td>
+                            <td style="text-align: center;">Illimité</td>
+                            <td style="text-align: center;">Illimité</td>
+                        </tr>
+                        <tr>
+                            <td><strong>API Access</strong></td>
+                            <td style="text-align: center;"><span class="cross-icon">✗</span></td>
+                            <td style="text-align: center;"><span class="cross-icon">✗</span></td>
+                            <td style="text-align: center;"><span class="check-icon">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Support</strong></td>
+                            <td style="text-align: center;">Email</td>
+                            <td style="text-align: center;">Prioritaire</td>
+                            <td style="text-align: center;">24/7 Dédié</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Comptes équipe</strong></td>
+                            <td style="text-align: center;">1</td>
+                            <td style="text-align: center;">1</td>
+                            <td style="text-align: center;">Illimité</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Prix</strong></td>
+                            <td style="text-align: center;"><strong>Gratuit</strong></td>
+                            <td style="text-align: center;"><strong>9,99€</strong></td>
+                            <td style="text-align: center;"><strong>Sur devis</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </section>
 
-    <div class="container">
-        <section class="faq-section">
-            <div class="section-header">
-                <h2>Questions fréquentes</h2>
-                <p>Tout ce que vous devez savoir sur nos tarifs</p>
-            </div>
+        <!-- FAQ Section -->
+        <div class="faq-section" id="faq">
+            <h2>Questions Fréquentes</h2>
+            <p>Tout ce que vous devez savoir sur PlayStore Analytics Pro</p>
 
             <div class="faq-grid">
                 <div class="faq-item">
-                    <h3>💳 Comment fonctionne le paiement ?</h3>
-                    <p>Le plan Premium est un paiement unique de 9,99€ qui vous donne un accès à vie. Aucun abonnement récurrent.</p>
+                    <div class="faq-question">C'est quoi le paiement unique ?</div>
+                    <div class="faq-answer">
+                        Contrairement aux abonnements mensuels, vous payez <strong>une seule fois 9,99€</strong> et vous avez accès à toutes les fonctionnalités Premium <strong>à vie</strong>. Pas de renouvellement, pas de frais cachés.
+                    </div>
                 </div>
 
                 <div class="faq-item">
-                    <h3>🔄 Puis-je essayer avant d'acheter ?</h3>
-                    <p>Absolument ! Vous avez droit à 3 analyses gratuites par jour sans carte bancaire. Testez la puissance de l'outil avant de passer Premium.</p>
+                    <div class="faq-question">Puis-je essayer avant d'acheter ?</div>
+                    <div class="faq-answer">
+                        Oui ! La version gratuite vous permet de faire <strong>3 analyses par jour</strong> sans carte bancaire. Testez l'outil, et passez Premium quand vous êtes convaincu.
+                    </div>
                 </div>
 
                 <div class="faq-item">
-                    <h3>💎 Que contient le plan Premium ?</h3>
-                    <p>Analyses illimitées, 65+ métriques avancées, exports professionnels (PDF, CSV, JSON), analyse batch CSV, keywords SEO complets, et support prioritaire.</p>
+                    <div class="faq-question">Comment fonctionne la licence Premium ?</div>
+                    <div class="faq-answer">
+                        Après paiement, vous recevez une <strong>clé de licence unique par email</strong>. Entrez-la dans le dashboard pour débloquer toutes les fonctionnalités Premium instantanément.
+                    </div>
                 </div>
 
                 <div class="faq-item">
-                    <h3>🔒 Mes données sont-elles sécurisées ?</h3>
-                    <p>Oui, nous ne stockons aucune donnée sensible. Les analyses sont faites en temps réel via l'API Google Play officielle. Vos exports restent privés.</p>
+                    <div class="faq-question">Y a-t-il une politique de remboursement ?</div>
+                    <div class="faq-answer">
+                        Oui, <strong>14 jours satisfait ou remboursé</strong>. Si le service ne fonctionne pas correctement, contactez-nous à hello@playstore-analytics.pro avec votre clé de licence.
+                    </div>
                 </div>
 
                 <div class="faq-item">
-                    <h3>📧 Puis-je obtenir une facture ?</h3>
-                    <p>Oui, une facture vous est envoyée automatiquement par email après chaque achat via Stripe. Vous recevrez également votre clé de licence Premium par email.</p>
+                    <div class="faq-question">Les données sont-elles à jour ?</div>
+                    <div class="faq-answer">
+                        Oui, toutes les données proviennent <strong>directement du Google Play Store en temps réel</strong>. Chaque analyse récupère les informations les plus récentes disponibles.
+                    </div>
                 </div>
 
                 <div class="faq-item">
-                    <h3>🏢 Proposez-vous des tarifs pour équipes ?</h3>
-                    <p>Oui ! Contactez-nous à hello@playstore-analytics.pro pour un devis personnalisé incluant workspace partagé et fonctionnalités avancées.</p>
+                    <div class="faq-question">Puis-je utiliser ma licence sur plusieurs appareils ?</div>
+                    <div class="faq-answer">
+                        Oui ! Votre licence est liée à votre email, vous pouvez l'utiliser sur <strong>n'importe quel appareil</strong> (ordinateur, tablette) en vous connectant avec votre clé.
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <div class="cta-banner">
-            <h2>Prêt à booster votre stratégie Play Store ?</h2>
-            <p>Rejoignez des centaines de professionnels qui font confiance à PlayStore Analytics Pro</p>
-            <div class="cta-buttons">
-                <a href="premium.html" class="cta-btn white">Essayer gratuitement</a>
-                <a href="mailto:hello@playstore-analytics.pro" class="cta-btn outline">Nous contacter</a>
+                <div class="faq-item">
+                    <div class="faq-question">Les exports PDF sont-ils personnalisables ?</div>
+                    <div class="faq-answer">
+                        Oui, les rapports PDF Premium incluent <strong>plus de 20 pages de graphiques</strong> avec votre branding et des insights actionnables prêts à partager avec vos clients ou votre équipe.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Quelle est la différence avec d'autres outils ASO ?</div>
+                    <div class="faq-answer">
+                        PlayStore Analytics Pro offre <strong>65+ métriques avancées</strong> pour seulement 9,99€ en paiement unique. La plupart des outils similaires coûtent 50-200€/mois en abonnement.
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- CTA Final -->
+        <div class="final-cta">
+            <h2>Prêt à Booster Votre Stratégie ASO ?</h2>
+            <p>Rejoignez des centaines de développeurs qui utilisent PlayStore Analytics Pro</p>
+            <div class="cta-group">
+                <a class="cta-primary" href="premium.html">
+                    <span>Commencer gratuitement →</span>
+                </a>
+                <a class="cta-secondary" href="#buy-premium">
+                    Obtenir Premium - 9,99€
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>PlayStore Analytics Pro</h3>
+                    <p>L'outil d'analyse Google Play Store le plus complet pour optimiser votre stratégie ASO et maximiser vos téléchargements.</p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Twitter">
+                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+                        </a>
+                        <a href="#" aria-label="GitHub">
+                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Produit</h4>
+                    <ul>
+                        <li><a href="premium.html">Dashboard</a></li>
+                        <li><a href="pricing.html">Tarifs</a></li>
+                        <li><a href="index.html#benefits">Fonctionnalités</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Légal</h4>
+                    <ul>
+                        <li><a href="legal.html">Mentions légales</a></li>
+                        <li><a href="privacy.html">Confidentialité</a></li>
+                        <li><a href="terms.html">CGU</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="mailto:hello@playstore-analytics.pro">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>© <span id="year"></span> PlayStore Analytics Pro. Tous droits réservés.</div>
+                <div>
+                    <a href="legal.html">Mentions légales</a> ·
+                    <a href="privacy.html">Confidentialité</a> ·
+                    <a href="terms.html">CGU</a>
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <footer>
-        <div class="container">
-            <p>© 2025 PlayStore Analytics Pro. Tous droits réservés.</p>
-            <p style="margin-top: 8px;">
-                <a href="index.html" style="color: #6b7280; text-decoration: none;">Accueil</a> ·
-                <a href="pricing.html" style="color: #6b7280; text-decoration: none;">Tarifs</a> ·
-                <a href="premium.html" style="color: #6b7280; text-decoration: none;">Dashboard</a> ·
-                <a href="mailto:hello@playstore-analytics.pro" style="color: #6b7280; text-decoration: none;">Contact</a>
-            </p>
-        </div>
-    </footer>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-    <!-- Stripe Checkout Script -->
-    <script src="assets/scripts/stripe-checkout.js"></script>
+        // Scroll smooth pour les ancres
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
