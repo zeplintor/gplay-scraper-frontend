@@ -21,6 +21,11 @@ const CONFIG = {
     PREMIUM_LIMIT: 9999,
 };
 
+// Expose configuration to navigateur
+if (typeof window !== 'undefined') {
+    window.CONFIG = CONFIG;
+}
+
 // Export pour utilisation dans d'autres fichiers
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = CONFIG;

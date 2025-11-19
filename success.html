@@ -267,19 +267,20 @@
         </div>
     </div>
 
+    <script src="assets/scripts/config.js"></script>
     <script>
-        const API = 'https://gplay-scraper-backend.onrender.com';
+        const API = window.CONFIG?.API_URL || 'https://gplay-scraper-api.onrender.com';
         const urlParams = new URLSearchParams(window.location.search);
         const sessionId = urlParams.get('session_id');
 
         if (!sessionId) {
             document.getElementById('loadingState').innerHTML = '<p style="color: #ef4444;">Session invalide.</p>';
         } else {
-            fetch(`${API}/api/checkout-status/${sessionId}`)
+            fetch(`${API}/api/checkout-status/${encodeURIComponent(sessionId)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        document.getElementById('amount').textContent = `${data.amount_total.toFixed(2)} ${data.currency.toUpperCase()}`;
+                        document.getElementById('amount').textContent = `${data.amount_total.toFixed(2)} ${data.currency}`;
                         document.getElementById('email').textContent = data.customer_email;
                         document.getElementById('loadingState').style.display = 'none';
                         document.getElementById('successContent').style.display = 'block';
