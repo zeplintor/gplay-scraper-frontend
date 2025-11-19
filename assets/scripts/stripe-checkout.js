@@ -2,12 +2,14 @@
 const STRIPE_PUBLIC_KEY = window.CONFIG?.STRIPE_PUBLIC_KEY || 'pk_test_...';
 const API_URL = window.CONFIG?.API_URL || 'https://gplay-scraper-api.onrender.com';
 
-async function buyPremium(plan = 'premium', email = null) {
+async function buyPremium(plan = 'premium', email = null, buttonElement = null) {
+    let originalText = '';
+
     try {
-        const button = event?.target;
-        if (button) {
-            button.disabled = true;
-            button.textContent = '⏳ Redirection...';
+        if (buttonElement) {
+            originalText = buttonElement.textContent;
+            buttonElement.disabled = true;
+            buttonElement.textContent = '⏳ Redirection...';
         }
 
         const response = await fetch(`${API_URL}/api/create-checkout`, {
@@ -28,9 +30,9 @@ async function buyPremium(plan = 'premium', email = null) {
         console.error('Payment error:', error);
         alert(`Erreur paiement : ${error.message}\n\nContactez hello@playstore-analytics.pro`);
 
-        if (button) {
-            button.disabled = false;
-            button.textContent = originalButtonText || 'Acheter Premium';
+        if (buttonElement) {
+            buttonElement.disabled = false;
+            buttonElement.textContent = originalText || 'Acheter Premium';
         }
     }
 }
@@ -39,17 +41,20 @@ function initStripeButtons() {
     const buttons = document.querySelectorAll('.buy-premium-btn, [data-stripe-action="buy"]');
 
     buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
+        // Remove existing listener to avoid duplicates
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+
+        newButton.addEventListener('click', function(e) {
             e.preventDefault();
             const plan = this.getAttribute('data-plan') || 'premium';
             const emailInput = document.getElementById('customer-email');
             const email = emailInput ? emailInput.value : null;
-            window.originalButtonText = this.textContent;
-            buyPremium(plan, email);
+            buyPremium(plan, email, this);
         });
     });
 
-    console.log(`✅ Buttons initialized (${buttons.length})`);
+    console.log(`✅ ${buttons.length} Stripe button(s) initialized`);
 }
 
 if (document.readyState === 'loading') {
