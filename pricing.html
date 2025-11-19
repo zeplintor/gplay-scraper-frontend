@@ -196,6 +196,8 @@
             text-decoration: none;
             transition: all 0.3s ease;
             border: 2px solid transparent;
+            cursor: pointer;
+            font-family: inherit;
         }
 
         .pricing-cta.primary {
@@ -504,7 +506,7 @@
                         <li>Mises à jour gratuites à vie</li>
                     </ul>
 
-                    <a href="#buy-premium" class="pricing-cta primary">Obtenir Premium →</a>
+                    <button class="pricing-cta primary buy-premium-btn" data-plan="premium">Obtenir Premium →</button>
                 </div>
 
                 <!-- Enterprise Plan -->
@@ -687,9 +689,9 @@
                 <a class="cta-primary" href="premium.html">
                     <span>Commencer gratuitement →</span>
                 </a>
-                <a class="cta-secondary" href="#buy-premium">
+                <button class="cta-secondary buy-premium-btn" data-plan="premium">
                     Obtenir Premium - 9,99€
-                </a>
+                </button>
             </div>
         </div>
 
@@ -749,6 +751,8 @@
         </footer>
     </div>
 
+    <script src="assets/scripts/config.js"></script>
+    <script src="assets/scripts/stripe-checkout.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 

@@ -285,13 +285,20 @@ function updateStatusBanner() {
                 </div>
                 <span class="status-counter">${i18n.t('premium.status.free.remaining', { count: remaining })}</span>
             </div>
-            <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank" class="status-upgrade-btn">
+            <button class="status-upgrade-btn buy-premium-btn" data-plan="premium">
                 ${i18n.t('premium.status.free.cta')}
-            </a>
+            </button>
         `;
         if (statusEl) {
             statusEl.textContent = i18n.t('premium.header.status_placeholder');
         }
+
+        // Réinitialiser les boutons Stripe après mise à jour du banner
+        setTimeout(() => {
+            if (typeof window.initStripeButtons === 'function') {
+                window.initStripeButtons();
+            }
+        }, 100);
     }
 }
 
@@ -933,9 +940,9 @@ function generateReport(data) {
                     <li>Support prioritaire</li>
                 </ul>
                 <div class="cta-buttons">
-                    <a href="https://votresite.gumroad.com/l/playstore-pro" target="_blank">
-                        <button class="cta-btn-primary">Acheter sur Gumroad</button>
-                    </a>
+                    <button class="cta-btn-primary buy-premium-btn" data-plan="premium">
+                        💎 Débloquer Premium - 9,99€
+                    </button>
                 </div>
                 <p class="guarantee">
                     ✓ Paiement sécurisé • Accès instantané • Garantie 30 jours
@@ -945,6 +952,11 @@ function generateReport(data) {
     }
 
     container.innerHTML = html;
+
+    // Réinitialiser les boutons Stripe après insertion du HTML dynamique
+    if (typeof window.initStripeButtons === 'function') {
+        window.initStripeButtons();
+    }
 }
 
 // ============ EXPORT & SHARE FUNCTIONS ============
