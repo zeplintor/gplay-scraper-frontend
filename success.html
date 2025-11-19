@@ -241,6 +241,10 @@
                     <span class="info-label">Statut</span>
                     <span class="info-value" style="color: #10b981;">✓ Payé</span>
                 </div>
+                <div class="info-row">
+                    <span class="info-label">Clé de licence</span>
+                    <span class="info-value" id="licenseKey">PSAP-XXXX-XXXX-XXXX-XXXX</span>
+                </div>
             </div>
 
             <div class="email-notice">
@@ -282,6 +286,7 @@
                     if (data.success) {
                         document.getElementById('amount').textContent = `${data.amount_total.toFixed(2)} ${data.currency}`;
                         document.getElementById('email').textContent = data.customer_email;
+                        document.getElementById('licenseKey').textContent = data.license_key || 'Envoyée par email';
                         document.getElementById('loadingState').style.display = 'none';
                         document.getElementById('successContent').style.display = 'block';
                     } else {

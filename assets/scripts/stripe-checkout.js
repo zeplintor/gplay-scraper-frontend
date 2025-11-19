@@ -1,6 +1,21 @@
 // Configuration - utilise CONFIG depuis config.js
-const STRIPE_PUBLIC_KEY = window.CONFIG?.STRIPE_PUBLIC_KEY || 'pk_test_...';
 const API_URL = window.CONFIG?.API_URL || 'https://gplay-scraper-api.onrender.com';
+let backendWarmedUp = false;
+
+async function warmupStripeBackend() {
+    if (backendWarmedUp) return;
+    backendWarmedUp = true;
+
+    try {
+        await fetch(`${API_URL}/api/health`, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-store'
+        });
+    } catch (error) {
+        console.warn('Backend warmup failed (non bloquant)', error);
+    }
+}
 
 async function buyPremium(plan = 'premium', email = null, buttonElement = null) {
     let originalText = '';
@@ -11,6 +26,8 @@ async function buyPremium(plan = 'premium', email = null, buttonElement = null) 
             buttonElement.disabled = true;
             buttonElement.textContent = '⏳ Redirection...';
         }
+
+        await warmupStripeBackend();
 
         const response = await fetch(`${API_URL}/api/create-checkout`, {
             method: 'POST',
@@ -58,8 +75,12 @@ function initStripeButtons() {
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initStripeButtons);
+    document.addEventListener('DOMContentLoaded', () => {
+        warmupStripeBackend();
+        initStripeButtons();
+    });
 } else {
+    warmupStripeBackend();
     initStripeButtons();
 }
 
