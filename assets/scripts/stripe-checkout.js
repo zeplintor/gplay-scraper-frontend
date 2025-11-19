@@ -20,8 +20,8 @@ async function buyPremium(plan = 'premium', email = null, buttonElement = null) 
 
         const data = await response.json();
 
-        if (data.success && data.checkout_url) {
-            window.location.href = data.checkout_url;
+        if (data.success && data.url) {
+            window.location.href = data.url;
         } else {
             throw new Error(data.error || 'Erreur session');
         }
